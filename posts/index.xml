@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Quant Out of Water</title>
-    <link>https://rjtk.github.io/qoow/posts/</link>
+    <link>https://rjtk.github.io/posts/</link>
     <description>Recent content in Posts on Quant Out of Water</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Dec 2022 00:00:00 -0600</lastBuildDate><atom:link href="https://rjtk.github.io/qoow/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 09 Dec 2022 00:00:00 -0600</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Introduction</title>
-      <link>https://rjtk.github.io/qoow/posts/introduction/</link>
+      <link>https://rjtk.github.io/posts/introduction/</link>
       <pubDate>Fri, 09 Dec 2022 00:00:00 -0600</pubDate>
       
-      <guid>https://rjtk.github.io/qoow/posts/introduction/</guid>
+      <guid>https://rjtk.github.io/posts/introduction/</guid>
       <description>My name is Ryan and I like math.
 The title of this blog, Quant out of Water, is more-or-less the first thing that came to mind. However, as I (as of 2022) work as a quant at an hedge fund, and I wanted to write a blog that was not explicitly about finance, this title reflects that motivation. I produced the fish with money using a stable diffusion model. I hope you enjoy some of my writings.</description>
     </item>

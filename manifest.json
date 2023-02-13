@@ -9,25 +9,25 @@
     "description": "Quant Out of Water",
     "icons": [
         {
-            "src": "/qoow/icon_hu9e1907b33ee69cc673a5c9565cee548c_692937_192x192_resize_catmullrom_3.png",
+            "src": "/icon_hu9e1907b33ee69cc673a5c9565cee548c_692937_192x192_resize_catmullrom_3.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "/qoow/icon_hu9e1907b33ee69cc673a5c9565cee548c_692937_256x256_resize_catmullrom_3.png",
+            "src": "/icon_hu9e1907b33ee69cc673a5c9565cee548c_692937_256x256_resize_catmullrom_3.png",
             "sizes": "256x256",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "/qoow/icon_hu9e1907b33ee69cc673a5c9565cee548c_692937_384x384_resize_catmullrom_3.png",
+            "src": "/icon_hu9e1907b33ee69cc673a5c9565cee548c_692937_384x384_resize_catmullrom_3.png",
             "sizes": "384x384",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "/qoow/icon_hu9e1907b33ee69cc673a5c9565cee548c_692937_512x512_resize_catmullrom_3.png",
+            "src": "/icon_hu9e1907b33ee69cc673a5c9565cee548c_692937_512x512_resize_catmullrom_3.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
