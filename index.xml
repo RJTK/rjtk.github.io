@@ -1,0 +1,30 @@
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+>
+
+    <channel>
+        <title>Quant Out of Water</title>
+        <atom:link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://qoow.com/index.xml%7d" rel="self" type="application/rss+xml" />
+        <link>https://qoow.com/</link>
+        <managingEditor>qoow</managingEditor>
+        <description>Quant Out of Water</description>
+        <lastBuildDate>Fri, 09 Dec 2022 00:00:00 -0600</lastBuildDate>
+        <language>en-us</language>
+        <generator>Hugo -- gohugo.io</generator><item>
+            <title>Introduction</title>
+            <link>https://qoow.com/posts/introduction/</link>
+            <pubDate>Fri, 09 Dec 2022 00:00:00 -0600</pubDate>
+            <guid>https://qoow.com/posts/introduction/</guid><description>&lt;p&gt;My name is Ryan and I like math.&lt;/p&gt;
+&lt;p&gt;The title of this blog, &lt;strong&gt;Quant out of Water&lt;/strong&gt;, is more-or-less the first thing that came to mind.  However, as I (as of 2022) work as a quant at an hedge fund, and I wanted to write a blog that was &lt;strong&gt;&lt;strong&gt;not explicitly about finance&lt;/strong&gt;&lt;/strong&gt;, this title reflects that motivation.  I produced the fish with money using a stable diffusion model.  I hope you enjoy some of my writings.&lt;/p&gt;
+&lt;p&gt;You can learn more on the &lt;a
+    class=&#34;link&#34;
+    href=&#34;_about_&#34;&gt;&amp;ldquo;about me&amp;rdquo;&lt;/a
+&gt;
+ page.&lt;/p&gt;
+</description></item></channel>
+</rss>
