@@ -13,9 +13,450 @@
         <link>https://rjtk.github.io/</link>
         <managingEditor>qoow</managingEditor>
         <description>Quant Out of Water</description>
-        <lastBuildDate>Sun, 11 Dec 2022 00:00:00 -0600</lastBuildDate>
+        <lastBuildDate>Sat, 17 Dec 2022 00:00:00 -0600</lastBuildDate>
         <language>en-us</language>
         <generator>Hugo -- gohugo.io</generator><item>
+            <title>Lyapunov Stability, Linear Systems, and Quadratic Functionals</title>
+            <link>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-quadratic-functionals/</link>
+            <pubDate>Sat, 17 Dec 2022 00:00:00 -0600</pubDate>
+            <guid>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-quadratic-functionals/</guid><description>&lt;p&gt;Dynamical systems are ubiquitous models occuring in science, engineering, and mathematics.  Not only are they used to model real-world dynamic phenomena like the dynamics of chemical plants, population growth, and physical engineered systems, they can also be applied to model algorithms themselves.  This post focuses on &lt;em&gt;linear&lt;/em&gt; dynamical systems, their analysis by means of semidefinite programming, and connections with control theory through the computation of quadratic functionals of their paths.&lt;/p&gt;
+&lt;h2 class=&#34;group &#34; id=&#34;introduction&#34;
+    &gt;Introduction&lt;a href=&#34;#introduction&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;This post introduces the Lyapunov approach to stability and convergence analysis.  While this approach and its connection to semidefinite programming may seem like &amp;ldquo;overkill&amp;rdquo; for linear systems (where you can just look at the eigenvalues of the system matrix), I believe it is an insightful starting point.  Analysis based on Lyapunov functions generalizes naturally to both nonlinear and stochastic systems, and the connection with semidefinite programming can be exploited to derive an analysis which may be, in some sense, &lt;em&gt;optimal&lt;/em&gt;.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;references&#34;
+    &gt;References&lt;a href=&#34;#references&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Much of the material in this post is derived or inspired from: &lt;kbd&gt;Boyd, Stephen, Laurent El Ghaoui, Eric Feron, and Venkataramanan Balakrishnan. Linear matrix inequalities in system and control theory. Society for industrial and applied mathematics, 1994.&lt;/kbd&gt;  This is an &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://web.stanford.edu/~boyd/lmibook/lmibook.pdf&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;easily accessible&lt;/a
+&gt;
+ book on &lt;em&gt;linear matrix inequalities&lt;/em&gt;.  I have also drawn some ideas and inspiration from the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Convex Optimization&lt;/a
+&gt;
+ book &lt;kbd&gt;Boyd, Stephen, Stephen P. Boyd, and Lieven Vandenberghe. Convex optimization. Cambridge university press, 2004.&lt;/kbd&gt; and have made use of &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://www.cvxpy.org/&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;cvxpy&lt;/a
+&gt;
+ for many some of the examples: &lt;kbd&gt;Diamond, Steven, and Stephen Boyd. &amp;ldquo;CVXPY: A Python-embedded modeling language for convex optimization.&amp;rdquo; The Journal of Machine Learning Research 17, no. 1 (2016): 2909-2913.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;linear-dynamical-systems&#34;
+    &gt;Linear Dynamical Systems&lt;a href=&#34;#linear-dynamical-systems&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Linear dynamical systems are generally characterized by a matrix \(A \in \R^{n \times n}\) which describes how the &lt;em&gt;state vector&lt;/em&gt; \(x \in \R^n\) changes through time.  For &lt;em&gt;continuous time&lt;/em&gt; dynamical systems, we work with ordinary differential equations&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\frac{\mathsf{d}}{\mathsf{d} t} x(t) = Ax(t),
+\end{equation}&lt;/p&gt;
+&lt;p&gt;usually written simply as \(\dot{x} = Ax\) where it is to be understood that \(x\) is a continuous function of time \(t\) and \(\dot{x}\) denotes differentiation with respect to \(t\).  In this case, \(A\) describes a &lt;em&gt;velocity field&lt;/em&gt; in state space &amp;ndash; each point \(x \in \R^n\) is associated to some velocity \(Ax\).  Analogously, for &lt;em&gt;discrete time&lt;/em&gt; dynamical systems, we have an iterative relationship&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+x(t + 1) = Ax(t),
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where in this case the matrix \(A\) specifies the next state of the system.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: I like to use $t$ for both discrete and continuous time.  The reader is trusted to recognize which is which (or if it matters at all) from the context.&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;Somewhat more generally, we could work with systems having some &lt;em&gt;constant offset&lt;/em&gt; \(b \in \R^n\) as in \(\dot{x} = Ax + b\).  However, if \(A\) is a full-rank matrix (meaning that it is invertible), then this additional offset term is not interesting.  Indeed, we can just as-well shift the coordinates of the system and instead work with \(\dot{z} = Az\) where \(z = x - A^{-1} b\).  Anything interesting that can be established for \(x\) can be done so by first doing it for \(z\).  If the matrix \(A\) is &lt;em&gt;not&lt;/em&gt; invertible, then there is a subspace which the matrix \(A\) has no effect upon, and this subspace can be analyzed separately.  It will become more-or-less obvious how to do this as we proceed, so I will make the standing assumption that \(A\) is full-rank and \(b = 0\).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: The case of linear systems with a general input $\dot{x}(t) = Ax(t) + Bu(t)$ on the other hand are quite interesting, and is likely to be the topic of some future post.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;examples&#34;
+    &gt;Examples&lt;a href=&#34;#examples&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Firstly, it should be understood that much of the analysis of &lt;em&gt;nonlinear&lt;/em&gt; dynamical systems, &lt;em&gt;i.e.,&lt;/em&gt; ordinary differential equations of the form \(\dot{x} = f(x)\), comes down to the linear case.  The reason lies in the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Hartman%E2%80%93Grobman_theorem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Hartman-Grobman Theorem&lt;/a
+&gt;
+ (which we have also &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://rjtk.github.io/posts//solving-equations-with-jacobi-iteration/&#34;&gt;already seen&lt;/a
+&gt;
+): the nonlinear system \(\dot{x} = f(x)\) can be approximated by the &lt;em&gt;linear&lt;/em&gt; dynamical system \(\dot{x} = Ax\) for in a neighbourhood of an &lt;em&gt;equilibrium point&lt;/em&gt; (&lt;em&gt;i.e.,&lt;/em&gt; point \(x_e\) such that \(f(x_e) = 0\)) with the matrix \(A = \mathsf{D} f(x_e)\), the derivative of \(f\).  More examples follow.&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;gradient-descent&#34;
+    &gt;Gradient Descent&lt;a href=&#34;#gradient-descent&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;One of the modern drivers of interest in systems theory is for applications in machine learning, or more specifically, optimization algorithms.  One of the most famous classical algorithms for optimization is &lt;em&gt;gradient descent&lt;/em&gt;: given a function \(f: \mathbb{R}^n \rightarrow \mathbb{R}\) that we want to minimize, the gradient descent algorithm proceeds through the iterates \[x(t + 1) = x(t) - \alpha \nabla f(x(t)),\] where \(\nabla f(x) = (\mathsf{D} f(x))^{\mathsf{T}}\) is the gradient and \(\alpha &amp;gt; 0\) is a step-size parameter.  In general, this is a nonlinear system.  However, there is a particularly important special case when \(\nabla f(x)\) is a linear function of \(x\): when \(f(x) = \frac{1}{2}x^{\mathsf{T}} Q x\) is a quadratic function.  In this case, \(\nabla f(x) = Qx\) and gradient descent \[x(t + 1) = (I - \alpha Q)x(t)\] is a linear system with $A = I - α Q.$&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;electronic-circuits&#34;
+    &gt;Electronic Circuits&lt;a href=&#34;#electronic-circuits&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;Another interesting example comes from electrical engineering.  In the design of electronic circuits, there are devices called &lt;em&gt;capacitors&lt;/em&gt; (basically two metal plates sandwiched next to each other) which can store a small electric charge and then subsequently release it.  Similarly, &lt;em&gt;inductors&lt;/em&gt; (coils of wire) store &lt;em&gt;magnetic&lt;/em&gt; energy, and later release it.&lt;/p&gt;
+&lt;p&gt;Using these devices, along with simple resistors, we can construct an &lt;em&gt;RLC circuit&lt;/em&gt; &amp;ndash; a circuit consisting of resitors, inductors, and capacitors (the &amp;lsquo;L&amp;rsquo; for inductors coming from the scientist Heinrich Lenz).  One of the simplest such circuits is to just place these three elements in a loop with each other.&lt;/p&gt;
+
+
+&lt;p&gt;Using &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Kirchhoff%27s_circuit_laws#Kirchhoff%27s_voltage_law&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Kirchoff&amp;rsquo;s voltage law&lt;/a
+&gt;
+, which says that the total voltage differences around a loop must sum to zero, we can obtain the equation \(V_R(t) + V_L(t) + V_C(t)\) where \(V_R, V_L, V_C\) are the voltages across the resistor, inductor, and capacitor at time \(t\), respectively.&lt;/p&gt;
+&lt;p&gt;The needed facts for this analysis are the  the &lt;em&gt;current-voltage relationships:&lt;/em&gt; $V_R(t) = RI_R(t),$ \(V_L(t) = L\dot{I}_L(t)\), and \(V_C(t) = \frac{1}{C}\int_0^t I_C(\tau)\mathsf{d}\tau\) with \(I_R, I_L, I_C\) being the currents passing through the devices, and \(R, L, C\) denoting the &amp;ldquo;size&amp;rdquo; of the devices in units of Ohms (resistance), Henries (inductance), and Farads (capacitance).  These are nothing but functions which describe how the devices operate.  The other key observation is that, since these devices are all placed in series one after the other along the same wire: \(I_R = I_L = I_C\)!  Thus, we have obtained the integro-differential equation:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+RI(t) + L\dot{I}(t) + \frac{1}{C}\int_0^t I(\tau) \mathsf{d} \tau &amp;amp;= 0\\
+\implies R\dot{I}(t) + L\ddot{I}(t) + \frac{1}{C}I(t) &amp;amp;= 0,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which by differentiating through the whole thing results in a second order ODE.  We now intend to play a clever trick with this equation &amp;ndash; a common source of linear systems.  We think of the state variables as being \(x(t) = \bigl(\dot{I}(t), I(t)\bigr)\), and by using the relationship between these derivatives described above we obtain:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{bmatrix}
+\ddot{I}\\
+\dot{I}
+\end{bmatrix}=
+\begin{bmatrix}
+-\frac{R}{L} &amp;amp; -\frac{1}{CL}\\
+1 &amp;amp; 0\\
+\end{bmatrix}
+\begin{bmatrix}
+\dot{I}\\
+I
+\end{bmatrix},
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which is a linear dynamical system.  Simulation of this system is straightforward.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; scipy.integrate &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; solve_ivp
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;simulate&lt;/span&gt;(t, R, C, L, I0&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1.0&lt;/span&gt;, I_dot0&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;0.0&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    A &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;array([[&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#bd93f9&#34;&gt;1.0&lt;/span&gt;], [&lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1.0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; (C &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; L), &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt;R &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; L]])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;ode&lt;/span&gt;(I):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; A &lt;span style=&#34;color:#ff79c6&#34;&gt;@&lt;/span&gt; I
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    res &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; solve_ivp(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        fun&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;lambda&lt;/span&gt; t, y: ode(y),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        t_span&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(t[&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;], t[&lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;]),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        y0&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;array([I0, I_dot0]),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        t_eval&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;t
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    )
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; (res&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;y[&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;, :], res&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;y[&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;, :])
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The reader unfamiliar with this trick is encouraged to study this example, as the technique is very commonly used.  The behaviour of the system can now be understood by analyzing the dynamics of this ODE given some set of initial conditions \(I(0), \dot{I}(0)\).&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;semidefinite-programming&#34;
+    &gt;Semidefinite Programming&lt;a href=&#34;#semidefinite-programming&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;In convex optimization, a &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://web.stanford.edu/~boyd/papers/pdf/semidef_prog.pdf&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;semidefinite program&lt;/a
+&gt;
+ is an optimization problem involving a matrix variable \(X\), a linear cost function \(J(x) = \mathsf{tr}\ C^{\mathsf{T}} X = \sum_{i, j} C_{ij} X_{ij}\), a linear equality constraint \(\mathcal{A}(X) = 0\), and a constraint \(X \succeq 0\), which means that \(X\) must be a &lt;em&gt;positive semidefinite matrix&lt;/em&gt;.  If you are not familiar with what this is, it is a matrix which is (1) &lt;em&gt;symmetric&lt;/em&gt; and (2) has &lt;em&gt;non-negative eigenvalues&lt;/em&gt;.  A generic SDP is as follows:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{X \in \R^{n \times n}}{\text{minimize}}&amp;amp;\quad \mathsf{tr}\ C^{\mathsf{T}} X\\
+\text{subject to}
+&amp;amp;\quad \mathcal{A}(X) = 0\\
+&amp;amp;\quad X \succeq 0.
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;The linear function \(\mathcal{A}(X) = 0\) can be any linear function of \(X\) &amp;ndash; examples include \(AX = 0\), \(AXA^{\mathsf{T}} - X + Q = 0\), &lt;em&gt;etc.&lt;/em&gt;  Of course, much more general SDPs are possible, but this will be adequate for our purposes.&lt;/p&gt;
+&lt;p&gt;Practically speaking, solving (relatively small: \(n &amp;lt; 100\)) SDPs is fairly straightforward.  Here is a basic &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://www.cvxpy.org/&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CVX Program&lt;/a
+&gt;
+ to solve an SDP we will encounter shortly:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; math &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; inf
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; scipy.linalg &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; la
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; cvxpy &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; cvx
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;solve_lyapunov_sdp&lt;/span&gt;(A, g, verbose&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;True&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&amp;#34;Solves the feasibility problem P &amp;gt; 0, (1 - g) * P - A&amp;#39; P A &amp;gt; 0.&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    n, _ &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; A&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;shape
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    P &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; cvx&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;Variable(shape&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(n, n), symmetric&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;True&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    I &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;eye(n)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    objective &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; cvx&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;Minimize(&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    constraints &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        P &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; I,  &lt;span style=&#34;color:#6272a4&#34;&gt;# P is positive semi-definite&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; g) &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; P &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; A&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;T &lt;span style=&#34;color:#ff79c6&#34;&gt;@&lt;/span&gt; P &lt;span style=&#34;color:#ff79c6&#34;&gt;@&lt;/span&gt; A &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; I
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    problem &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; cvx&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;Problem(objective, constraints&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;constraints)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    problem&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;solve(solver&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;CVXOPT&amp;#34;&lt;/span&gt;, verbose&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;verbose)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; problem&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;value, P&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;value
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Given a matrix \(A\), and a constant \(\gamma\), this program will solve a semidefinite &lt;em&gt;feasibility program&lt;/em&gt; to find a matrix \(P \succeq I\) such that \((1 - \gamma) P - A^{\mathsf{T}} P A \succeq I\).  This is actually just a computational means of solving a special type of feasability problem called a &lt;em&gt;linear matrix inequality&lt;/em&gt; (LMI).  Usually, LMIs are &lt;em&gt;strict&lt;/em&gt; inequalities where it is required to find \(P \succ 0\) and \((1 - \gamma) P - A^{\mathsf{T}} P A \succ 0\), and any such \(P\) will do.  However, since optimization problems are not usually well defined when strict inequalities are involved (since the feasible region is then not closed, &lt;em&gt;c.f.,&lt;/em&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Extreme_value_theorem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Weierstrass&amp;rsquo; Theorem&lt;/a
+&gt;
+) it is necessary to modify the LMI to involve non-strict inequalities.  Doing this in a naive way, simply replacing \(\succ\) by \(\succeq\), may result in a trivial output \(P = 0\).  However, since the LMI is linear in \(P\), we can just scale the inequality and ask that it be \(\succeq I\) &amp;ndash; indeed, if any \(P \succ 0\) exists which satisfies the inequality, there must also exist one satisfying \(P \succeq I\).&lt;/p&gt;
+&lt;p&gt;The meaning of this LMI will be explained next.&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;lyapunov-stability-theory&#34;
+    &gt;Lyapunov Stability Theory&lt;a href=&#34;#lyapunov-stability-theory&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;The most important question to answer when it comes to linear systems is &lt;em&gt;stability&lt;/em&gt;.  The term stability is used to invoke the idea of a system which, when slightly perturbed, returns back to its nominal position.  However, it might be somewhat of a misnomer, as what is often really meant is &lt;em&gt;convergence&lt;/em&gt;: given some starting point \(x(0)\), does the linear system satisfy \(x(t) \rightarrow 0\ \text{as}\ t \rightarrow \infty\).  There are many methods of determining this, the most natural being an analysis of the eigenvalues of the system matrix \(A\).  Analyzing the eigenvalues however, is a method which is quite particular to the case of simple linear systems.  Another method, which has a much greater deal of potential for generalization, is the method of analysis by means of &lt;em&gt;Lyapunov Stability Theory&lt;/em&gt;.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;lyapunov-stability&#34;
+    &gt;Lyapunov Stability&lt;a href=&#34;#lyapunov-stability&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;One of the most important techniques for establishing system stability is &lt;em&gt;Lyapunov&amp;rsquo;s direct method&lt;/em&gt; &amp;ndash; I&amp;rsquo;ll explain the idea for discrete time systems, although much of the literature focuses on the continuous time case.&lt;/p&gt;
+&lt;p&gt;The idea is to find a so-called &lt;em&gt;Lyapunov function&lt;/em&gt;  \(V: \R^n \rightarrow \R\) on the state space which captures some generalized notion of &amp;ldquo;kinetic energy&amp;rdquo; of the system.  A Lyapunov function must satisfy a few properties.  The first of which is that $V(0) = 0,$ but \(V(x) &amp;gt; 0\) everwhere else (&lt;em&gt;i.e.,&lt;/em&gt; everywhere that \(x \ne 0\)).  I will call this property &lt;em&gt;positivity&lt;/em&gt;, and it is this property that makes a Lyapunov function analogous to a generalized notion of kinetic energy: it is positive except at an equilibrium point when the system stops moving.  The next key property is that \(V\) must be constructed such that its value decreases along the path traced by the system.  That is, if it can be shown that \(V(x(t + 1)) &amp;lt; V(x(t))\) for the system \(x(t + 1) = Ax(t)\), with \(x(0) = x_0 \in \R^n\) being an arbitrary initial condition, then the system can be expected to converge towards \(0\).&lt;/p&gt;
+&lt;p&gt;These two properties (positivity and decreasing along trajectories) are not the whole story though.  The additional technical property of &lt;em&gt;coerciveness&lt;/em&gt; is required: \(||x|| \rightarrow \infty \implies V(x) \rightarrow \infty\).  This appears like an esoteric technical requirement, but it is essential.  If \(V\) is not coercive, then the &lt;em&gt;level sets&lt;/em&gt; of \(V\), the sets \(L_\alpha = \{x \in \R^n\ |\ V(x) \le \alpha\}\) may be unbounded, and the trajectory \(x(t)\) can drift off \(x(t) \rightarrow \infty\) while \(V(x(t))\) is stil decreasing.&lt;/p&gt;
+&lt;p&gt;In the linear case, excellent &lt;em&gt;Lyapunov function candidates&lt;/em&gt; (i.e., functions \(V\) which you hope will serve as Lyapunov functions) are quadratic forms \(V(x) = x^{\mathsf{T}} P x\), for some matrix \(P \in \R^{n \times n}\).  It is quite easy to determine when these functions are positive &amp;ndash; this is the case exactly when \(P \succ 0\) (the matrix \(P\) is positive-definite), and moreover, \(V(x)\) will be coercive when \(P \succ 0\) (the matrix \(P\) is positive definite).  Thus, it makes sense to refer to positive coercive functions \(V\) as being positive definite; we can refer to a Lyapunov function for a system as being a positive definite function which is decreasing along trajectories of the system.&lt;/p&gt;
+&lt;p&gt;So, in the linear case we have the candidate function \(V(x) = x^{\mathsf{T}} P x\) and the requirement \(P &amp;gt; 0\).  All that remains is to figure out if \(V(x(t + 1)) &amp;lt; V(x(t))\) along trajectories of the system.  This can be established by verifying \(V(Ax) &amp;lt; V(x)\) (why?), that is:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\forall x \in \R^n:\ V(Ax) - V(x) &amp;lt; 0
+&amp;amp;\iff \forall x \in \R^n:\ x^{\mathsf{T}}A^{\mathsf{T}}PAx - x^{\mathsf{T}}Px &amp;lt; 0\\
+&amp;amp;\iff \forall x \in \R^n:\ x^{\mathsf{T}}\bigl(A^{\mathsf{T}} P A - P\bigr)x &amp;lt; 0\\
+&amp;amp;\iff A^{\mathsf{T}} P A - P \prec 0.
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;If we are able to simply find some matrix \(P \succ 0\) such that \(V(x)\) is a Lyapunov function, then we have established the convergence of our system.  The astute reader will notice that this is a linear matrix inequality and can be solved by means of the above semidefinite feasibility program (with \(\gamma = 0\)).&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;example&#34;
+    &gt;Example&lt;a href=&#34;#example&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;Consider a simple example with&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+A = \begin{bmatrix}
+0.750 &amp;amp; 1.00\\
+-0.667 &amp;amp; 0.111
+\end{bmatrix}.
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;Notice that \(A\) does not have any particularly simple properties (triangularity, diagonal dominance&amp;hellip;) that would allow us to determine at a glance (unless we are rather speedy when it comes to calculating eigenvalues of \(2 \times 2\) matrices!) that the system \(x(t + 1) = Ax(t)\) is stable.  However, we can plug this matrix into our trusty semidefinite program and obtain a matrix&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+P = \begin{bmatrix}
+8.419 &amp;amp; 3.636\\
+3.636 &amp;amp; 12.109
+\end{bmatrix},
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which proves stability by Lyapunov&amp;rsquo;s method.&lt;/p&gt;
+
+
+&lt;p&gt;I&amp;rsquo;ve plotted above a figure showing the value of various functions of the state \(x(t)\) for the example.  The main observation is that while they all are roughly &amp;ldquo;decreasing&amp;rdquo;, it is only the Lyapunov function which is decreasing &lt;em&gt;monotonically&lt;/em&gt;.  That is not to say that this Lyapunov function is the &lt;em&gt;only&lt;/em&gt; function with this property &amp;ndash; there are many Lyapunov functions.  More subtly, it may also be possible to find starting points such that some other arbitrary function decreases monotonically towards zero from that particular system initialization, but a Lyapunov function will do so from &lt;em&gt;any&lt;/em&gt; starting point.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;fast-convergence&#34;
+    &gt;Fast Convergence&lt;a href=&#34;#fast-convergence&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Can we modify Lyapunov&amp;rsquo;s method to somehow establish &lt;em&gt;fast&lt;/em&gt; convergence?  The answer is yes.  Consider the stronger condition:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+V(Ax) - V(x) &amp;amp;&amp;lt; -\gamma V(x)\\
+\implies V(Ax) &amp;amp;&amp;lt; (1 - \gamma)V(x)\\
+\implies V(A^2 x) &amp;amp;&amp;lt; (1 - \gamma)V(Ax) &amp;lt; (1 - \gamma)^2 V(x)\\
+&amp;amp;\vdots\\
+\implies V(A^T x) &amp;amp;&amp;lt; (1 - \gamma)^T V(x).
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which is establishing a &lt;em&gt;rate of convergence&lt;/em&gt; on the Lyapunov function &amp;ndash; after \(T\) iterations of the system, the value must have decreased by a factor of \((1 - \gamma)^T\).  It is quite convenient to recognize that the existence of a quadratic Lyapunov function \(V_\gamma\) which verifies this fast convergence is equivalent to finding an ordinary quadratic Lyapunov function for the modified system with \(A_\gamma = \frac{1}{\sqrt{1 - \gamma}} A\).&lt;/p&gt;
+&lt;p&gt;How do we incorporate the search for some such \(\gamma\) into our SDP?  All we need is that \(A^{\mathsf{T}}PA - (1 - \gamma)P \prec 0\), and indeed, we would like to find the largest satisfactory \(\gamma\).  Unfortunately, I do not believe it is possible to directly encode optimization over \(\gamma\) into a convex SDP, since the product $γ P $, where both \(\gamma\) and \(P\) are variables, is non-convex.  Instead, since \(\gamma \in \R\) is just a single parameter, we can apply &lt;em&gt;bisection&lt;/em&gt; to find an optimal \(\gamma\):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; math &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; inf
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;is_feasible&lt;/span&gt;(A, g, verbose&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;True&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&amp;#34;Checks if P &amp;gt; 0, (1 - g) * P - A&amp;#39; P A &amp;gt; 0 is feasible.&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    val, _ &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; solve_lyapunov_sdp(A, g, verbose&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;verbose)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; val &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&lt;/span&gt; inf
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;find_optimal_convergence_rate&lt;/span&gt;(A, num_iter&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;20&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    right &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; it &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;range&lt;/span&gt;(num_iter):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        g &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; left &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; (right &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; left) &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; is_feasible(A, g, verbose&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;False&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            left &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; g
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            right &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; g
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; g
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;By solving the feasability SDP multiple times, we obtain a value of \(\gamma\) such that \(V(A^T x) &amp;lt; (1 - \gamma)^T V(x)\), establishing a fast convergence rate for the system.  It should be noted that specialized algorithms to solve the Lyapunov inequality \(A^{\mathsf{T}} P A - P \prec 0\), but doing so by semidefinite programming opens up a more general array of possibilities, which I turn to next.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;em&gt;Remark&lt;/em&gt;: It is possible to represent this optimization problem as a joint optimization problem over $P, \gamma$, but not as a &lt;em&gt;convex&lt;/em&gt; optimization problem.  However, the resulting problem is &lt;em&gt;quasiconvex&lt;/em&gt;.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;stability-of-uncertain-linear-systems&#34;
+    &gt;Stability of Uncertain Linear Systems&lt;a href=&#34;#stability-of-uncertain-linear-systems&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;So far, I&amp;rsquo;ve talked about linear systems with a single and perfectly well known matrix \(A\).  However, in many applications it may be the case that the matrix \(A\) is not known exactly, or that it is only an approximation of a real system.  For this reason, we would like to establish some degree of &lt;em&gt;robust&lt;/em&gt; stability guarantee.  To this end, let us suppose that we have some &lt;strong&gt;uncertainty set&lt;/strong&gt; \(\mathbf{A} \subset \R^{n \times n}\) and that our system matrix \(A \in \mathbf{A} \subset \R^{n \times n}\).  If this is the case, then we can expect our linear system to satisfy a linear &lt;strong&gt;recursive inclusion&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+x(t + 1) \in \mathbf{A} x(t) \overset{\Delta}{=} \{A x(t)\ |\ A \in \mathbf{A}\}. \notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;That is, the next point \(x(t + 1)\) is obtained from \(x(t)\) by simple multiplication by a matrix \(A\), we just don&amp;rsquo;t know &lt;strong&gt;which&lt;/strong&gt; matrix \(A\); all we know is that \(A \in \mathbf{A}\).  Amazingly, establishing the stability of this system can still be done by looking for a Lyapunov function \(V(x) = x^{\mathsf{T}} P x\) with \(P \succ 0\) and such that \(\forall x \in \R^n, A \in \mathbf{A}:\ V(A x) - V(x) &amp;lt; 0\) and this is equivalent to the collection of LMIs: \[P \succ 0, \forall A \in \mathbf{A}:\ A^{\mathsf{T}} P A - P \prec 0.\]&lt;/p&gt;
+&lt;p&gt;Of course, not all such LMIs can be solved &amp;ndash; it depends on the model of \(\mathbf{A}\).  A quite flexible model is furnished by &lt;strong&gt;polytopic&lt;/strong&gt; sets: \(\mathbf{A} = \mathsf{conv}\{ A_k\ |\ k \in [K] \}\), that is, the convex hull of a &lt;strong&gt;finite&lt;/strong&gt; number of matrices \(A_k\), &lt;em&gt;i.e.,&lt;/em&gt; for any \(A \in \mathbf{A}\) there exists some \(\mu \in [0, 1]\) and matrices \(A_i, A_j\) such that \(A = \mu A_i + (1 - \mu) A_j\).  These sets can be used to construct arbitrarily accurate approximations of any convex set \(\mathbf{A}\).&lt;/p&gt;
+&lt;p&gt;Then, using the fact that \(V(x)\) is convex if \(P \succ 0\), we have \(V(\mu A_i x + (1 - \mu) A_j x) \le \mu V(A_i x) + (1 - \mu) V(A_j x)\) and therefore a sufficient condition for the stability of the recursive inclusion is to find some \(P \succ 0\) which satisfies the system of \(K\) LMIs: \[P \succ 0, \forall k \in [K]:\ A_k^{\mathsf{T}} P A_k - P \prec 0.\]&lt;/p&gt;
+&lt;p&gt;Speaking intuitively, if such a \(P\) exists for some uncertain linear system, we can make a conclusion about the &lt;strong&gt;robust&lt;/strong&gt; stability of the system.&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;example-gain-margins-and-momentum-gradient-descent&#34;
+    &gt;Example &amp;ndash; Gain Margins and Momentum Gradient Descent&lt;a href=&#34;#example-gain-margins-and-momentum-gradient-descent&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;One of the main motivations for considering uncertain linear systems arises from control theory.  A very common situation is that we have some system matrix \(A\), as well as a &lt;em&gt;gain matrix&lt;/em&gt; \(K\) which we have designed.  The gain matrix \(K\) is intended to be used to steer the system \(x(t + 1) = A x(t)\) towards zero by means of a &lt;em&gt;feedback control&lt;/em&gt; \(x(t + 1) = Ax(t) - Kx(t)\).  Importantly, the system \(A\) may very well be unstable, in which case the matrix \(K\) is absolutely essential.&lt;/p&gt;
+&lt;p&gt;Suppose that we have some \(K\) in hand which makes the controlled system \(x(t + 1) = (A - K)x(t)\) stable.  The idea of a &lt;em&gt;gain margin&lt;/em&gt; is to determine if for some interval \([\alpha_1, \alpha_2]\) that the modified system \(x(t + 1) = (A - \alpha K) x(t)\) remains stable, for any \(\alpha \in [\alpha_1, \alpha_2]\).  If this interval is wide, then it may give us some assurance that the matrix \(K\) is robust, in some sense.  The collection of system matrices \[\mathbf{A} = \{A - \alpha K\ |\ \alpha_1 \le \alpha \le \alpha_2\}\] forms a natural polytopic set.&lt;/p&gt;
+&lt;p&gt;Gradient descent constitutes a perfectly good example of this situation.  For a quadratic function \(f(x) = \frac{1}{2}x^{\mathsf{T}} Q x\) we have non-stable natural dynamics \(x(t + 1) = x(t)\), a controller \(Q\), and the stepsize \(\alpha\) fills in for the gain margin, giving us \(x(t + 1) = (I - \alpha Q)x(t)\).  To make this a bit more interesting, we can augment this system with a &lt;em&gt;momentum&lt;/em&gt; term by introducing a &lt;em&gt;velocity&lt;/em&gt; \(v(t)\):&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+v(t + 1) &amp;amp;= \gamma v(t) + \alpha Q x(t)\\
+x(t + 1) &amp;amp;= x(t) - v(t + 1).
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;These equations are known as &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://arxiv.org/pdf/1609.04747.pdf&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;gradient descent with momentum&lt;/a
+&gt;
+.  The idea is that if we are heading in some &amp;ldquo;nominal&amp;rdquo; direction \(v(t)\), we might as well keep going in that direction, and just add the gradient step \(\alpha Qx(t)\) to our velocity.  A slight modification of this momentum scheme, Nesterov&amp;rsquo;s momentum, is known to be optimal in a certain sense.&lt;/p&gt;
+&lt;p&gt;In any case, the ordinary Momentum gradient descent algorithm corresponds to the (block) system matrix&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+A_{\gamma, \alpha} =
+\begin{bmatrix}
+\gamma I &amp;amp; \alpha Q\\
+-\gamma I &amp;amp; I - \alpha Q
+\end{bmatrix}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;for the joint system \(\bigl(v(t), x(t)\bigr)\).&lt;/p&gt;
+&lt;p&gt;Now, if you can construct a Lyapunov function (by solving a semidefinite program) for \(\gamma, \alpha \in \{\gamma_1, \gamma_2\} \times \{\alpha_1, \alpha_2\}\) (&lt;em&gt;i.e.&lt;/em&gt;, all four corners of a square) then you will have proof that the algorithm will converge for every pair \(\gamma, \alpha \in [\gamma_1, \gamma_2] \times [\alpha_1, \alpha_2]\).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: This example is quite simplistic, but it is illustrative of&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://arxiv.org/pdf/1502.02009.pdf&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;general and powerful techniques&lt;/a
+&gt;
+. &lt;kbd&gt;Specifically, if you can construct and solve an appropriate SDP &lt;em&gt;analytically&lt;/em&gt;, then it can serve as a constructive proof of convergence.  As well, SDPs can potentially be used to find &lt;em&gt;optimal&lt;/em&gt; parameters for algorithms by similar means as were used earlier to calculate convergence rates by means of bisection search.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;quadratic-integrals&#34;
+    &gt;Quadratic Integrals&lt;a href=&#34;#quadratic-integrals&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;As a final illustration of the power of the Lyapunov approach, let&amp;rsquo;s consider how to evaluate infinite quadratic integrals (or summations, in the discrete case).  Say we have a linear system \(x(t + 1) = Ax(t)\), and are interested in computing the value of a of the path of this system according to the quadratic functional&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+J_Q(x_0) = \sum_{t = 0}^\infty x(t)^{\mathsf{T}} Q x(t); x(0) = x_0,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \(Q \succ 0\) is some arbitrary positive definite matrix.  Such functions arise often in control theory.&lt;/p&gt;
+&lt;p&gt;To see the connection with Lyapunov theory, recognize that we can fully expand out the summation in terms of \(x_0\) by using the fact that \(x(t) = A^t x_0\):&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+J_Q(x_0)
+&amp;amp;= \sum_{t = 0}^\infty \bigl(A^t x_0 \bigr)^{\mathsf{T}} Q \bigl(A^t x_0)\\
+&amp;amp;= x_0^{\mathsf{T}} \Bigl( \sum_{t = 0}^\infty (A^t)^{\mathsf{T}} Q A^t \Bigr)x_0\\
+&amp;amp;= x_0^{\mathsf{T}} Q x_0 + \Bigl( \sum_{t = 1}^\infty (A^t)^{\mathsf{T}} Q A^t \Bigr)x_0\\
+&amp;amp;= x_0^{\mathsf{T}} \Bigl(Q + \sum_{t = 1}^\infty (A^t)^{\mathsf{T}} Q A^t \Bigr)x_0\\
+&amp;amp;= x_0^{\mathsf{T}} \Bigl(Q + A^{\mathsf{T}} \bigl[\sum_{t = 0}^\infty (A^t)^{\mathsf{T}} Q A^t \bigr]A \Bigr)x_0\\
+&amp;amp;= x_0^{\mathsf{T}} Q x_0 + J(Ax_0).
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;Thus, since \(J\) is a quadratic function of \(x_0\), there must be some \(P\) such that \(J(x_0) = x_0^{\mathsf{T}} P x_0\) and therefore \(J(x)\) satisfies, for any starting point \(x \in \R^n\):&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+J(x)
+&amp;amp;= x^{\mathsf{T}} P x\\
+&amp;amp;= x^{\mathsf{T}}[Q + A^{\mathsf{T}} P A] x,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;or in other words, \(P - A^{\mathsf{T}} P A = Q\).  What this tells us is that if we have a matrix \(P \succ 0\) verifying the Lyapunov inequality \(P - A^{\mathsf{T}} P A \succ 0\), then not only do we have a Lyapunov function, but there is some positive definite matrix \(Q = P - A^{\mathsf{T}} P A\) such that \(x^\mathsf{T} P x\) is the value of the quadratic functional \(J_Q(x)\).  Conversely, if we can solve the Lyapunov equation \(P - A^{\mathsf{T}} P A = Q\) for some \(P \succ 0\), then we have a Lyapunov function, as well as a function for easily evaluating the value of \(J_Q(x)\), namely, \(J_Q(x) = x^{\mathsf{T}} P x\).&lt;/p&gt;
+&lt;p&gt;I intend to explore the ideas surrounding quadratic functionals in more detail in a future post.  These functions can be used to tie together semidefinite programming duality, &lt;em&gt;stochastic&lt;/em&gt; linear systems (with random disturbances), as well as the classical methods of stochastic optimal control: the Kalman filter and the linear quadratic regulator.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: Lyapunov&amp;rsquo;s equation&lt;/kbd&gt; \(P - A^{\mathsf{T}} P A = Q\) &lt;kbd&gt;is a &lt;em&gt;linear&lt;/em&gt; equation in&lt;/kbd&gt; \(P\) &lt;kbd&gt;and can be solved efficiently.  In Python, the function&lt;/kbd&gt; &lt;code&gt;scipy.linalg.solve_discrete_lyapunov&lt;/code&gt; &lt;kbd&gt;can be used for this purpose.  Lyapunov equations arise in a number of different ways, so it is a useful pattern to have in mind.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;conclusion&#34;
+    &gt;Conclusion&lt;a href=&#34;#conclusion&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;The purpose of this post has been to introduce the Lyapunov approach to analyzing the stability of linear dynamical systems.  This is only one of many possible approaches to this analysis, but the semidefinite programming perspective on this problem can generalize much further than a direct analysis of eigenvalues, not to mention that it opens the door to constructing &lt;em&gt;optimal&lt;/em&gt; algorithms.&lt;/p&gt;</description></item><item>
             <title>Solving Equations with Jacobi Iteration</title>
             <link>https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/</link>
             <pubDate>Sun, 11 Dec 2022 00:00:00 -0600</pubDate>
