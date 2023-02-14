@@ -13,7 +13,7 @@
 <meta property="og:title" content="Solving Equations with Jacobi Iteration" />
 <meta property="og:description" content="Jacobi iteration is a natural idea for solving certain types of nonlinear equations, and reduces to a famous algorithm for linear systems. This post discusses the algorithm, its convergence, benefits and drawbacks, along with a discussion of examples and pretty pictures 🖼️.
 " />
-<meta property="og:url" content="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/" /><meta property="article:published_time" content="2022-12-11T00:00:00-06:00" /><meta property="article:modified_time" content="2023-02-13T21:20:43-06:00" /><meta name="theme-color" content="#dd6065" />
+<meta property="og:url" content="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/" /><meta property="article:published_time" content="2022-12-11T00:00:00-06:00" /><meta property="article:modified_time" content="2023-02-13T21:45:31-06:00" /><meta name="theme-color" content="#dd6065" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Solving Equations with Jacobi Iteration - Quant Out of Water" />
 <meta name="apple-mobile-web-app-status-bar-style" content="white" />
@@ -30,8 +30,8 @@
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https:\/\/rjtk.github.io\/posts\/solving-equations-with-jacobi-iteration\/"
-  },"genre": "posts","wordcount": 5007 ,
-  "url": "https:\/\/rjtk.github.io\/posts\/solving-equations-with-jacobi-iteration\/","datePublished": "2022-12-11T00:00:00-06:00","dateModified": "2023-02-13T21:20:43-06:00","author": {
+  },"genre": "posts","wordcount": 5004 ,
+  "url": "https:\/\/rjtk.github.io\/posts\/solving-equations-with-jacobi-iteration\/","datePublished": "2022-12-11T00:00:00-06:00","dateModified": "2023-02-13T21:45:31-06:00","author": {
     "@type": "Person",
     "name": "qoow"
   },"description": ""
@@ -126,7 +126,7 @@
                     <i class="eva eva-edit-2-outline mr-1"></i>
                     <span>
                         <time
-                            title="Last modified on: 13 Feb 2023 21:20:43"datetime="2023-02-13T21:20:43-06:00">13 Feb 2023</time
+                            title="Last modified on: 13 Feb 2023 21:45:31"datetime="2023-02-13T21:45:31-06:00">13 Feb 2023</time
                         >
                     </span>
                 </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
@@ -134,7 +134,7 @@
                 <span>24 mins read</span>
             </div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
                 <i class="eva eva-bar-chart-outline mr-1"></i>
-                <span>5007 words</span>
+                <span>5004 words</span>
             </div></div></div><aside
             class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
         >
@@ -180,7 +180,7 @@
     href="https://en.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi"target="_blank" rel="noopener">Carl Gustav Jacobi</a
 >
  (the same Jacobi for whom the <em>Jacobian</em> in calculus is named after), is a numerical method for solving systems of equations.  It is particularly famous as a classical iterative algorithm for solving <em>linear</em> systems.  One of the main reasons one might want to use Jacobi iteration in practice is that it admits of a naturally <em>parallel</em> implementation, and can thus scale to very large and complex systems, and even to problems without any closed form representation of the system we want to solve (like a simulator, or a black-box machine learning algorithm).</p>
-<p>In this post, I&rsquo;ll introduce the basic mathematical intuition of Jacobi iteration, along with some examples of how and where it might arise.  I&rsquo;ll also give a brief analysis of convergence for <em>linear</em> systems of equations, where the concept of a <em>diagonally dominant</em> matrix arises.  I also attempt to extend the intuition of the linear case to nonlinear systems by using theoretical techniques from the theory of ordinary differential equations.</p>
+<p>In this post, I&rsquo;ll introduce the basic mathematical intuition of Jacobi iteration, along with some examples of how and where it might arise.  I&rsquo;ll also give a brief analysis of convergence for <em>linear</em> systems of equations, where the concept of a <em>diagonally dominant</em> matrix arises.  I also attempt to extend the intuition of the linear case to nonlinear systems by using techniques from the theory of ordinary differential equations.</p>
 
 
 <h2 class="group " id="systems-of-equations"
@@ -188,7 +188,7 @@
         ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
 ></h2>
 
-<p>We are all familiar with the grade-school notion of a <em>mathematical equation</em>.  Particularly famous are the quadratic polynomial equations, <em>e.g.,</em> \(x^2 - x - 2 = 0\), which has exactly the solutions \(x = 2\) and \(x = -1\)).  For another example, the trigonometric equation \(\mathsf{sin}(\frac{(2x + 1) \pi}{2}) - 1 = 0\) has any \(x\) being an integer multiple of \(2\), <em>i.e.,</em> \(x \in 2\Z\) as a solution.</p>
+<p>We are all familiar with the grade-school notion of a <em>mathematical equation</em>.  Particularly famous are the quadratic polynomial equations, <em>e.g.,</em> \(x^2 - x - 2 = 0\), which has exactly the solutions \(x = 2\) and \(x = -1\).  For another example, the trigonometric equation \(\mathsf{sin}(\frac{(2x + 1) \pi}{2}) - 1 = 0\) has any \(x\) being an integer multiple of \(2\), <em>i.e.,</em> \(x \in 2\Z\) as a solution.</p>
 <p>What is meant by a <em>system</em> of equations is simply a multitude of ordinary equations that need to be satisfied <em>simultaneously</em>.  For instance, if we combined the above two examples into the system of <em>two equations</em> and <em>one variable</em> we would be left with the <em>system</em></p>
 <p>\begin{equation}
 \notag
@@ -297,12 +297,12 @@ Ax(\infty) &amp;= b,
 \end{aligned}
 \end{equation}</p>
 <p>which is a solution to the equation \(Ax = b\)!</p>
-<p>To establish the convergence of the iterations, it is well known (this is likey to be a topic of a future post! 😜) that for linear systems \(x(t + 1) = a + K x(t)\), \(x(t)\) will converge whenever \(\rho(K) &lt; 1\), where \(\rho(K) = \text{max}_i\ |\lambda_i(K)|\) is the largest eigenvalue magnitude, a quantity called the /spectral radius.  For the case of Jacobi iteration, we require that \(\rho(D^{-1} M) &lt; 1\).</p>
+<p>To establish the convergence of the iterations, it is well known (this is likey to be a topic of a future post! 😜) that for linear systems \(x(t + 1) = a + K x(t)\), \(x(t)\) will converge whenever \(\rho(K) &lt; 1\), where \(\rho(K) = \text{max}_i\ |\lambda_i(K)|\) is the largest eigenvalue magnitude, a quantity called the <em>spectral radius</em>.  For the case of Jacobi iteration, we require that \(\rho(D^{-1} M) &lt; 1\).</p>
 <p>Using the <a
     class="link"
     href="https://en.wikipedia.org/wiki/Gershgorin_circle_theorem"target="_blank" rel="noopener">Gershgorin circle theorem</a
 >
-, and the fact that the diagonal values of \(M\) are all \(0\) (by construction), it holds that every eigenvalue of \(D^{-1} M\) lies within a distance \(|D_{ii}^{-1}|\sum_{j \ne i} |M_{ij}|\) of \(0\).  A condition on \(A\) which guarantees this is  <em>diagonally dominance</em>: \(\sum_{j \ne i} |A_{ij}| &lt; |A_{ii}|\) for each \(i\).  If this holds, then the eigenvalues \(\lambda_i\) of \(A\) are &ldquo;close&rdquo; to the diagonals of \(A_{ii}\), so such matrices are in some sense &ldquo;almost diagonal&rdquo;.  Since linear systems \(Dx = b\), for diagonal \(D\), are easy to solve, it is not surprising that there is a simple iterative algorithm for solving linear systems which are diagonally dominant.  Moreover, if the diagonals of \(A\) are also non-zero, \(A\) will necessarily have non-zero eigenvalues, and therefore it will be full-rank, invertible, and admit of unique solutions.  This is all summarized with the following theorem.</p>
+, and the fact that the diagonal values of \(M\) are all \(0\) (by construction), it holds that every eigenvalue of \(D^{-1} M\) lies within a distance \(|D_{ii}^{-1}|\sum_{j \ne i} |M_{ij}|\) of \(0\).  A condition on \(A\) which guarantees this is  <em>diagonal dominance</em>: \(\sum_{j \ne i} |A_{ij}| &lt; |A_{ii}|\) for each \(i\).  If this holds, then the eigenvalues \(\lambda_i\) of \(A\) are &ldquo;close&rdquo; to the diagonals of \(A_{ii}\), so such matrices are in some sense &ldquo;almost diagonal&rdquo;.  Since linear systems \(Dx = b\), for diagonal \(D\), are easy to solve, it is not surprising that there is a simple iterative algorithm for solving linear systems which are diagonally dominant.  Moreover, if the diagonals of \(A\) are also non-zero, \(A\) will necessarily have non-zero eigenvalues, and therefore it will be full-rank, invertible, and admit of unique solutions.  This is all summarized with the following theorem.</p>
 <p><kbd><strong>Theorem</strong>: Let $A \in \R^{n \times n}$ be a square matrix with real entries.  Suppose that $A$ has a non-zero diagonal and is <em>diagonally dominant</em>.  Then, for any vector $b \in \R^n$, there exists a unique solution $x^\star$ to the linear equation $Ax = b$ and Jacobi iteration converges, from any initial condition, to the solution $x^\star$.</kbd></p>
 
 
@@ -354,7 +354,7 @@ Ax(\infty) &amp;= b,
 <p>\[
 A = \begin{bmatrix} 4/5 &amp; 3 / 5 \\ -6 / 5 &amp; 7/5\end{bmatrix},
 \]</p>
-<p>and \(b = 0\).  The case \(b = 0\) is without loss of generality for the purpose of plotting.  Even though finding a solution to the equation \(Ax = 0\) is trivial in this case, it is equivalent to re-orienting the center of our coordinate system upon the solution \(A^{-1} b\).  It is also worth noting that this matrix is row-wise diagonally dominant (corresponding to our definition) but <em>not</em> columns wise.</p>
+<p>and \(b = 0\).  The case \(b = 0\) is without loss of generality for the purpose of plotting.  Even though finding a solution to the equation \(Ax = 0\) is trivial in this case, it is equivalent to re-orienting the center of our coordinate system upon the solution \(A^{-1} b\).  It is also worth noting that this matrix is row-wise diagonally dominant (corresponding to our definition) but <em>not</em> column wise.</p>
 <figure><img src="jacobi_flow001.svg"/>
 </figure>
 
@@ -479,7 +479,7 @@ F_i(x) = f_i(x_i) + g_i(x_{-i})\ \forall i,
     href="https://en.wikipedia.org/wiki/Substitute_good"target="_blank" rel="noopener"><em>substitution effect</em></a
 >
 .  To get more specific, suppose that when the prices for all \(n\) goods are given by \(p \in \R^n\), the supply for good \(i\) is described by a function \(\mathcal{S}_i(p) = S_i(p_i)\) and the demand for this good is \[\mathcal{D}_i(p) = D_i(p_i) + T_i(p_{-i}).\]  What this latter equation says is that there is some <em>nominal</em> demand \(D_i(p_i)\) given by a scalar function of the price of that good, as well as the functions \(T_i(p_{-i})\) which serves to model the <em>substitution effect</em>: the demand for good \(i\) also depends upon the prices of other goods in the economy.  A set of equilibrium prices \(p^\star \in \R^n\) (which may not be unique!) in this economy are prices such that \[\mathcal{S_i}(p^\star) - \mathcal{D}_i(p^\star) = 0\ \forall i \in [n],\] a nonlinear equation.</p>
-<p>To make this more concrete, suppose we have an economy with two goods: coffee and tea.  As the price of coffee increases, demand for coffee also falls.  But, the demand for tea <em>rises</em>, since some coffee drinkers that are tightening their belt and drinking less coffee, start drinking more tea.  Let&rsquo;s write this all down mathematically.  For the <em>demand</em> I&rsquo;ll use functions \(D_i(p_i) = \frac{k_i}{1 + p_i}\), modelling the fact that demand should be decreasing toward zero as price increases, and that there is some maximum demand \(k_i\) when the good is free (I don&rsquo;t think it&rsquo;s possible to consume an infinite amount of tea or coffee! ☕).  Picking another perfectly good function, I&rsquo;ll model the substitution effect will be with a hyperbolic tangent: \(T_i(p_{-i}) = c_i \mathsf{tanh}(p_{-i})\).  This function has a plateau at \(c_i\), as \(p_{-i} \rightarrow \infty\), so the ratio \(c_c / k_\tau\) is measuring the proportion of tea drinkers that would switch to coffee as the price of tea increases.  On the supply side, I&rsquo;ll use a nice S-shaped function \(S_i(p_i) = \frac{m_i p_i}{1 + p_i}\) where the maximum producible amount of the good reaches another plateau at \(m_i\).  This results in the nonlinear system of equations (using \(c\) for coffee and \(\tau\) for tea):</p>
+<p>To make this more concrete, suppose we have an economy with two goods: coffee and tea.  As the price of coffee increases, demand for coffee also falls.  But, the demand for tea <em>rises</em>, since some coffee drinkers that are tightening their belt and drinking less coffee, start drinking more tea.  Let&rsquo;s write this all down mathematically.  For the <em>demand</em> I&rsquo;ll use functions \(D_i(p_i) = \frac{k_i}{1 + p_i}\), modelling the fact that demand should be decreasing toward zero as price increases, and that there is some maximum demand \(k_i\) when the good is free (I don&rsquo;t think it&rsquo;s possible to consume an infinite amount of tea or coffee! ☕).  Picking another perfectly good function, I&rsquo;ll model the substitution effect with a hyperbolic tangent: \(T_i(p_{-i}) = c_i \mathsf{tanh}(p_{-i})\).  This function has a plateau at \(c_i\), as \(p_{-i} \rightarrow \infty\), so the ratio \(c_c / k_\tau\) is measuring the proportion of tea drinkers that would switch to coffee as the price of tea increases.  On the supply side, I&rsquo;ll use a nice S-shaped function \(S_i(p_i) = \frac{m_i p_i}{1 + p_i}\) where the maximum producible amount of the good reaches another plateau at \(m_i\).  This results in the nonlinear system of equations (using \(c\) for coffee and \(\tau\) for tea):</p>
 <p>\begin{equation}
 \notag
 \begin{aligned}
