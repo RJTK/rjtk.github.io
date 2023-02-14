@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en-us" class="lang-en-us">
+    <head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Jacobi iteration is a natural idea for solving certain types of nonlinear equations, and reduces to a famous algorithm for linear systems. This post discusses the algorithm, its convergence, benefits and drawbacks, along with a discussion of examples and pretty pictures 🖼️.
+" />
+<meta itemprop="description" content="Jacobi iteration is a natural idea for solving certain types of nonlinear equations, and reduces to a famous algorithm for linear systems. This post discusses the algorithm, its convergence, benefits and drawbacks, along with a discussion of examples and pretty pictures 🖼️.
+" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<meta itemprop="name" content="Solving Equations with Jacobi Iteration - Quant Out of Water" />
+<link href="https://rjtk.github.io/index.xml" title="Solving Equations with Jacobi Iteration - Quant Out of Water" type="application/rss+xml" rel="alternate" />
+<title>Solving Equations with Jacobi Iteration - Quant Out of Water</title><link rel="stylesheet" href="/main.efa856a7e699d6b8dc8748086f759f5a7bff94ff5428a65430ef983ad3b92d56.css" integrity="sha256-76hWp+aZ1rjch0gIb3WfWnv/lP9UKKZUMO+YOtO5LVY=" /><meta property="og:site_name" content="Solving Equations with Jacobi Iteration - Quant Out of Water" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Solving Equations with Jacobi Iteration" />
+<meta property="og:description" content="Jacobi iteration is a natural idea for solving certain types of nonlinear equations, and reduces to a famous algorithm for linear systems. This post discusses the algorithm, its convergence, benefits and drawbacks, along with a discussion of examples and pretty pictures 🖼️.
+" />
+<meta property="og:url" content="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/" /><meta property="article:published_time" content="2022-12-11T00:00:00-06:00" /><meta property="article:modified_time" content="2023-02-13T21:20:43-06:00" /><meta name="theme-color" content="#dd6065" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Solving Equations with Jacobi Iteration - Quant Out of Water" />
+<meta name="apple-mobile-web-app-status-bar-style" content="white" />
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Solving Equations with Jacobi Iteration - Quant Out of Water" />
+<meta name="twitter:description" content="Jacobi iteration is a natural idea for solving certain types of nonlinear equations, and reduces to a famous algorithm for linear systems. This post discusses the algorithm, its convergence, benefits and drawbacks, along with a discussion of examples and pretty pictures 🖼️.
+" />
+<meta name="twitter:url" content="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
+<link href="/icon.png" rel="Bookmark" />
+<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Solving Equations with Jacobi Iteration",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/rjtk.github.io\/posts\/solving-equations-with-jacobi-iteration\/"
+  },"genre": "posts","wordcount": 5007 ,
+  "url": "https:\/\/rjtk.github.io\/posts\/solving-equations-with-jacobi-iteration\/","datePublished": "2022-12-11T00:00:00-06:00","dateModified": "2023-02-13T21:20:43-06:00","author": {
+    "@type": "Person",
+    "name": "qoow"
+  },"description": ""
+}
+</script>
+
+
+    </head>
+    
+    <body class="dark:bg-darkBg dark:text-darkText">
+        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
+            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="relative"><div class=" text-center py-6 border-b dark:border-darkBorder"><div class="text-3xl">Quant Out of Water</div></div><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
+        <div class="route-items flex w-full items-center justify-around"><a
+                    title="Home"
+                    data-active-link="/"
+                    href="/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Home</span>
+                </a><a
+                    title="About"
+                    data-active-link="/about/"
+                    href="/about/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">About</span>
+                </a>
+        </div>
+    </nav><nav class="sub-navbar z-10 flex items-center border-b px-5 py-2 dark:border-darkBorder md:px-10"><a
+                title="Tags"
+                data-active-link="/tags/"
+                href="/tags/"
+                class=" relative flex cursor-pointer items-center mr-4 text-gray-400 dark:text-darkText transition duration-150 ease-[ease] hover:text-theme"
+            >
+                <i
+                    class="eva eva-pricetags leading-none mr-1"
+                ></i>
+                <span>Tags</span>
+            </a></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
+    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
+</div>
+</header>
+<main class="relative flex flex-grow " id="swup"><style>:root {
+        --font:Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }</style><div class="type-posts layout- w-full"><div class="relative h-full">
+    <div class="relative h-full">
+        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div
+    style="padding-bottom:75%;"
+    class="article-cover relative h-0Page(/posts/solvingEquations/index.md) w-full"
+>
+    <picture class="noscript-hidden"><img
+            data-src="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/jacobi_flow001.svg"
+            src="/images/outload.svg"
+            
+            
+            data-
+            alt="Solving Equations with Jacobi Iteration"
+            class="absolute left-0 top-0 h-full w-full object-cover object-center"
+            data-lazyload data-lazyload-blur
+
+        />
+    </picture>
+    <noscript>
+        <picture><img
+                src="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/jacobi_flow001.svg"
+                
+                alt="Solving Equations with Jacobi Iteration"
+                
+                class="absolute left-0 top-0 h-full w-full object-cover object-center"
+            />
+        </picture>
+    </noscript>
+</div>
+<h1 class="article-title absolute bottom-0 left-0 w-full px-6 pb-8 pt-32 text-3xl text-white dark:text-darkText md:px-10 md:text-4xl">
+    Solving Equations with Jacobi Iteration
+</h1></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
+    <div>
+        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+            <i class="eva eva-clock-outline mr-1"></i>
+            <span>
+                <time
+                    title="Published in 11 Dec 2022 00:00:00"datetime="2022-12-11T00:00:00-06:00">11 Dec 2022</time
+                >
+            </span>
+        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                    <i class="eva eva-edit-2-outline mr-1"></i>
+                    <span>
+                        <time
+                            title="Last modified on: 13 Feb 2023 21:20:43"datetime="2023-02-13T21:20:43-06:00">13 Feb 2023</time
+                        >
+                    </span>
+                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-flag-outline mr-1"></i>
+                <span>24 mins read</span>
+            </div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-bar-chart-outline mr-1"></i>
+                <span>5007 words</span>
+            </div></div></div><aside
+            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
+        >
+            <header>
+                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">Table of Contents</h1>
+            </header>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#systems-of-equations">Systems of Equations</a>
+      <ul>
+        <li><a href="#minimizing-functions">Minimizing Functions</a></li>
+        <li><a href="#economic-equilibria">Economic Equilibria</a></li>
+        <li><a href="#robotic-manipulators">Robotic Manipulators</a></li>
+      </ul>
+    </li>
+    <li><a href="#jacobi-iteration">Jacobi Iteration</a></li>
+    <li><a href="#the-case-of-linear-equations">The Case of Linear Equations</a>
+      <ul>
+        <li><a href="#convergence">Convergence</a></li>
+        <li><a href="#linear-2-times-2-example">Linear \(2 \times 2\) Example</a></li>
+        <li><a href="#relaxation-and-associated-flows">Relaxation and Associated Flows</a></li>
+      </ul>
+    </li>
+    <li><a href="#the-case-of-nonlinear-equations">The case of Nonlinear Equations</a>
+      <ul>
+        <li><a href="#example-supply-and-demand-with-substitution">Example: Supply and Demand with Substitution</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+        </aside><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="Faster Reads" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
+            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
+        ><p>Jacobi iteration is a natural idea for solving certain types of nonlinear equations, and reduces to a famous algorithm for linear systems.  This post discusses the algorithm, its convergence, benefits and drawbacks, along with a discussion of examples and pretty pictures 🖼️.</p>
+<h2 class="group " id="introduction"
+    >Introduction<a href="#introduction"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>The method of <em>Jacobi Iteration,</em> named after the 19th century mathematician <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Carl_Gustav_Jacob_Jacobi"target="_blank" rel="noopener">Carl Gustav Jacobi</a
+>
+ (the same Jacobi for whom the <em>Jacobian</em> in calculus is named after), is a numerical method for solving systems of equations.  It is particularly famous as a classical iterative algorithm for solving <em>linear</em> systems.  One of the main reasons one might want to use Jacobi iteration in practice is that it admits of a naturally <em>parallel</em> implementation, and can thus scale to very large and complex systems, and even to problems without any closed form representation of the system we want to solve (like a simulator, or a black-box machine learning algorithm).</p>
+<p>In this post, I&rsquo;ll introduce the basic mathematical intuition of Jacobi iteration, along with some examples of how and where it might arise.  I&rsquo;ll also give a brief analysis of convergence for <em>linear</em> systems of equations, where the concept of a <em>diagonally dominant</em> matrix arises.  I also attempt to extend the intuition of the linear case to nonlinear systems by using theoretical techniques from the theory of ordinary differential equations.</p>
+
+
+<h2 class="group " id="systems-of-equations"
+    >Systems of Equations<a href="#systems-of-equations"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>We are all familiar with the grade-school notion of a <em>mathematical equation</em>.  Particularly famous are the quadratic polynomial equations, <em>e.g.,</em> \(x^2 - x - 2 = 0\), which has exactly the solutions \(x = 2\) and \(x = -1\)).  For another example, the trigonometric equation \(\mathsf{sin}(\frac{(2x + 1) \pi}{2}) - 1 = 0\) has any \(x\) being an integer multiple of \(2\), <em>i.e.,</em> \(x \in 2\Z\) as a solution.</p>
+<p>What is meant by a <em>system</em> of equations is simply a multitude of ordinary equations that need to be satisfied <em>simultaneously</em>.  For instance, if we combined the above two examples into the system of <em>two equations</em> and <em>one variable</em> we would be left with the <em>system</em></p>
+<p>\begin{equation}
+\notag
+\begin{aligned}
+x^2 + x - 2 &amp;= 0\\
+\mathsf{sin}\bigl(\frac{(2x + 1) \pi}{2}\bigr) - 1 &amp;= 0,
+\end{aligned}
+\end{equation}</p>
+<p>which now has a single unique <em>simultaneous</em> solution \(x = 2\).</p>
+<p>In general, we can write systems of equations using a single multivariate function \(F: \R^m \rightarrow \R^n\) which takes \(m\) variables \(x = (x_1, x_2, \ldots, x_m)\) as in \(F(x)\), and outputs \(n\) values \(F(x) = \bigl(F_1(x), F_2(x), \ldots, F_n(x)\bigr)\).  It is a <em>rule of thumb</em> (certainly not an actual <em>rule</em>) that if there are \(n\) equations, you can expect to be able to solve for \(n\) variables, <em>i.e.</em>, the function \(F\) is &ldquo;square&rdquo; with \(m = n\).  Assuming this square case is by no-means essential, but it simplifies many of our examples, so we will run with this case.</p>
+<p>The ultimate goal of <em>solving</em> systems of equations is to find some \(x \in \R^n\) such that \(F(x) = 0\).  We can motivate such problems with a few illustrative examples.</p>
+
+
+<h3 class="group " id="minimizing-functions"
+    >Minimizing Functions<a href="#minimizing-functions"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Consider a function \(f: \R^n \rightarrow \R\) which we want to <em>minimize</em>, <em>i.e.</em>, to find an \(x^\star \in \R^n\) such that \(f(x^\star) \le f(x)\) for every other \(x\) in some neighbourhood of \(x^\star\).  One might want to think of \(f(x)\) perhaps as a design objective (find the best design according to the cost function \(f\)), or as a machine learning loss function, <em>etc.</em>  It is a theorem (the <em>first order necessary conditions</em>) that for differentiable functions \(f\), any minimizer \(x^\star\) must necessarily satisfy the derivative condition \(\mathsf{D} f(x^\star) = 0\), where \(\mathsf{D} f: \R^n \rightarrow \R^n\) is the derivative of \(f\).</p>
+
+
+<h3 class="group " id="economic-equilibria"
+    >Economic Equilibria<a href="#economic-equilibria"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>In economics, many believe that prices of goods in an economy are determined by the matching of supply and demand.  That is, if \(\mathcal{D}(p)\) is a <em>demand curve</em> and \(\mathcal{S}(p)\) is a <em>supply curve</em>, then we expect the price \(p\) to be found from solving the nonlinear equation \(\mathcal{D}(p) = \mathcal{S}(p)\).  I have much more to say about this example in Section <a
+    class="link"
+    href="#example-supply-and-demand-with-substitution">Example: Supply and Demand with Substitution</a
+>
+, where I apply Jacobi iteration to a simple coffee and tea economy where the two goods serve as partial substitutes for one and other.</p>
+
+
+<h3 class="group " id="robotic-manipulators"
+    >Robotic Manipulators<a href="#robotic-manipulators"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Robotic arms with stiff linkages can be modeled by the angles \(\theta\) of their joints.  For example, the position of your hand (your <em>end affector</em>) in space can be determined as a function of the length of your upper arm and your forearm, along with the angles formed at your elbow and shoulder (including the multiple dimensions of rotation your shoulder is capable of).  Specifically, we might wish to describe the position of your hand in space by a function \(F(\theta)\) of these joints.  The problem of determining the appropriate angular settings of your joints, in order to place your hand at a point \(p \in \R^3\) in space, is a problem of solving the system of equations \(F(\theta) - p = 0\), and one which your brain apparently solves with remarkable ease.</p>
+
+
+<h2 class="group " id="jacobi-iteration"
+    >Jacobi Iteration<a href="#jacobi-iteration"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>The ideal of <em>Jacobi iteration</em> is to split up the system \(F(x) = 0\) of \(n\) equations in \(n\) unknowns, into a sequence of simpler equations of one variable and one unknown.  For equation \(i\), we imagine that every variable <em>except</em> \(x_i\), let&rsquo;s call them \(x_{-i}\) is held fixed, and that we don&rsquo;t care about the value of any function except \(F_i\).  We then solve the <em>univariate</em> equation \(F_i(x_i; x_{-i}) = 0\) (This notation is common in game theory, I hope that it is understood) to find the single value of \(x_i\) that results in function \(F_i\) being satisfied.</p>
+<p>This process is carried out, <em>possibly in parallel</em>, simultaneously for each equation to obtain a new set of points which we hope is closer to satisfying the full system of equations.</p>
+<p><strong>Remark</strong>: Proceeding sequentially, rather than simultaneously, by updating each \(x_i\) value immediately after finding a univariate solution, and before finding the next one, is an algorithm called <em>Gauss-Seidel Iteration</em>.  The reader is encouraged to meditate upon the difference.</p>
+<p>A pseudo-code algorithm implementing Jacobi iteration is given as follows:</p>
+<ul>
+<li><kbd>Initialize</kbd> \(x(0) \in \R^n\)</li>
+<li><kbd>for</kbd> \(t = 1, 2, \ldots\)
+<ul>
+<li><kbd>parallel for each</kbd> \(i \in [n]\)
+<ul>
+<li><kbd>find</kbd> \(\tilde{x}_i\) <kbd>such that</kbd> \(F_i(\tilde{x}_i, x_{-i}(t)) = 0\)  <kbd>// i.e., solve the $i^{th}$ equation</kbd></li>
+</ul>
+</li>
+<li><kbd>set</kbd> \(x(t + 1) = \tilde{x}\)</li>
+</ul>
+</li>
+</ul>
+<p>In order that this algorithm be an appropriate choice for your problem, it is <em>at least</em> necessary that the step requiring that we &ldquo;solve the \(i^{th}\) equation&rdquo; can be reliably carried out.  However, even if solving each of the sub-problems is challenging, we may benefit from the straight-forward parallelism offered by finding each \(\tilde{x}_i\) simultaneously.</p>
+<p>The other major issue is <em>convergence</em>, <em>i.e.,</em> does the algorithm actually find a solution?  We can get fairly clear answers to this question in the linear case by applying dynamical systems theory.  As is so often the case, the theory for linear functions serves as a stepping stone to building intuition more generally.</p>
+
+
+<h2 class="group " id="the-case-of-linear-equations"
+    >The Case of Linear Equations<a href="#the-case-of-linear-equations"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Whether or not the algorithm is actually able to find some \(x\) such that \(F(x) = 0\) (assuming at the very least that such an \(x\) <em>exists</em>!) is highly problem dependent and in practice may require various &ldquo;clever tweaks&rdquo;, or benefit from restarting the algorithm from a wide range of initial points \(x(0)\).  However, for the case of <em>linear</em> systems of equations \(Ax = b\) (with \(A \in \R^{n \times n}\) a square matrix with real entries), the algorithm is both elegantly simple, and admits of an easily verifiable <em>sufficient condition</em> for convergence known as <em>diagonal dominance</em>.</p>
+<p>To understand how this works, lets solve for \(x_i\) such that the \(i^{th}\) equation is satisfied.  That is,</p>
+<p>\begin{equation}
+\notag
+\begin{aligned}
+\sum_{j = 1}^n A_{ij} x_j &amp;= b_i\\
+\iff A_{ii} x_i &amp;= b_i - \sum_{j: j \ne i} A_{ij} x_j\\
+\iff x_i &amp;= \frac{1}{A_{ii}}\bigl(b_i - \sum_{j: j \ne i}A_{ij} x_j \bigr),
+\end{aligned}
+\end{equation}</p>
+<p>where we should notice that we already require the diagonal elements of \(A\) to be non-zero (otherwise we couldn&rsquo;t divide).</p>
+<p>Focusing for a moment on the term \(\sum_{j \ne i} A_{ij} x_j\), this is nothing but the \(i^{th}\) element in the matrix multiplication \(Ax\) minus the component \(A_{ii} x_i\), that is, \(\sum_{j \ne i} A_{ij} x_j = (Ax)_i - A_{ii} x_i\).  Using this, we can write the parallel updates to the entire vector \(x\), and the entire Jacobi iteration algorithm as:</p>
+<p>\begin{equation}
+\notag
+x(t + 1) = D^{-1} (b - Mx(t)),
+\end{equation}</p>
+<p>where \(D = \mathsf{dg}(A)\) (the diagonal elements of \(A\)), \(M = A - D\) is all of the <em>off-diagonal</em> elements of \(A\), and \(x(0) \in \R^n\) is an arbitrary starting point for the sequence of candidate solutions \(x(t)\).  When people refer to &ldquo;Jacobi iteration&rdquo;, it is usually this algorithm in particular that they are referring to.</p>
+
+
+<h3 class="group " id="convergence"
+    >Convergence<a href="#convergence"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>The hope is that the iterations \(x(t)\) converge to a solution \(x^\star\), <em>i.e.,</em> \(x(t) \rightarrow x^\star\), where \(Ax^\star = b\).</p>
+<p>To see why we might expect this to happen, imagine that \(x(t)\) converges to a <em>fixed point</em> of the algorithm, <em>i.e.,</em> some \(x(\infty)\) satisfying \(x(\infty) = D^{-1} (b - M x(\infty))\).  For such a point it holds that:</p>
+<p>\begin{equation}
+\notag
+\begin{aligned}
+x(\infty) &amp;= D^{-1} (b - M x(\infty))\\
+Dx(\infty) &amp;= b - M x(\infty)\\
+(D + M)x(\infty) &amp;= b\\
+Ax(\infty) &amp;= b,
+\end{aligned}
+\end{equation}</p>
+<p>which is a solution to the equation \(Ax = b\)!</p>
+<p>To establish the convergence of the iterations, it is well known (this is likey to be a topic of a future post! 😜) that for linear systems \(x(t + 1) = a + K x(t)\), \(x(t)\) will converge whenever \(\rho(K) &lt; 1\), where \(\rho(K) = \text{max}_i\ |\lambda_i(K)|\) is the largest eigenvalue magnitude, a quantity called the /spectral radius.  For the case of Jacobi iteration, we require that \(\rho(D^{-1} M) &lt; 1\).</p>
+<p>Using the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Gershgorin_circle_theorem"target="_blank" rel="noopener">Gershgorin circle theorem</a
+>
+, and the fact that the diagonal values of \(M\) are all \(0\) (by construction), it holds that every eigenvalue of \(D^{-1} M\) lies within a distance \(|D_{ii}^{-1}|\sum_{j \ne i} |M_{ij}|\) of \(0\).  A condition on \(A\) which guarantees this is  <em>diagonally dominance</em>: \(\sum_{j \ne i} |A_{ij}| &lt; |A_{ii}|\) for each \(i\).  If this holds, then the eigenvalues \(\lambda_i\) of \(A\) are &ldquo;close&rdquo; to the diagonals of \(A_{ii}\), so such matrices are in some sense &ldquo;almost diagonal&rdquo;.  Since linear systems \(Dx = b\), for diagonal \(D\), are easy to solve, it is not surprising that there is a simple iterative algorithm for solving linear systems which are diagonally dominant.  Moreover, if the diagonals of \(A\) are also non-zero, \(A\) will necessarily have non-zero eigenvalues, and therefore it will be full-rank, invertible, and admit of unique solutions.  This is all summarized with the following theorem.</p>
+<p><kbd><strong>Theorem</strong>: Let $A \in \R^{n \times n}$ be a square matrix with real entries.  Suppose that $A$ has a non-zero diagonal and is <em>diagonally dominant</em>.  Then, for any vector $b \in \R^n$, there exists a unique solution $x^\star$ to the linear equation $Ax = b$ and Jacobi iteration converges, from any initial condition, to the solution $x^\star$.</kbd></p>
+
+
+<h3 class="group " id="linear-2-times-2-example"
+    >Linear \(2 \times 2\) Example<a href="#linear-2-times-2-example"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Some straightforward Python code implementing linear Jacobi iteration is provided in the listing below.  A realistic implementation should have a method of detecting divergence.  As well, checking the norm of the distance to the solution on every iteration is relatively expensive &ndash; it essentially doubles the computational effort.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">solve_linear_system</span>(A, b, x0<span style="color:#ff79c6">=</span><span style="color:#ff79c6">None</span>, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1e-6</span>, maxiter<span style="color:#ff79c6">=</span>np<span style="color:#ff79c6">.</span>inf):
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;&#34;&#34;Solves the linear system Ax = b by Jacobi iteration.
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    The algorithm&#39;s starting point is x0.  The algorithm is only guaranteed
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    to converge if A is diagonally dominant.
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    Dinv_M, Dinv_b <span style="color:#ff79c6">=</span> (A <span style="color:#ff79c6">-</span> np<span style="color:#ff79c6">.</span>diagflat(D)) <span style="color:#ff79c6">/</span> np<span style="color:#ff79c6">.</span>diag(A)[:, <span style="color:#ff79c6">None</span>], b <span style="color:#ff79c6">/</span> np<span style="color:#ff79c6">.</span>diag(A)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>array(x0) <span style="color:#ff79c6">if</span> x0 <span style="color:#ff79c6">is</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">None</span> <span style="color:#ff79c6">else</span> np<span style="color:#ff79c6">.</span>zeros_like(b)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    it <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> it <span style="color:#ff79c6">&lt;</span> maxiter <span style="color:#ff79c6">and</span> np<span style="color:#ff79c6">.</span>linalg<span style="color:#ff79c6">.</span>norm(A <span style="color:#ff79c6">@</span> x <span style="color:#ff79c6">-</span> b) <span style="color:#ff79c6">&gt;</span> eps:
+</span></span><span style="display:flex;"><span>        x <span style="color:#ff79c6">=</span> Dinv_b <span style="color:#ff79c6">-</span> Dinv_M <span style="color:#ff79c6">@</span> x
+</span></span><span style="display:flex;"><span>        it <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> x
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>For problems in \(\R^2\) (<em>i.e.,</em> with just two variables) it is quite straight-forward to produce nice-looking figures.  The following figure plots the <em>flow</em> of an associated ODE, as well as an &ldquo;SOR&rdquo; modification (both to be explained shortly 💁), along with the discrete iterates of the Jacobi iteration algorithm for the matrix</p>
+<p>\[
+A = \begin{bmatrix} 4/5 &amp; 3 / 5 \\ -6 / 5 &amp; 7/5\end{bmatrix},
+\]</p>
+<p>and \(b = 0\).  The case \(b = 0\) is without loss of generality for the purpose of plotting.  Even though finding a solution to the equation \(Ax = 0\) is trivial in this case, it is equivalent to re-orienting the center of our coordinate system upon the solution \(A^{-1} b\).  It is also worth noting that this matrix is row-wise diagonally dominant (corresponding to our definition) but <em>not</em> columns wise.</p>
+<figure><img src="jacobi_flow001.svg"/>
+</figure>
+
+<p>If you squint closely at this figure, you might even believe that the lines joining the discrete iterates are <em>tangent</em> to the flow lines in the background&hellip;</p>
+
+
+<h3 class="group " id="relaxation-and-associated-flows"
+    >Relaxation and Associated Flows<a href="#relaxation-and-associated-flows"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Our figure above is constructed by plotting the <em>vector field</em> from the <em>flow</em> of a closely related ordinary differential equation.  Let&rsquo;s use \(t\) to denote time, and as in the previous example, assume without loss that \(b = 0\).</p>
+<p>Merely as a device to construct a differential equation, imagine that each step of the algorithm takes \(\Delta\) &ldquo;algorithm time&rdquo;.  Precisely, let us write</p>
+<p>\begin{equation}
+\notag
+\begin{aligned}
+x(t + \Delta) &amp;= -D^{-1} Mx(t)\\
+\iff x(t + \Delta) - x(t) &amp;= -(I + D^{-1} M)x(t))\\
+\end{aligned}
+\end{equation}</p>
+<p>Now, we have an analogy with continually <em>taking steps</em> \(-(I + D^{-1} M)x(t)\) to update the value of \(x(t)\).  If we reduce the size of these steps by \(\Delta\) and then take a limit as \(\Delta \rightarrow 0\)</p>
+<p>\begin{equation}
+\notag
+\begin{aligned}
+x(t + \Delta) - x(t) &amp;= -\Delta(I + D^{-1} M)x(t))\\
+\iff  \frac{1}{\Delta} [x(t + \Delta) - x(t)] &amp;= -(I + D^{-1} M)x(t))\\
+\overset{\Delta \rightarrow 0}{\implies} \dot{x}(t)  &amp;= -(I + D^{-1} M)x(t)),
+\end{aligned}
+\end{equation}</p>
+<p>we obtain a <em>linear</em> ordinary differential equation.</p>
+<p><kbd><strong>Remark</strong>:  The stablity of linear ODEs can be established by checking that the eigenvalues of the corresponding system matrix have negative real part.  In our case, due to the negative sign, we require that $\mathfrak{R}[\lambda_i(I + D^{-1} M)] &gt; 0$ hold for every $i$, where $\lambda_i(A)$ is the $i^{th}$ eigenvalue of $A$.  Since $D^{-1}M$ has $0$ on the main diagonal (by construction) the Gershgorin circle theorem tells us that the eigenvalues lie within Gershgorin discs centered at $1$.  Clearly, the condition $\rho(D^{-1} M) &lt; 1$ is <em>sufficient</em> for the stability of this ODE.  But, thinking intuitively, should one expect that this ODE be &ldquo;more likely&rdquo; to converge than the discrete algorithm?  The reader is encouraged to visualize this situation, and to think about this stability condition.</kbd></p>
+<p>Let&rsquo;s play with this a bit.  What if we didn&rsquo;t take a full limit towards \(\Delta \rightarrow 0\)?  Rearranging the above equations results in another discrete algorithm</p>
+<p>\begin{equation}
+\notag
+x(t + \Delta) = (1 - \Delta) x(t) -\Delta D^{-1} Mx(t)),
+\end{equation}</p>
+<p>where \(\Delta &gt; 0\) is a <em>parameter</em> of the algorithm, with \(\Delta = 1\) corresponding to ordinary Jacobi iteration.</p>
+<p>This algorithm is now picking the next point to lie somewhere along the line connecting \(x\) and the nominal next step \(s(x)\), that is: as \(x \leftarrow (1 - \Delta) x + \Delta s(x)\).  This is a general pattern called <em>Successive Over-relaxation</em> (SOR), and can be applied to any iterative algorithm which takes as input a point \(x\), and outputs the next point as \(x \leftarrow s(x)\).  When \(\Delta &lt; 1\), the next point will lie somewhere in the interval \([x, s(x)]\) between the current point and the nominal next step (the &ldquo;relaxation&rdquo; part of SOR); and \(\Delta &gt; 1\) means that the step goes <em>beyond</em> \(s(x)\) to move a further distance (the &ldquo;over&rdquo; part).  The value \(\Delta = 0\) corresponds to the <em>vanilla</em> version of the algorithm.  I don&rsquo;t think that the case \(\Delta &lt; 0\) has any sensible use (at least not directly in this context) as you would be going <em>backwards</em> in some sense, but maybe it&rsquo;s an interesting possibility to think about.</p>
+<p>The reason that the SOR algorithm can be expected to converge for a broader collection of \(A\) matrices than ordinary Jacobi iteration, is that the space of matrices satisfying \(\mathfrak{R}[\lambda_i(I + D^{-1} M)] &gt; 0\) is larger than those which satisfy \(\rho(D^{-1} M) &lt; 1\) (can you see why?).  However, for a matrix \(A\) such that \(D^{-1}M\) has an eigenvalue with real part less than \(-1\), both algorithms will diverge.</p>
+
+
+<h2 class="group " id="the-case-of-nonlinear-equations"
+    >The case of Nonlinear Equations<a href="#the-case-of-nonlinear-equations"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>For the case of nonlinear equations, we can use tools from ordinary differential equations to say something about the convergence of the associated Jacobi flow, and then extend that intuition through successive over-relaxation to try to understand something about how the discrete algorithm will behave.</p>
+<p>To this end, let us go back to the <em>nonlinear</em> equation \(F(x) = 0\) that we want to solve.  Supposing that the Jacobi iteration algorithm can be implemented for \(F\) (<em>i.e.,</em> each equation in the system can be solved in the &ldquo;diagonal&rdquo; variable), we can write the algorithm with the notation</p>
+<p>\begin{equation}
+\notag
+x(t + 1) = \mathcal{M}(x(t)),
+\end{equation}</p>
+<p>where for any \(x\), \(y = \mathcal{M}(x)\) is a vector such that \(F_i(x_{-i}, y_i) = 0\), that is, solves the \(i^{th}\) equation in the \(i^{th}\) variable.  Following the same trick as we had in the linear case, we can construct an ODE:</p>
+<p>\begin{equation}
+\notag
+\begin{aligned}
+\frac{x(t + \Delta) - x(t)}{\Delta} &amp;= \mathcal{M}(x(t)) - x(t)\\
+\overset{\Delta \rightarrow 0}{\implies} \dot{x}(t) &amp;= \mathcal{M}(x(t)) - x(t).
+\end{aligned}
+\end{equation}</p>
+<p>Thus, we can hope to understand the convergence of nonlinear Jacobi iteration by analyzing the convergence of the nonlinear system of ODEs associated to the function \(\mathcal{M}\).  Firstly, a fixed point of this ODE is, similarly to the linear case, a solution to the nonlinear equation.  So, perhaps we can understand the convergence of \(x(t)\) for points where \(\mathcal{M}(x(t)) \approx x(t)\)?  The method for doing this type of <em>local</em> analysis of ODE convergence is the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Hartman%E2%80%93Grobman_theorem"target="_blank" rel="noopener">Hartman-Grobman Theorem</a
+>
+ (HGT from hereon).  Intuitively, our hope is that if we initialize the algorithm somewhere &ldquo;close&rdquo; to a solution, that it will actually converge to that solution.  That is, we hope that the ODE is <em>locally asymptotically stable</em>.</p>
+<p>The HGT essentially tells us that if the <em>Jacobian</em> \(A = \mathsf{D}\mathcal{M}(x^\star) - I\) of the system at an equilibrium point \(x^\star\) is stable, <em>i.e.,</em> \(\dot{x} = Ax\) converges to \(x^\star\), then there is a local neighbourhood around \(x^\star\) such that the original <em>nonlinear</em> ODE \(\dot{x} = \mathcal{M}(x) - x\) converges to \(x^\star\).</p>
+<p>This statement is still pretty abstract, since we don&rsquo;t really have a handle on what \(\mathcal{M}\) is explicitly.  Another abstract tool that we could apply here is the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Implicit_function_theorem"target="_blank" rel="noopener">Implicit Function Theorem</a
+>
+, which would allow us to calculate \(\mathsf{D}\mathcal{M}\) in terms of derivatives of the original function \(F\).  While this approach can certainly get us somewhere, I&rsquo;d like to make a closer analogy with the linear case.  To this end, let&rsquo;s make a simplifying assumption about the structure of \(F\):</p>
+<p>\begin{equation}
+\notag
+F_i(x) = f_i(x_i) + g_i(x_{-i})\ \forall i,
+\end{equation}</p>
+<p>that is, the \(i^{th}\) equation consists of an individual function \(f_i: \mathbb{R} \rightarrow \mathbb{R}\) of \(x_i\), along with additional <em>coupling</em> function \(g_{i}: \mathbb{R}^{n - 1} \rightarrow \mathbb{R}^{}\) involving the remainder of the variables.  We can now write down what \(\mathcal{M}_i\) is <em>explicitly</em>:</p>
+<p>\begin{equation}
+\notag
+\mathcal{M}_i(x) = f_i^{-1} (-g_i(x_{-i})).
+\end{equation}</p>
+<p>In the linear case, \(f_i^{-1}(z) = z / A_{ii}\) and \(g_i(x_{-i}) = \sum_{j: j \ne i} A_{ij} x_j - b_i\).  Considering now the derivatives of \(\mathcal{M}_i,\)  we just need to combine the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Inverse_function_theorem"target="_blank" rel="noopener">Inverse Function Theorem</a
+>
+ along with the chain rule to obtain</p>
+<p>\begin{equation}
+\notag
+\mathsf{D}\mathcal{M}_i(x) = -\frac{1}{f_i^\prime \circ \mathcal{M}_i(x)} \begin{bmatrix}\frac{\partial g_i(x_{-i})}{\partial x_1} &amp; \cdots &amp; \frac{\partial g_i(x_{-i})}{\partial x_{i - 1}} &amp; 0 &amp; \frac{\partial g_i(x_{-i})}{\partial x_{i + 1}} &amp; \cdots &amp;\frac{\partial g_i(x_{-i})}{\partial x_{n}}\end{bmatrix}
+\end{equation}</p>
+<p>where \(f^\prime \circ \mathcal{M}_i(x) = f^\prime (f_i^{-1} (-g_{i}(x_{-i})))\).  Thus, in exact analogy with the linear case, we can write</p>
+<p>\begin{equation}
+\notag
+\mathsf{D}\mathcal{M}(x) = -D(x)^{-1} M(x),
+\end{equation}</p>
+<p>where \(D(x)\) is a diagonal matrix consisting of the derivatives \(f_i^\prime\) evaluated at the point \(\mathcal{M}_i(x)\) and \(M(x)\) is the Jacobian \(\mathsf{D}F\) of \(F\) itself, but with the diagonal elements zeroed out.</p>
+<p>Returning to the HGT, we need to consider the stability of the linear ODE defined by the matrix \(A = \mathsf{D}\mathcal{M}(x^\star) - I\).  Since \(\mathcal{M}(x^\star) = x^\star\), we have that \(D_i(x^\star) = f_i^\prime(x^\star_i)\).  Using this fact, we are inspired to make a definition of a <em>locally diagonally dominant</em> function.  We will say that \(F\) is a locally diagonally dominant (around an equilibrium point \(x^\star\)) if it has the form \(F_i(x) = f_i(x_i) + g_i(x_{-i})\) and \[|f_i^\prime(x_i^\star)| &gt; \sum_{j: j \ne i} |\frac{\partial g_i (x^\star_{-i})}{\partial x_j}|\] for every \(i\).</p>
+<p>Using what we know from the linear case, combined with the HGT, and the fact that the SOR scheme is an <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Euler_method"target="_blank" rel="noopener">Euler Method</a
+>
+ for the ODE (which converges towards the ODE itself as \(\Delta \rightarrow 0\)), we have a theorem about local convergence of nonlinear Jacobi iteration:</p>
+<p><kbd><strong>Theorem</strong>: Let $F: \mathbb{R}^n \rightarrow \mathbb{R}^n$ be a smooth function.  Suppose there exists some $x^\star$ such that $F(x^\star) = 0$ and that $F(x^\star)$ is locally diagonally dominant in a neighbourhood of $x^\star$.  Then, there exists a neighbourhood $\mathcal{N}$ of $x^\star$ and a $\Delta &gt; 0$ such that SOR nonlinear Jacobi iteration with step-size $\Delta$ converges to $x^\star$ from any initial point $x \in \mathcal{N}$.</kbd></p>
+<p>Of course, the linear case corresponds to the functions \(f_i(x_i) = A_{ii} x_i\) and \(g_i(x_{-i}) = \sum_{j: j \ne i} A_{ij} x_j - b_i\), wherein we recover from above the convergence theorem of linear Jacobi iteration.</p>
+
+
+<h3 class="group " id="example-supply-and-demand-with-substitution"
+    >Example: Supply and Demand with Substitution<a href="#example-supply-and-demand-with-substitution"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Let&rsquo;s cook up an example from economics where we&rsquo;ll try to work out the equilibrium prices of goods in an economy.  A typical economic model (at least so far as I know&hellip; I&rsquo;m no economist!), is to find the prices at which the supply of a good is matched to the demand for that good.  The story is that when prices are high, manufacturers will scramble to produce that good in order to sell it for a large profit, which will drive down the price for the good through competition.  Similarly, when prices are low, demand will be very high, since you can get a lot of utility out of consuming the good in comparison to keeping the small amount of money.  This can be expected to drive up prices.  Through these competing effects pushing prices up and down, it is hoped that prices will <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/General_equilibrium_theory"target="_blank" rel="noopener"><em>equilibriate</em></a
+>
+ at some fixed value through a process of <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Walrasian_auction"target="_blank" rel="noopener"><em>tâtonnement</em></a
+>
+.</p>
+<p>The critical aspect that will make this model an interesting example for solving nonlinear equations is a <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Substitute_good"target="_blank" rel="noopener"><em>substitution effect</em></a
+>
+.  To get more specific, suppose that when the prices for all \(n\) goods are given by \(p \in \R^n\), the supply for good \(i\) is described by a function \(\mathcal{S}_i(p) = S_i(p_i)\) and the demand for this good is \[\mathcal{D}_i(p) = D_i(p_i) + T_i(p_{-i}).\]  What this latter equation says is that there is some <em>nominal</em> demand \(D_i(p_i)\) given by a scalar function of the price of that good, as well as the functions \(T_i(p_{-i})\) which serves to model the <em>substitution effect</em>: the demand for good \(i\) also depends upon the prices of other goods in the economy.  A set of equilibrium prices \(p^\star \in \R^n\) (which may not be unique!) in this economy are prices such that \[\mathcal{S_i}(p^\star) - \mathcal{D}_i(p^\star) = 0\ \forall i \in [n],\] a nonlinear equation.</p>
+<p>To make this more concrete, suppose we have an economy with two goods: coffee and tea.  As the price of coffee increases, demand for coffee also falls.  But, the demand for tea <em>rises</em>, since some coffee drinkers that are tightening their belt and drinking less coffee, start drinking more tea.  Let&rsquo;s write this all down mathematically.  For the <em>demand</em> I&rsquo;ll use functions \(D_i(p_i) = \frac{k_i}{1 + p_i}\), modelling the fact that demand should be decreasing toward zero as price increases, and that there is some maximum demand \(k_i\) when the good is free (I don&rsquo;t think it&rsquo;s possible to consume an infinite amount of tea or coffee! ☕).  Picking another perfectly good function, I&rsquo;ll model the substitution effect will be with a hyperbolic tangent: \(T_i(p_{-i}) = c_i \mathsf{tanh}(p_{-i})\).  This function has a plateau at \(c_i\), as \(p_{-i} \rightarrow \infty\), so the ratio \(c_c / k_\tau\) is measuring the proportion of tea drinkers that would switch to coffee as the price of tea increases.  On the supply side, I&rsquo;ll use a nice S-shaped function \(S_i(p_i) = \frac{m_i p_i}{1 + p_i}\) where the maximum producible amount of the good reaches another plateau at \(m_i\).  This results in the nonlinear system of equations (using \(c\) for coffee and \(\tau\) for tea):</p>
+<p>\begin{equation}
+\notag
+\begin{aligned}
+\text{coffee:}\quad&amp; \frac{m_c p_c}{1 + p_c} - \frac{k_c}{1 + p_c} - c_c \mathsf{tanh}(p_\tau) = 0,\\
+\text{tea:}\quad&amp; \frac{m_\tau p_\tau}{1 + p_\tau} - \frac{k_\tau}{1 + p_\tau} - c_\tau \mathsf{tanh}(p_c) = 0.
+\end{aligned}
+\end{equation}</p>
+<p>Solving these equations individually for \(p_c, p_\tau\) we obtain a nonlinear Jacobi algorithm:</p>
+<p>\begin{equation}
+\notag
+\begin{aligned}
+p_c(t + 1) &amp;= \frac{k_c + c_c \mathsf{tanh}(p_\tau(t))}{m_c - c_c \mathsf{tanh}(p_\tau(t))}\\
+p_\tau(t + 1) &amp;= \frac{k_\tau + c_\tau \mathsf{tanh}(p_c(t))}{m_\tau - c_\tau \mathsf{tanh}(p_c(t))}.
+\end{aligned}
+\end{equation}</p>
+<p>In order for this to constitute a locally diagonally dominant system, we need to check the derivatives.  It is a fairly straightforward calculation which, after cancelling some terms, results in the requirements \[\frac{m_i + k_i}{(1 + p_i^\star)^2} &gt; c_i(1 - \mathsf{tanh}^2 (p_{-i}^\star)).\]  The idea of &ldquo;diagonal dominance&rdquo; is clear in this equation: \(m_i, k_i\) are coefficients controlling the importance of the &ldquo;diagonal&rdquo; part of the function, with \(c_i\) controlling the coupling.  If the coupling is weak: \(m_i + k_i \gg c_i\), then it can be expected that the system is diagonally dominant, and an equilibrium should be close to the &ldquo;nominal&rdquo; equilibrium \(p_i^\star \approx k_i / m_i\).  Incidentally, this should give us a decent starting point for initializing Jacobi iteration.</p>
+<p>Here&rsquo;s a generic implementation of nonlinear Jacobi iteration:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">from</span> typing <span style="color:#ff79c6">import</span> List, Callable
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">jacobi_iteration</span>(x, f_inv: List[Callable], g: List[Callable]):
+</span></span><span style="display:flex;"><span>    x_next <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>zeros_like(x)
+</span></span><span style="display:flex;"><span>    all_i <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>arange(<span style="color:#8be9fd;font-style:italic">len</span>(x))
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> i, (f_inv_i, g_i) <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">enumerate</span>(<span style="color:#8be9fd;font-style:italic">zip</span>(f_inv, g)):
+</span></span><span style="display:flex;"><span>        x_next[i] <span style="color:#ff79c6">=</span> f_inv_i(<span style="color:#ff79c6">-</span>g_i(x[all_i <span style="color:#ff79c6">!=</span> i]))
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> x_next
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">jacobi_flow</span>(x, f_inv: List[Callable], g: List[Callable]):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> jacobi_iteration(x, f_inv, g) <span style="color:#ff79c6">-</span> x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">solve_nonlinear_system</span>(
+</span></span><span style="display:flex;"><span>    F: Callable,
+</span></span><span style="display:flex;"><span>    f_inv: List[Callable],
+</span></span><span style="display:flex;"><span>    g: List[Callable],
+</span></span><span style="display:flex;"><span>    x0<span style="color:#ff79c6">=</span><span style="color:#ff79c6">None</span>,
+</span></span><span style="display:flex;"><span>    eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1e-6</span>,
+</span></span><span style="display:flex;"><span>    maxiter<span style="color:#ff79c6">=</span>np<span style="color:#ff79c6">.</span>inf,
+</span></span><span style="display:flex;"><span>    D<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;&#34;&#34;Solves the nonlinear system F_i(x) = f_i(x_i) + g_i(x_{-i}) = 0.
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    The algorithm&#39;s starting point is x0.  The algorithm is only guaranteed
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    to converge if F is locally diagonally dominant around an equilibrium, and
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    x0 is chosen nearby that equilibrium point.
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>array(x0) <span style="color:#ff79c6">if</span> x0 <span style="color:#ff79c6">is</span> <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">None</span> <span style="color:#ff79c6">else</span> np<span style="color:#ff79c6">.</span>zeros(<span style="color:#8be9fd;font-style:italic">len</span>(g))
+</span></span><span style="display:flex;"><span>    _iter <span style="color:#ff79c6">=</span> partial(jacobi_iteration, f_inv<span style="color:#ff79c6">=</span>f_inv, g<span style="color:#ff79c6">=</span>g)
+</span></span><span style="display:flex;"><span>    all_i <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>arange(<span style="color:#8be9fd;font-style:italic">len</span>(x))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    it <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> it <span style="color:#ff79c6">&lt;</span> maxiter <span style="color:#ff79c6">and</span> np<span style="color:#ff79c6">.</span>linalg<span style="color:#ff79c6">.</span>norm(F(x)) <span style="color:#ff79c6">&gt;</span> eps:
+</span></span><span style="display:flex;"><span>        x <span style="color:#ff79c6">=</span> D <span style="color:#ff79c6">*</span> x <span style="color:#ff79c6">+</span> (<span style="color:#bd93f9">1</span> <span style="color:#ff79c6">-</span> D) <span style="color:#ff79c6">*</span> _iter(x)
+</span></span><span style="display:flex;"><span>        it <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> x
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The code follows a functional programming style that mimics the mathematical description as closely as possible.  A particular implementation of our coffee-tea economy, including useful functions for plotting the progress of the algorithm, might look something like this:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">from</span> math <span style="color:#ff79c6">import</span> tanh
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> functools <span style="color:#ff79c6">import</span> partial
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">coffee_tea_solver</span>(k, m, c, D<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.0</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;&#34;&#34;A particular example with coffee and tea...&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">F</span>(p):
+</span></span><span style="display:flex;"><span>        x0 <span style="color:#ff79c6">=</span> (m[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">*</span> p[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">-</span> k[<span style="color:#bd93f9">0</span>]) <span style="color:#ff79c6">/</span> (<span style="color:#bd93f9">1</span> <span style="color:#ff79c6">+</span> p[<span style="color:#bd93f9">0</span>]) <span style="color:#ff79c6">-</span> c[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">*</span> tanh(p[<span style="color:#bd93f9">1</span>])
+</span></span><span style="display:flex;"><span>        x1 <span style="color:#ff79c6">=</span> (m[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">*</span> p[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">-</span> k[<span style="color:#bd93f9">1</span>]) <span style="color:#ff79c6">/</span> (<span style="color:#bd93f9">1</span> <span style="color:#ff79c6">+</span> p[<span style="color:#bd93f9">1</span>]) <span style="color:#ff79c6">-</span> c[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">*</span> tanh(p[<span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> (x0, x1)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">f_inv</span>(z, _k, _m):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> (_k <span style="color:#ff79c6">+</span> z) <span style="color:#ff79c6">/</span> (_m <span style="color:#ff79c6">-</span> z)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">g</span>(p, _c):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span>_c <span style="color:#ff79c6">*</span> tanh(p)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    f_invs <span style="color:#ff79c6">=</span> [
+</span></span><span style="display:flex;"><span>        partial(f_inv, _k<span style="color:#ff79c6">=</span>k[<span style="color:#bd93f9">0</span>], _m<span style="color:#ff79c6">=</span>m[<span style="color:#bd93f9">0</span>]),
+</span></span><span style="display:flex;"><span>        partial(f_inv, _k<span style="color:#ff79c6">=</span>k[<span style="color:#bd93f9">1</span>], _m<span style="color:#ff79c6">=</span>m[<span style="color:#bd93f9">1</span>]),
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>    gs <span style="color:#ff79c6">=</span> [partial(g, _c<span style="color:#ff79c6">=</span>c[<span style="color:#bd93f9">0</span>]), partial(g, _c<span style="color:#ff79c6">=</span>c[<span style="color:#bd93f9">1</span>])]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    _jacobi_iterator <span style="color:#ff79c6">=</span> partial(jacobi_iteration, f_inv<span style="color:#ff79c6">=</span>f_invs, g<span style="color:#ff79c6">=</span>gs)
+</span></span><span style="display:flex;"><span>    _jacobi_flow <span style="color:#ff79c6">=</span> partial(jacobi_flow, f_inv<span style="color:#ff79c6">=</span>f_invs, g<span style="color:#ff79c6">=</span>gs)
+</span></span><span style="display:flex;"><span>    _solver <span style="color:#ff79c6">=</span> partial(
+</span></span><span style="display:flex;"><span>        solve_nonlinear_system,
+</span></span><span style="display:flex;"><span>        F<span style="color:#ff79c6">=</span>F,
+</span></span><span style="display:flex;"><span>        f_inv<span style="color:#ff79c6">=</span>f_invs,
+</span></span><span style="display:flex;"><span>        g<span style="color:#ff79c6">=</span>gs,
+</span></span><span style="display:flex;"><span>        eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1e-6</span>,
+</span></span><span style="display:flex;"><span>        maxiter<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1000</span>,
+</span></span><span style="display:flex;"><span>        D<span style="color:#ff79c6">=</span>D
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> _jacobi_iterator, _jacobi_flow, _solver, F
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Here&rsquo;s a plot of the flow of this system for the parmeter settings</p>
+<p>\begin{equation}
+\begin{aligned}
+&amp;k_c = 3/2, k_\tau = 2\\
+&amp;m_c = 5/3, m_\tau = 1/2\\
+&amp;c_c = 4/3, c_\tau = 1/3,
+\end{aligned}
+\end{equation}</p>
+<p>which, at least intuitively, results in a system corresponding to our intuition of diagonal dominance.  Increasing the values of \(c_c, c_\tau\) results in a breakdown of the algorithm and a failure to converge, either as a result of domain errors, or running to infinity.  The SOR technique described earlier can potentially be used to increase the domain of convergence, but that is a matter for experimentation.</p>
+<figure><img src="supply_and_demand_jacobi.svg"/>
+</figure>
+
+<p>For this particular coffee-tea system, there is surely a lot more analysis that one could do in order to determine clearer convergence criteria, the ranges of parameters that will result in convergence, <em>etc.</em>  Such analysis is worthwhile in actual practice, but we&rsquo;re here for fun 🙃.</p>
+
+
+<h2 class="group " id="conclusion"
+    >Conclusion<a href="#conclusion"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Our main point is in understanding the Jacobi iteration algorithm for solving systems of equations.  The key assumption for this algorithm is that the system be <em>diagonally dominant</em>.  Intuitively, this means that the equation associated to the \(i^{th}\) variable be only weakly coupled with the remaining variables \(x_{-i}\).  We&rsquo;ve seen how to formalize this in the case of linear equations, and how similar &ldquo;rough guide&rdquo; criteria can be obtained from the Hartman-Grobman Theorem in the nonlinear case.</p>
+<p>In actual practice, Jacobi iteration is not likely to be the best nonlinear equation solver to use, though it depends upon the problem domain.  The fact that it breaks down a system of equations into the <em>parallel</em> solution of <em>univariate</em> equations (for which completely general black-box algorithms like <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Bisection_method"target="_blank" rel="noopener">the Bisection Method</a
+>
+ are available) gives it a rather large potential domain of applicability.  If you find yourself confronted with the need to solve a large system of nonlinear equations, available only through slow and black-box evaluation, and where the equations can be expected to be weakly coupled, Jacobi iteration might be for you 🤞.</p></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="Share to twitter"
+                href="https://twitter.com/share?&text=Jacobi%20iteration%20is%20a%20natural%20idea%20for%20solving%20certain%20types%20of%20nonlinear%20equations,%20and%20reduces%20to%20a%20famous%20algorithm%20for%20linear%20systems.%20This%20post%20discusses%20the%20algorithm,%20its%20convergence,%20benefits%20and%20drawbacks,%20along%20with%20a%20discussion%20of%20examples%20and%20pretty%20pictures%20%f0%9f%96%bc%ef%b8%8f.&url=https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><i class="eva eva-twitter hover:text-theme"></i
+            ></a><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="Share to weibo"
+                href="https://service.weibo.com/share/share.php?url=https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/&title=Solving%20Equations%20with%20Jacobi%20Iteration&sudaref=rjtk.github.io"
+                target="_blank"
+                rel="noopener noreferrer"
+            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="Copy Link" data-clipboard-text="https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/"></i></div>
+<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
+    <div>
+        <a
+            href="/posts/introduction/"
+            title="Introduction"
+            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
+            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+                <i class="eva eva-chevron-left-outline"></i>
+            </span>
+            <span>Prev</span>
+        </a>
+    </div><div class="hidden items-center text-xs xl:flex">
+        Unless otherwise stated, this blog is licensed under 「
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener noreferrer" class="text-theme">CC BY-NC-SA 4.0</a>
+        」
+    </div>
+    <div class="flex items-center text-sm xl:hidden">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener noreferrer" class="text-theme">
+            <img src="/Cc-by-nc-sa.svg" alt="CC BY-NC-SA 4.0" title="CC BY-NC-SA 4.0" class="w-24" />
+        </a>
+    </div>
+
+    <a
+        href=""
+        title=""
+        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText">
+        <span>Next</span>
+        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+            <i class="eva eva-chevron-right-outline"></i>
+        </span>
+    </a>
+</div>
+
+        </div>
+    </div>
+</div>
+</div>
+                </main><footer>
+    <div
+        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
+    >
+        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
+            <span class="">© 2022 - 2023</span>
+            <span class="mx-1.5 opacity-50"> | </span>Powered by <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a></div>
+
+        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://rjtk.github.io/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
+                    <span>RSS</span>
+                </a><a data-no-swup href="https://rjtk.github.io/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
+                    <span>Sitemap</span>
+                </a><div id="google_translate_element" class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
+    <span>Run time: </span><b id="run-time-d">0</b>
+    <span class="text-xs">days</span>
+    <b id="run-time-h">0</b>
+    <span class="text-xs">h</span>
+    <b id="run-time-m">0</b>
+    <span class="text-xs">m</span>
+    <b id="run-time-s">0</b>
+    <span class="text-xs">s</span>
+</div>
+</div>
+
+    <script type="text/javascript">
+window.__theme = {
+    cdn: '',
+    pjax: true ,
+    isServer: false ,
+    $version:"",
+    lang: 'en-us',
+    imageZoom: true ,
+    lazyload: true ,
+    bionicReading: {
+        enabled: true ,
+        skipLinks: false ,
+        autoBionic: false ,
+        excludeWords:[],
+        excludeClasses:[],
+        excludeNodeNames:[],
+    },
+    katex: true ,
+    search: true ,
+    backtop: true ,
+    pangu: false ,
+    autoDarkMode: false ,
+    googleAnalytics:false,
+    hugoEncrypt: {
+        wrongPasswordText: 'Password is incorrect',
+        userStorage:window['sessionStorage'],
+    },
+    console: {
+        enabled: true ,
+        leftColor: '#dd6065',
+        rightColor: '#feb462',
+        leftText: 'Hugo Theme Luna',
+        rightText: 'Powered by Hugo ❤ Luna',
+    },
+    assets: {
+        error_svg: "\/images\/error.svg",
+        search_svg: "\/images\/search.svg",
+    },
+    i18n: {
+        copy: {
+            success: "Copy success",
+            failed: "Copy failed",
+            copyCode: "Copy code",
+        },
+        search: {
+            untitled: "Untitled",
+            loadFailure: "Initialization of the search engine failed",
+            input: "Type something...",
+        },
+        darkMode: {
+            dark: "Switch to dark mode",
+            light: "Switch to light mode"
+        }
+    },creatTime: "2022\/12\/11"}
+</script>
+<script type="text/javascript" src="/ts/main.988b77b29f6061a05182a3737ac3fe3b34578e939adc83437110316c5e2023d5.js" defer integrity="sha256-mIt3sp9gYaBRgqNzesP&#43;OzRXjpOa3INDcRAxbF4gI9U="></script><script type="text/javascript" src="/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js" defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type="text/javascript">
+    window.translateelement_styles = "\/sass\/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";
+    function googleTranslateElementInit(){
+        new google.translate.TranslateElement({
+            pageLanguage: 'en-us',
+            includedLanguages: 'af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi',
+            autoDisplay:false
+        },'google_translate_element');
+    }
+</script>
+
+
+
+
+
+<script>
+    
+    
+</script>
+
+<script data-swup-reload-script>
+    
+    
+</script>
+</footer>
+</div>
+        </div><a
+        href="#nav"
+        title="Back to top"
+        id="back-top"
+        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
+    >
+        <div class="relative">
+            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
+                <i class="eva eva-arrow-upward-outline"></i>
+            </div>
+            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
+                <circle
+                    transform="rotate(-90, 27 , 27)"
+                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
+                    cx="27"
+                    cy="27"
+                    r="25"
+                    fill="none"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke="var(--theme)"
+                />
+            </svg>
+        </div>
+    </a><noscript>
+    <style>
+        .dark-mode-switch,
+        #run-time,
+        #bionicReading,
+        .noscript-hidden,
+        [data-clipboard-text],
+        [data-lazyload] {
+            display: none;
+        }
+        #back-top {
+            opacity: 1;
+        }
+        .noscript-show {
+            display: initial;
+        }
+    </style>
+</noscript>
+</body>
+</html>

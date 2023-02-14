@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Quant Out of Water</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Dec 2022 00:00:00 -0600</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 11 Dec 2022 00:00:00 -0600</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Solving Equations with Jacobi Iteration</title>
+      <link>https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/</link>
+      <pubDate>Sun, 11 Dec 2022 00:00:00 -0600</pubDate>
+      
+      <guid>https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/</guid>
+      <description>&lt;p&gt;Jacobi iteration is a natural idea for solving certain types of nonlinear equations, and reduces to a famous algorithm for linear systems.  This post discusses the algorithm, its convergence, benefits and drawbacks, along with a discussion of examples and pretty pictures 🖼️.&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Introduction</title>
       <link>https://rjtk.github.io/posts/introduction/</link>
