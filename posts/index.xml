@@ -8,11 +8,11 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 17 Dec 2022 00:00:00 -0600</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Lyapunov Stability, Linear Systems, and Quadratic Functionals</title>
-      <link>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-quadratic-functionals/</link>
+      <title>Lyapunov Stability, Linear Systems, and Semidefinite Programming</title>
+      <link>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-semidefinite-programming/</link>
       <pubDate>Sat, 17 Dec 2022 00:00:00 -0600</pubDate>
       
-      <guid>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-quadratic-functionals/</guid>
+      <guid>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-semidefinite-programming/</guid>
       <description>&lt;p&gt;Dynamical systems are ubiquitous models occuring in science, engineering, and mathematics.  Not only are they used to model real-world dynamic phenomena like the dynamics of chemical plants, population growth, and physical engineered systems, they can also be applied to model algorithms themselves.  This post focuses on &lt;em&gt;linear&lt;/em&gt; dynamical systems, their analysis by means of semidefinite programming, and connections with control theory through the computation of quadratic functionals of their paths.&lt;/p&gt;</description>
     </item>
     

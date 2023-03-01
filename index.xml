@@ -16,10 +16,10 @@
         <lastBuildDate>Sat, 17 Dec 2022 00:00:00 -0600</lastBuildDate>
         <language>en-us</language>
         <generator>Hugo -- gohugo.io</generator><item>
-            <title>Lyapunov Stability, Linear Systems, and Quadratic Functionals</title>
-            <link>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-quadratic-functionals/</link>
+            <title>Lyapunov Stability, Linear Systems, and Semidefinite Programming</title>
+            <link>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-semidefinite-programming/</link>
             <pubDate>Sat, 17 Dec 2022 00:00:00 -0600</pubDate>
-            <guid>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-quadratic-functionals/</guid><description>&lt;p&gt;Dynamical systems are ubiquitous models occuring in science, engineering, and mathematics.  Not only are they used to model real-world dynamic phenomena like the dynamics of chemical plants, population growth, and physical engineered systems, they can also be applied to model algorithms themselves.  This post focuses on &lt;em&gt;linear&lt;/em&gt; dynamical systems, their analysis by means of semidefinite programming, and connections with control theory through the computation of quadratic functionals of their paths.&lt;/p&gt;
+            <guid>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-semidefinite-programming/</guid><description>&lt;p&gt;Dynamical systems are ubiquitous models occuring in science, engineering, and mathematics.  Not only are they used to model real-world dynamic phenomena like the dynamics of chemical plants, population growth, and physical engineered systems, they can also be applied to model algorithms themselves.  This post focuses on &lt;em&gt;linear&lt;/em&gt; dynamical systems, their analysis by means of semidefinite programming, and connections with control theory through the computation of quadratic functionals of their paths.&lt;/p&gt;
 &lt;h2 class=&#34;group &#34; id=&#34;introduction&#34;
     &gt;Introduction&lt;a href=&#34;#introduction&#34;
         &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
@@ -39,9 +39,13 @@
 &gt;
  book on &lt;em&gt;linear matrix inequalities&lt;/em&gt;.  I have also drawn some ideas and inspiration from the &lt;a
     class=&#34;link&#34;
-    href=&#34;https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Convex Optimization&lt;/a
+    href=&#34;https://amzn.to/41kpMCU&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Convex Optimization book&lt;/a
 &gt;
- book &lt;kbd&gt;Boyd, Stephen, Stephen P. Boyd, and Lieven Vandenberghe. Convex optimization. Cambridge university press, 2004.&lt;/kbd&gt; and have made use of &lt;a
+ (also &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;freely available&lt;/a
+&gt;
+) &lt;kbd&gt;Boyd, Stephen, Stephen P. Boyd, and Lieven Vandenberghe. Convex optimization. Cambridge university press, 2004.&lt;/kbd&gt; and have made use of &lt;a
     class=&#34;link&#34;
     href=&#34;https://www.cvxpy.org/&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;cvxpy&lt;/a
 &gt;
@@ -273,6 +277,7 @@ I
 \end{aligned}\notag
 \end{equation}&lt;/p&gt;
 &lt;p&gt;If we are able to simply find some matrix \(P \succ 0\) such that \(V(x)\) is a Lyapunov function, then we have established the convergence of our system.  The astute reader will notice that this is a linear matrix inequality and can be solved by means of the above semidefinite feasibility program (with \(\gamma = 0\)).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: Lyapunov stability is a fundamental tool for establishing convergence in nonlinear systems.  One of the most elegant examples is that of the gradient flow $\dot{x} = -\nabla f(x)$ for a strongly convex function $f$ (making this assumption for simplicity).  In this case, the function $f$ itself can serve as a Lyapunov function:  That is, $\frac{\mathsf{d}}{\mathsf{d}t} f(x) = \nabla f(x)^{\mathsf{T}} \dot{x} = -||\nabla f(x)||_2^2 &amp;lt; 0$ except at $x = x^\star$, the minimizer where $\nabla f(x^\star) = 0$.  Incidentally, this also tells us that the gradient flow monotonically decreases the function $f$.  Convergence proofs of &lt;em&gt;many&lt;/em&gt; algorithms come down to constructing an appropriate Lyapunov function.&lt;/kbd&gt;&lt;/p&gt;
 
 
 &lt;h4 class=&#34;group &#34; id=&#34;example&#34;
@@ -456,7 +461,7 @@ J(x)
         &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
 &gt;&lt;/h2&gt;
 
-&lt;p&gt;The purpose of this post has been to introduce the Lyapunov approach to analyzing the stability of linear dynamical systems.  This is only one of many possible approaches to this analysis, but the semidefinite programming perspective on this problem can generalize much further than a direct analysis of eigenvalues, not to mention that it opens the door to constructing &lt;em&gt;optimal&lt;/em&gt; algorithms.&lt;/p&gt;</description></item><item>
+&lt;p&gt;My purpose in writing this has been to explore the Lyapunov approach to analyzing the stability of linear dynamical systems.  This is only one of many possible approaches to this analysis, but it also generalizes (in various directions) much more easily than does a direct analysis of the eigenvalues of the system matrix.  Indeed, the Lyapunov approach can also lead to &lt;em&gt;global&lt;/em&gt; convergence theorems for nonlinear systems, whereas the Hartman-Grobman theorem combined with an eigenvalue analysis can only lead to a &lt;em&gt;local&lt;/em&gt; convergence result.  Moreover, the semidefinite programming perspective on this problem can also generalize greatly, and opens the door to constructing &lt;em&gt;optimal&lt;/em&gt; algorithms.  The tradeoff with the Lyapunov approach is that constructing an appropriate Lyapunov function can be &lt;em&gt;extremely&lt;/em&gt; difficult, and there is no ready-made recipe for doing so &amp;ndash; it often comes down to your creativity!&lt;/p&gt;</description></item><item>
             <title>Solving Equations with Jacobi Iteration</title>
             <link>https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/</link>
             <pubDate>Sun, 11 Dec 2022 00:00:00 -0600</pubDate>
