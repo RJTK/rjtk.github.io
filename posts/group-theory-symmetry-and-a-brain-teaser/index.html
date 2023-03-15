@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en-us" class="lang-en-us">
+    <head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="I review some elementary discrete math concepts, use them to describe and solve a neat brain-teaser, and generalize the solution into a form of robust breadth first search.
+" />
+<meta itemprop="description" content="I review some elementary discrete math concepts, use them to describe and solve a neat brain-teaser, and generalize the solution into a form of robust breadth first search.
+" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<meta itemprop="name" content="Group Theory, Symmetry, and a Brain Teaser - Quant Out of Water" />
+<link href="https://rjtk.github.io/index.xml" title="Group Theory, Symmetry, and a Brain Teaser - Quant Out of Water" type="application/rss+xml" rel="alternate" />
+<title>Group Theory, Symmetry, and a Brain Teaser - Quant Out of Water</title><link rel="stylesheet" href="/main.efa856a7e699d6b8dc8748086f759f5a7bff94ff5428a65430ef983ad3b92d56.css" integrity="sha256-76hWp+aZ1rjch0gIb3WfWnv/lP9UKKZUMO+YOtO5LVY=" /><meta property="og:site_name" content="Group Theory, Symmetry, and a Brain Teaser - Quant Out of Water" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Group Theory, Symmetry, and a Brain Teaser" />
+<meta property="og:description" content="I review some elementary discrete math concepts, use them to describe and solve a neat brain-teaser, and generalize the solution into a form of robust breadth first search.
+" />
+<meta property="og:url" content="https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/" /><meta property="article:published_time" content="2023-02-19T00:00:00-06:00" /><meta property="article:modified_time" content="2023-03-15T14:45:55-05:00" /><meta name="theme-color" content="#dd6065" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Group Theory, Symmetry, and a Brain Teaser - Quant Out of Water" />
+<meta name="apple-mobile-web-app-status-bar-style" content="white" />
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Group Theory, Symmetry, and a Brain Teaser - Quant Out of Water" />
+<meta name="twitter:description" content="I review some elementary discrete math concepts, use them to describe and solve a neat brain-teaser, and generalize the solution into a form of robust breadth first search.
+" />
+<meta name="twitter:url" content="https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
+<link href="/icon.png" rel="Bookmark" />
+<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Group Theory, Symmetry, and a Brain Teaser",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/rjtk.github.io\/posts\/group-theory-symmetry-and-a-brain-teaser\/"
+  },"genre": "posts","wordcount": 4741 ,
+  "url": "https:\/\/rjtk.github.io\/posts\/group-theory-symmetry-and-a-brain-teaser\/","datePublished": "2023-02-19T00:00:00-06:00","dateModified": "2023-03-15T14:45:55-05:00","author": {
+    "@type": "Person",
+    "name": "qoow"
+  },"description": ""
+}
+</script>
+
+
+    </head>
+    
+    <body class="dark:bg-darkBg dark:text-darkText">
+        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
+            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="relative"><div class=" text-center py-6 border-b dark:border-darkBorder"><div class="text-3xl">Quant Out of Water</div></div><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
+        <div class="route-items flex w-full items-center justify-around"><a
+                    title="Home"
+                    data-active-link="/"
+                    href="/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Home</span>
+                </a><a
+                    title="About"
+                    data-active-link="/about/"
+                    href="/about/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">About</span>
+                </a>
+        </div>
+    </nav><nav class="sub-navbar z-10 flex items-center border-b px-5 py-2 dark:border-darkBorder md:px-10"><a
+                title="Tags"
+                data-active-link="/tags/"
+                href="/tags/"
+                class=" relative flex cursor-pointer items-center mr-4 text-gray-400 dark:text-darkText transition duration-150 ease-[ease] hover:text-theme"
+            >
+                <i
+                    class="eva eva-pricetags leading-none mr-1"
+                ></i>
+                <span>Tags</span>
+            </a></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
+    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
+</div>
+</header>
+<main class="relative flex flex-grow " id="swup"><style>:root {
+        --font:Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }</style><div class="type-posts layout- w-full"><div class="relative h-full">
+    <div class="relative h-full">
+        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div
+    style="background-image: linear-gradient(180deg,#f2f1f2, #ccc);padding-bottom:75%;"
+    class="article-cover relative h-0Page(/posts/equivalenceClassesAndABrainTeaser/index.md) w-full"
+>
+    <picture class="noscript-hidden"><source data-srcset="/posts/group-theory-symmetry-and-a-brain-teaser/transition_diagram_hu6b66eed25b1b2bc98277cba15c36c73a_138305_1181x0_resize_q95_h2_catmullrom_3.webp 1440w" type="image/webp" /><img
+            data-src="https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/transition_diagram.png"
+            src="/posts/group-theory-symmetry-and-a-brain-teaser/transition_diagram_hu6b66eed25b1b2bc98277cba15c36c73a_138305_1bf663a46664223f031638d8d490ed24.jpg"
+            width="1181"
+            height="1181"
+            data-srcset="/posts/group-theory-symmetry-and-a-brain-teaser/transition_diagram_hu6b66eed25b1b2bc98277cba15c36c73a_138305_1181x0_resize_catmullrom_3.png 1440w"
+            alt="Group Theory, Symmetry, and a Brain Teaser"
+            class="absolute left-0 top-0 h-full w-full object-cover object-center"
+            data-lazyload data-lazyload-blur
+
+        />
+    </picture>
+    <noscript>
+        <picture><source srcset="/posts/group-theory-symmetry-and-a-brain-teaser/transition_diagram_hu6b66eed25b1b2bc98277cba15c36c73a_138305_1181x0_resize_q95_h2_catmullrom_3.webp 1440w" type="image/webp" /><img
+                src="https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/transition_diagram.png"
+                srcset="/posts/group-theory-symmetry-and-a-brain-teaser/transition_diagram_hu6b66eed25b1b2bc98277cba15c36c73a_138305_1181x0_resize_catmullrom_3.png 1440w"
+                alt="Group Theory, Symmetry, and a Brain Teaser"width="1181"
+                height="1181"
+                class="absolute left-0 top-0 h-full w-full object-cover object-center"
+            />
+        </picture>
+    </noscript>
+</div>
+<h1 class="article-title absolute bottom-0 left-0 w-full px-6 pb-8 pt-32 text-3xl text-white dark:text-darkText md:px-10 md:text-4xl">
+    Group Theory, Symmetry, and a Brain Teaser
+</h1></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
+    <div>
+        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+            <i class="eva eva-clock-outline mr-1"></i>
+            <span>
+                <time
+                    title="Published in 19 Feb 2023 00:00:00"datetime="2023-02-19T00:00:00-06:00">19 Feb 2023</time
+                >
+            </span>
+        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                    <i class="eva eva-edit-2-outline mr-1"></i>
+                    <span>
+                        <time
+                            title="Last modified on: 15 Mar 2023 14:45:55"datetime="2023-03-15T14:45:55-05:00">15 Mar 2023</time
+                        >
+                    </span>
+                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-flag-outline mr-1"></i>
+                <span>23 mins read</span>
+            </div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-bar-chart-outline mr-1"></i>
+                <span>4741 words</span>
+            </div></div></div><aside
+            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
+        >
+            <header>
+                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">Table of Contents</h1>
+            </header>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#a-mathematical-preamble">A Mathematical Preamble</a>
+      <ul>
+        <li><a href="#equivalence-classes">Equivalence Classes</a></li>
+        <li><a href="#functions-permutations-and-groups">Functions, Permutations, and Groups</a></li>
+      </ul>
+    </li>
+    <li><a href="#solving-the-puzzle">Solving the Puzzle</a>
+      <ul>
+        <li><a href="#representation-and-rotations">Representation and Rotations</a></li>
+        <li><a href="#solved-states">Solved States</a></li>
+        <li><a href="#three-more-equivalence-classes">Three More Equivalence Classes</a></li>
+        <li><a href="#more-permutations-on-s">More Permutations on \(S\)</a></li>
+        <li><a href="#transition-diagramming">Transition Diagramming</a></li>
+        <li><a href="#a-solution">A Solution</a></li>
+      </ul>
+    </li>
+    <li><a href="#computational-generalizations">Computational Generalizations</a>
+      <ul>
+        <li><a href="#uncertain-breadth-first-search">Uncertain Breadth First Search</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+        </aside><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="Faster Reads" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
+            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
+        ><p>I review some elementary discrete math concepts, use them to describe and solve a neat brain-teaser, and generalize the solution into a form of robust breadth first search.</p>
+<h2 class="group " id="introduction"
+    >Introduction<a href="#introduction"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Recently, a friend introduced me to the following brain teaser:</p>
+<p><kbd><strong>Problem Statement</strong>: Suppose you are kidnapped, blindfolded, and placed into a room.  Your kidnappers hand you a plate with four coins on it, arranged in a</kbd> \(2 \times 2\) <kbd>square.  They will let you leave if you can flip all of the coins so that they are face up, in a <em>finite</em> amount of time (they ain&rsquo;t got all day!).  Since you can&rsquo;t see, you can ask the interrogator if you&rsquo;ve successfully placed all the coins heads up (if you&rsquo;d like to increase the immersion, you can imagine you are actually blind, otherwise you could just take off the blindfold).  The interrogator won&rsquo;t lie to you, but will try to mess with you: any time the answer is &ldquo;no&rdquo;, they will rotate the plate before giving it back to you.  The amount by which it is rotated is arbitrary &ndash; it could be random, follow a fixed pattern, or be adversarial.</kbd></p>
+<p>The first things coming to mind with this puzzle is that you could just iterate through every possible sequence of flips, asking the interrogator whether they&rsquo;re all heads up after each flip.  This possibility is immediately shut down by their adversarial rotations &ndash; the interrogator can easily foil this plan.</p>
+<p>Another possibility is through <em>random</em> flips.  Randomization is an effective tool because the interrogator cannot determine your next move by finding a pattern in your behaviour (if you randomize effectively, even you don&rsquo;t know your next move!).  If you simply pick up all the coins at random, flip them randomly, and then ask if you&rsquo;ve solved the puzzle, it is guaranteed (by the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Borel%E2%80%93Cantelli_lemma"target="_blank" rel="noopener">Borell-Cantelli Lemma</a
+>
+) that you will eventually stumble upon the solution.  However, this is where the caveat about <em>finite time</em> comes in.  In probability theory, it is sometimes a point of confusion what is actually meant by a random variable being finite, so let&rsquo;s spell it out.  If \(N(\omega)\) is the number of flips taken, given a state of the universe \(\omega\), the Borell-Cantelli Lemma tells us that \(N(\omega) &lt; \infty\) almost surely, so \(N\) is <em>bounded</em>, but it is not <em>uniformly bounded</em> (over all possible events \(\omega\)).  What we want is that there is some real number \(N_{\text{max}} &lt; \infty\) such that \(N(\omega) \le N_{\text{max}}\) almost-surely, and this cannot be done by the random flipping strategy.</p>
+<p>That all being said, the solution I arrived upon does not include any randomization.  Before explaining the solution, I&rsquo;m going to take a detour through the ideas that came to my mind, and some of the formalisms that can be used to understand the puzzle, its solution, and potential generalization.</p>
+
+
+<h2 class="group " id="a-mathematical-preamble"
+    >A Mathematical Preamble<a href="#a-mathematical-preamble"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>The purpose of this section is to review some mathematical formalism and terminology used in reasoning about the coins-on-a-plate puzzle.  I have a limited background in discrete math or abstract algebra, so even though these concepts are rather elementary, it has been good for me to write things down.  Indeed, reviewing elementary concepts facilitates <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Chunking_%28psychology%29"target="_blank" rel="noopener">Chunking</a
+>
+ (an essential part of <a
+    class="link"
+    href="https://amzn.to/41gvuFQ"target="_blank" rel="noopener">learning</a
+>
+).  If all one is interested in is the solution to the puzzle, or if they are already well familiar with these concepts, they can skip to <a
+    class="link"
+    href="#solving-the-puzzle">Solving the Puzzle</a
+>
+.</p>
+
+
+<h3 class="group " id="equivalence-classes"
+    >Equivalence Classes<a href="#equivalence-classes"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>In mathematics, an <em>equivalence relation</em> \(\sim\) on a set \(X\) is a binary relation satisfying the following properties:</p>
+<ol>
+<li><em>Reflexivity</em>: \(\forall x \in X\ x \sim x\)</li>
+<li><em>Symmetry</em>: \(\forall x, y \in X\ x \sim y \iff y \sim x\)</li>
+<li><em>Transitivity</em>: $∀ x, y, z ∈ X\ x ∼ y, y ∼ z \implies x ∼ z.$</li>
+</ol>
+<p>The most famous equivalence relation is &ldquo;ordinary&rdquo; equality: &lsquo;\(=\)&rsquo;, but there are various more exotic equivalence relations: equivalence up to rotations in geometry, equivalence almost surely in probability, equivalence except on measure-zero sets in the theory of \(L_p\) spaces, <em>etc</em>.</p>
+<p>When dealing with a finite number of objects (finiteness is not necessary in some/many of the cases I talk about, but I keep the assumption to avoid accidentally writing something that is technically wrong for infinite sets), equivalence classes easily arise from partitions of the set.  That is, if \(X\) is a finite set, and \(X = \bigcup_{i = 1}^M X_i\) for subsets \(X_i \subseteq X\) which are all disjoint \(i \ne j \implies X_i \cap X_j = \emptyset\) (<em>i.e.</em>, the \(X_i\) are a partition \(X\)) we can define an equivalence relation on \(X\) by \[x \sim y \iff (\exists i: x \in X_i \wedge y \in X_i),\] where \(\wedge\) indicates &ldquo;and&rdquo;.  Let us quickly check that this is a bona-fide equivalence relation: Let \(x \in X\).  There is an \(X_i\) in the partition such that \(x \in X_i\) and hence &ldquo;also&rdquo; \(x \in X_i\) verifying it is reflexive.  That it is symmetric arises since \((x \in X_i \wedge y \in X_i) \iff (y \in X_i \wedge x \in X_i)\).  Finally, it is transitive since the \(X_i\) are a partition without any overlap: if \(x, y\) are in the same set \(X_i\) and \(y, z\) are both in another set \(X_j\), it must be that \(X_i = X_j\) (and hence \(x, z \in X_i\)) since \(y\) must be in exactly one of the \(X_i\).  Conversely, the reader can check that any set partition also induces an equivalence relation.  Thus, set partitions and equivalence relations are equivalent.</p>
+<p>Given an equivalence relation \(\sim\) on a set \(X\), the corresponding partition (<em>i.e.</em>, the partition <em>induced</em> by \(\sim\)) is commonly denoted as \(X / \sim\) as the <em>quotient set</em>.  We then say that elements of a set in the partition (that is, elements \(x \in X_i\) for some \(X_i \in X / \sim\), which is a subset \(X_i \subseteq X\)) are <em>equivalent up to</em> \(\sim\).</p>
+
+
+<h3 class="group " id="functions-permutations-and-groups"
+    >Functions, Permutations, and Groups<a href="#functions-permutations-and-groups"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Any <em>finite</em> set with \(N\) elements can be represented simply as the set of integers from \(1\) to \(N\) as in \(X = \{1, 2, \ldots, N\}\) (a set which is commonly denoted \([N]\)).  It does not matter what the elements of the set actually are, you can simply refer to the first, second, <em>etc</em>., in an arbitrary order.</p>
+<p>Now, what are the functions on finite sets?  Well, a function \(f: X \rightarrow X\) is just a mapping from some element of \(x \in X\) (without loss, an integer between \(1\) and \(N\)) to another element \(f(x) \in X\).  If the function is a one-to-one function (<em>i.e.</em>, it is <em>injective</em>) whose domain is all of \(X\), then it must also (why?) be an onto function (<em>i.e.</em>, a <em>surjection</em>) and thus it is a <em>bijection</em> and in this context such functions are called <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Permutation"target="_blank" rel="noopener"><em>permutations</em></a
+>
+.  These are nothing but re-orderings of the integers, usually denoted by \(\sigma\) (or other Greek letter, instead of the more generic \(f\)) as in &ldquo;\(\sigma\) re-orders the sequence \((1, 2, \ldots, N)\) into \((\sigma(1), \sigma(2), \ldots, \sigma(N))\)&rdquo;.</p>
+<p>Since permutations are bijections, they have an inverse.  Moreover, the composition operation amongst permutations is <em>associative</em> (why?): for permutations \(\sigma, \pi, \tau\) on \(X\), it is the case that \((\sigma \circ \pi) \circ \tau = \sigma \circ (\pi \circ \tau)\), where, <em>e.g.</em>, \((\sigma \circ \pi)(x) = \sigma(\pi(x))\).  This means that (with the trivial &ldquo;doing nothing&rdquo; permutation \(Id(x) = x\) serving as the identity) the set of all permutations of \(X\), call it \[G_X = \{\sigma: X \rightarrow X\ | \ \sigma \text{ is a bijection}\},\] along with the composition operation constitutes a (finite) <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Group_%28mathematics%29"target="_blank" rel="noopener"><em>Group</em></a
+>
+ \((G_X, \circ)\).  This particular group \(G_X\) of all bijections is particularly special, and is referred to as the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Symmetric_group"target="_blank" rel="noopener">Symmetric Group</a
+>
+ \(S_N\) on \(N\) elements &ndash; it is worthwhile noting that the size of this group grows rather quickly: there are \(N!\) bijections in \(S_N\).</p>
+
+
+<h4 class="group " id="cycles-and-decomposition"
+    >Cycles and Decomposition<a href="#cycles-and-decomposition"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h4>
+
+<p>Given a permutation \(\sigma \in S_N\), an $r$-<em>cycle</em> is a sequence of \(r \ge 1\) numbers \(i_1, \ldots, i_r\) such that \(i_{k + 1} = \sigma(i_k)\) and \(i_r = i_1\).  Given an $r$-cycle of \(\sigma\), we can collect each \(i_1, \ldots, i_r\) into a set \(C \subseteq [N]\) called an <em>orbit</em> and restrict \(\sigma\) to this cycle so that \(\sigma_C\) is equal to \(\sigma\) in \(C\), and the identity outside of \(C\) as in \(\forall x \in C:\ \sigma_C(x) = \sigma(x)\) and \(\forall x \in C^{\mathsf{c}}:\ \sigma_C(x) = x\).  Remarkably, permutations can be <em>decomposed</em> into a composition of their cycles:</p>
+<p><kbd><strong>Theorem</strong> (Cyclic Decomposition): Let $\sigma \in S_N$.  Then, there exists a partition $C_1, \ldots, C_m$ of $[N]$ such that $\sigma = \sigma_{C_1} \circ \cdots \circ \sigma_{C_m}.$  Moreover, each $C_i$ is an orbit of a cycle of $\sigma$, and for any cycle of $\sigma$ there is a corresponding orbit $C_i$.</kbd></p>
+<p><em>proof (sketch): Since \(\sigma\) acts on a finite set, there exists at least one cycle, call its orbit \(C_1\).  We have the partition \([N] = C_1^{\mathsf{c}} \cup C_1\) and the decomposition \(\sigma = \sigma_{C_1^{\mathsf{c}}} \circ \sigma_{C_1}\) since \(\sigma_{C_1}(x) = x\) on \(C_1^{\mathsf{c}}\).  Now, \(C_1\) contains at least one element, and \(\sigma_{C_1^{\mathsf{C}}}\) is another permutation when restricted to \(C_1^{\mathsf{c}}\), so the theorem follows by induction.</em> \(\square\)</p>
+<p>From the partitioning of \([N]\) by the orbits of a permutation, we see that any permutation also induces a collection of equivalence classes (exactly the orbits of the permutation)!  Within each of these equivalence classes, we can say that the elements are identical <em>up to</em> the operation of \(\sigma\).  As well, we say that any set \(C\) such that \(x \in C \implies \sigma(x) \in C\) is <em>invariant</em> to \(\sigma\) &ndash; clearly, the partitions induced by \(\sigma\) are all invariant sets.  These formalisms can be used to understand the structure of the coins-on-a-plate puzzle.</p>
+
+
+<h2 class="group " id="solving-the-puzzle"
+    >Solving the Puzzle<a href="#solving-the-puzzle"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>The main idea for solving the puzzle revolves around identifying particular partitions of the set of all states of the game, thus identifying equivalence relations.  I then define some natural operations that one can apply to the coins on the plate and reason about how those operations map elements of one equivalence class into another.  It turns out that we can apply these operations in a particular order such that we are guaranteed to eventually reach the solution.</p>
+
+
+<h3 class="group " id="representation-and-rotations"
+    >Representation and Rotations<a href="#representation-and-rotations"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Abstractly, we can represent the state of each coin as either being heads \(H\) or tails \(T\).  Since the coins are arranged in a square, we can think of the state of the whole puzzle as being the sequence of states of each individual coin following a left-to-right and top-to-bottom ordering.  Notice that we&rsquo;ve already encountered an equivalence class: we naturally think of aligning the coins to look as though they are on a &ldquo;right-angle&rdquo; when facing us &ndash; following this convention, a whole set of angles of the plate spanning \(90^\circ\) (\(45^\circ\) in either direction) all represent <em>equivalent</em> configurations.  If the interrogator rotates the plate by, say, \(37^\circ\) before handing it back to us, we should be able to feel around the coins to rotate this back to \(0^\circ\).  Thus, when we speak of an arrangement of coins on the plate, we are already really speaking of a whole equivalence class, all of which are equivalent up to rotation back to the nearest right-angle alignment of the coins.  The upshot here is that listing the coins in this order results in a finite representation of the set of all possible states (of which there are \(2^4 = 16\)) as elements of the set \[S = \Bigl\{{HH \atop HH}, {TH \atop HH}, {HT \atop HH}, \ldots, {TT \atop TH}, {TT \atop TT}\Bigr\},\] which is naturally isomorphic (<em>i.e.</em>, equivalent) to the set \([16] = \{1, \ldots, 16\}\).</p>
+<p>Any such rotation operation can now naturally be thought of as a permutation \(\texttt{rotate}^n\), where \(n\) indicates the number of \(90^\circ\) angles the plate is clockwise rotated.  For example, \(\texttt{rotate} \Bigl({HT \atop HH}\Bigr) = {HH \atop HT}\) and \(\texttt{rotate}^2 \Bigl({HT \atop HH}\Bigr) = {HH \atop TH}\), <em>etc.</em>  The power notation with \(n\) is naturally suggestive since \(n\) rotations by \(90^\circ\) is equivalent to applying the single \(\texttt{rotate}\) permutation \(n\) times.  Since we don&rsquo;t know how many times the interrogator will apply \(\texttt{rotate}\) before giving us the plate back, we need to work with equivalence classes of states which are equivalent up to the action of this permutation.</p>
+<p><kbd><strong>Remark</strong>: It is an exercise for the reader to enumerate all of the equivalence classes induced by $\texttt{rotate}$.  I should note at this point though that I stumbled upon the appropriate sets and operations for solving the puzzle through intuition, and only went backwards afterwards to add some formalism.  In my experience, this is typical of mathematical problem solving and research &ndash; you begin by understanding and solving particular problems and special cases ad-hoc through intuition, and then go back to formalize the ideas, which opens up new ideas and generalizations, which you begin by solving ad-hoc, and then later formalize, which leads to more questions&hellip;</kbd></p>
+
+
+<h3 class="group " id="solved-states"
+    >Solved States<a href="#solved-states"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>The next key observation involves another permutation and collection of equivalence classes.  Consider a \(\texttt{flip\_all}\) operation &ndash; you can apply this operator to the coins on the plate by flipping every coin onto its other face.  Since this \(\texttt{flip\_all}\) operation is just a permutation, it decomposes the space \(S\) into equivalence classes (whose elements are all equivalent up to the operation of \(\texttt{flip\_all}\)).  Examples include \(\Bigl\{ {HT \atop HT}, {TH \atop TH} \Bigr\}, \Bigl\{ {HT \atop TH}, {TH \atop HT} \Bigr\}\), <em>etc</em>, which are all orbits containing just two elements.  Another important example is \[S_\star = \Bigl\{{HH \atop HH}, {TT \atop TT}\Bigr\},\] which is the equivalence class (of \(\texttt{flip\_all}\)) containing the solved state \({HH \atop HH}\).  The importance of this class arises as follows.</p>
+<p>Consider the following query, which I&rsquo;ll refer to as \(\texttt{solved?}(s)\): <kbd>Ask the interrogator if the puzzle in state</kbd> \(s\) <kbd>is solved.  If it is, you&rsquo;re done.  If not, the plate is returned to you after application of some number of $\texttt{rotate}$ permutations.</kbd>  Now, consider the composite query (\(\texttt{solved?}(s)\) is not formally a permutation, so I use the word &ldquo;query&rdquo;): \(\texttt{solved?} \circ \texttt{flip\_all}\), which in words describes: <kbd>first flip all the coins onto their other side and then ask the interrogator if the puzzle is solved.</kbd>  Therefore, since \(\texttt{rotate}\) does not change the number of heads or tails in the configuration (<em>i.e.</em>, both elements of \(S_\star\) are <em>fixed-points</em> of \(\texttt{rotate}\)) if you reach a state \(s \in S_\star\) then you can first query \(\texttt{solved?}\) and if the plate is returned to you (which means you must have asked about the configuration \({TT \atop TT}\)) then you know that the state \(s\) has not changed and you can apply the composite query \(\texttt{solved?} \circ \texttt{flip\_all}\) which is now guaranteed to result in successfully solving the puzzle.</p>
+<p>Thus, if you do this every time you want to know if the puzzle is solved, then you have <em>effectively</em> solved the puzzle anytime all of the coins are all face up, or all face down &ndash; if they are face down, then they will be face up the second time you ask.  Thus, the two states in \(S_\star\) &ldquo;<kbd>coins all face up</kbd>&rdquo; and &ldquo;<kbd>coins all face down</kbd>&rdquo; form an equivalence class of &ldquo;solved states&rdquo; according to the composite query described above &ndash; I&rsquo;ll call this composite query \(\texttt{solved?}^\star\).  We can now frame our problem as reaching any state in \(S_\star\).</p>
+
+
+<h3 class="group " id="three-more-equivalence-classes"
+    >Three More Equivalence Classes<a href="#three-more-equivalence-classes"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Consider the following three sets: \[S_1 = \Bigl\{{HH \atop HT}, {HH \atop TH}, {HT \atop HH}, {TH \atop HH}, {TT \atop TH}, {TT \atop HT}, {TH \atop TT}, {HT \atop TT}\Bigr\},\] which has either a single head or a single tail; \[S_2^{(d)} = \Bigl\{{HT \atop TH}, {TH \atop HT}\Bigr\},\] with two heads and two tails arranged diagonally from one and other; and \[S_2^{(s)} = \Bigl\{{HH \atop TT}, {HT \atop HT}, {TT \atop HH}, {TH \atop TH}\Bigr\},\] consisting again of two heads and two tails, but now sitting side-by-side.  Critically, the sets we have so far defined form a <em>partition</em> of the space: \[S = S_\star \cup S_1 \cup S_2^{(s)} \cup S_2^{(d)},\] and thus more equivalence relations given by membership in these sets.  Moreover, each of these sets is invariant to both permutations \(\texttt{rotate}\) and \(\texttt{flip\_all}\).  Indeed, \(S_2^{(d)}\) is exactly one of the equivalence classes induced by both, \(S_2^{(s)}\) is an equivalence class induced by \(\texttt{rotate}\) and is the union of two equivalence classes of \(\texttt{flip\_all}\), and \(S_1\) is the union of two equivalence classes of \(\texttt{rotate}\) along with the corresponding ones of \(\texttt{flip\_all}\).  Since the elements of the sets are all equivalent to one and other (in the sense of being members of a partition, and in the sense of rotational symmetry) we can treat all members of the class simultaneously.  These sets, along with three more operations, will allow us to formalize a solution to the puzzle.</p>
+<p>Due to the invariance of these sets to the \(\texttt{rotate}\) permutation, the action of the rotation introduced by the interrogator when you query \(\texttt{solved?}\) does not have any affect on the membership of \(s\) in one of these sets.  This is, of course, <em>not</em> true of any arbitrary subset of \(S\), and hence the choice of sets above is in some sense &ldquo;cunning&rdquo; (and now we see, well motivated by the consideration of equivalence classes!).  Indeed, rotations applied to \(\tilde{S} = \{{HH \atop TT}, {TT \atop HH}\}\) could produce something in \(\tilde{S}\), but it could also produce something in \(\{{HT \atop HT}, {TH \atop TH}\}\)!</p>
+
+
+<h3 class="group " id="more-permutations-on-s"
+    >More Permutations on \(S\)<a href="#more-permutations-on-s"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>The additional permutations we need to solve the puzzle are: \(\texttt{flip\_one}\), which flips over an arbitrary single coin; \(\texttt{flip\_side}\), which flips over two side-by-side coins; and \(\texttt{flip\_diag}\), which flips over arbitrary cross-diagonal coins.  These functions are not uniquely defined (<em>e.g.</em>, which coin do you flip over for \(\texttt{flip\_one}\)) but the choice of which particular permutation you use does not matter, so I&rsquo;m glossing over this.</p>
+<p>We can reason through the effects of how these map between our equivalence classes as follows (I skip the consideration of how \(S_\star\) is affected since we will always query \(\texttt{solved?}^\star\) between each operation, so if we hit \(S_\star\) we are done):</p>
+<p>\begin{equation}
+\begin{aligned}
+\texttt{flip\_one}: S_1 \rightarrow S_2^{(d)} \cup S_2^{(s)} \cup S_\star\\
+\texttt{flip\_one}: S_2^{(d)} \cup S_2^{(s)} \rightarrow S_1,
+\end{aligned}
+\end{equation}</p>
+<p>since if \(s \in S_1\) and we flip over a single coin, then we must now have either two heads and two tails, or we happened to flip over the &ldquo;right&rdquo; coin and reach a solved state.  Alternatively, if we begin with two $H$s and two $T$s, then flipping one coin over necessarily puts us back in \(S_1\) with either three $H$s and one \(T\), or three $T$s and one \(H\).  For the side-by-side flip operator:</p>
+<p>\begin{equation}
+\begin{aligned}
+\texttt{flip\_side}: S_1 \rightarrow S_1\\
+\texttt{flip\_side}: S_2^{(d)} \rightarrow S_2^{(s)}\\
+\texttt{flip\_side}: S_2^{(s)} \rightarrow S_\star \cup S_2^{(d)},
+\end{aligned}
+\end{equation}</p>
+<p>since if there is one head (or one tail), application of \(\texttt{flip\_side}\) must necessarily result in three heads or tails; if there are heads diagonal from one and other (<em>i.e.</em>, \(s \in S_2^{(d)}\)) then \(\texttt{flip\_side}\) must necessarily flip one head and one tail, and thus result in side-by-side heads and tails; and if \(s \in S_2^{(s)}\) then we either get lucky and flip the &ldquo;right&rdquo; coins into a solved state, or we flip the &ldquo;wrong&rdquo; coins into a diagonal state \(S_2^{(d)}\).  Finally, for the diagonal flipping operator:</p>
+<p>\begin{equation}
+\begin{aligned}
+\texttt{flip\_diag}: S_1 \rightarrow S_1\\
+\texttt{flip\_diag}: S_2^{(d)} \rightarrow S_\star\\
+\texttt{flip\_diag}: S_2^{(s)} \rightarrow S_2^{(s)},
+\end{aligned}
+\end{equation}</p>
+<p>by similar reasoning.  This is the <strong><strong>key to the puzzle</strong></strong>.  If we are faced with some \(s \in S_2^{(d)}\), then application of \(\texttt{flip\_diag}\) is guaranteed to place us into the solved state \(S_\star\).  The only difficulty now is that we cannot <em>know</em> whether or not \(s \in S_2^{(d)}\)!  Regardless, this feels like progress.</p>
+
+
+<h3 class="group " id="transition-diagramming"
+    >Transition Diagramming<a href="#transition-diagramming"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>The simple enumeration of the action of the operators \(\texttt{flip\_one}, \texttt{flip\_side}, \texttt{flip\_diag}\) on the sets \(S_1, S_2^{(s)}, S_2^{(d)}\) described in the previous section can be difficult to visualize.  Our intuition is that we should try to find some appropriate order in which to apply these operations which will guarantee that we eventually reach the state \(S_\star\), but how?  We can make progress towards this task by drawing a diagram of all the possible transitions:</p>
+<figure><img src="transition_diagram.png"
+         alt="Figure 1: Transition Diagram for each Function and Set"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Transition Diagram for each Function and Set</p>
+        </figcaption>
+</figure>
+
+<p>One thing we can notice from this diagram is that some operations map from a set and back into itself, <em>i.e.</em>, some of the sets described above are also invariant to \(\texttt{flip\_diag}\) or \(\texttt{flip\_side}\).  For example, \(\texttt{flip\_diag}\) maps from \(S_2^{(s)}\) back into itself, as well as from \(S_1\) and back into itself.  Recall that there is also an <em>implicit</em> self-loop corresponding to the \(\texttt{rotate}\) permutation for each set, <em>i.e.</em>, we can safely ask if the puzzle is solved (following the logic described in <a
+    class="link"
+    href="#solved-states">Solved States</a
+>
+) without the interrogator being able to effect the state we are in.</p>
+
+
+<h3 class="group " id="a-solution"
+    >A Solution<a href="#a-solution"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Using the diagram above, we can deduce a solution to the puzzle.  Start in any arbitrary state \(s \in S\): first, make the \(\texttt{solved?}^\star\) query, if \(s \in S_\star\) then we are done (that was easy!), otherwise, we are in a state \[s \in S \setminus S_\star = S_1 \cup S_2^{(d)} \cup S_2^{(s)}.\]  Apply the operator \(\texttt{flip\_diag}\) and then query \(\texttt{solved?}^\star\) again.  If we happened to be in \(S_2^{(d)}\), then the puzzle is solved, otherwise (notice the self-loops) we must be in \(s \in S_2^{(s)} \cup S_1\).  Now, apply \(\texttt{flip\_side}\), followed by \(\texttt{solved?}^\star\), \(\texttt{flip\_diag}\), and \(\texttt{solved?}^\star\) again.  If we were in \(S_2^{(s)}\), then \(\texttt{flip\_side}\) transitioned us into \(S_2^{(d)}\), and \(\texttt{flip\_diag}\) brought us into \(S_\star\).  If we were in \(S_1\), then we are still in \(S_1\), since this set is invariant to both \(\texttt{flip\_diag}\) and \(\texttt{flip\_side}\).  To solve the puzzle from here, we apply \(\texttt{flip\_one}\) and query \(\texttt{solved?}^\star\).  If that query failed, then we must be in \(S_2^{(d)} \cup S_2^{(s)}\) in which case we can apply \(\texttt{flip\_diag}\) and query \(\texttt{solved}?^\star\), which will finish the puzzle if we were in \(S_2^{(d)}\).  Otherwise, we are in \(S_2^{(s)}\) and applying \(\texttt{flip\_side}\) followed by \(\texttt{solved?}^\star\) and then again \(\texttt{flip\_diag}\) which is finally guaranteed to place us into \(S_\star\), wherein a final \(\texttt{solved?}^\star\) query is the end.</p>
+<p>We have solved the puzzle &ndash; regardless of our starting position, and regardless of how random or adversarial are the rotations to the plate of coins done by the interrogator (they can even know our exact plan!), the above policy will eventually move us into the solved state \(S_\star\).  To summarize the policy, we apply the following order of operations, querying \(\texttt{solved?}^\star\) between each operator: \(\texttt{flip\_diag}, \texttt{flip\_side}, \texttt{flip\_diag}, \texttt{flip\_one}, \texttt{flip\_diag}, \texttt{flip\_side}, \texttt{flip\_diag}\).</p>
+
+
+<h2 class="group " id="computational-generalizations"
+    >Computational Generalizations<a href="#computational-generalizations"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Solving this particular brain-teaser is satisfying, but a solution is not a <em>good</em> solution to me unless it is illustrative or indicative of a more general <em>pattern</em>.  Indeed, I wrote out the formalism above exactly for the purpose of trying to reason through a more general idea.  To introduce the idea, suppose we have \(N\) states \(V = [N] \overset{\Delta}{=} \{1, 2, \ldots, N\}\) and \(K\) functions \(\mathcal{F} = \{f_k: V \rightarrow V\ |\ k \in [K]\}\) on \(V\).  Given this data, we can define a graph \(\mathcal{G} = (V, \mathcal{E})\) where the set of vertices is naturally \(V\) and the edges are tuples \(\mathcal{E} \subseteq \{(i, j, f)\ |\ i, j \in V, f \in \mathcal{F}\}\) where the edges \((i, j, f) \in \mathcal{E}\) is present in the graph if there is a function \(f \in \mathcal{F}\) which maps from node \(i\) to node \(j\).  Each node will have \(K\) edges emanating from it &ndash; one for each function.  Let&rsquo;s suppose as well that there is a fixed <em>target</em> state \(s^\star \in S\) and that this state is invariant to every function application \(f_k(s^\star) = s^\star\), <em>i.e.</em>, when we reach the target state, we know it.  This graph is analogous to the graph I drew for the coin problem.</p>
+<p>Now, the interesting part of this comes in when we suppose we do not know what state we are in.  The new question is: <strong><strong>can we find a search algorithm which will find a sequence of functions leading to a goal state, but which does not require knowledge of what vertex it is currently visiting</strong></strong>?  Abstractly, given a target state \(s^\star\), can we find a <em>finite</em> (ideally minimal) sequence of functions \(f_1, f_2, \ldots, f_M \in \mathcal{F}\) which when applied from an arbitrary starting point, are guaranteed to eventually reach the target state \(s^\star\)?</p>
+
+
+<h3 class="group " id="uncertain-breadth-first-search"
+    >Uncertain Breadth First Search<a href="#uncertain-breadth-first-search"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>There may exist a better algorithm, but this problem can be solved by means of breadth first search.  However, we cannot just apply BFS directly upon the graph \(\mathcal{G}\), since we don&rsquo;t know our starting point.  Instead, we&rsquo;ll apply BFS on a graph over the <em>power set</em> \(2^V\) of \(V\) (<em>i.e.</em>, the set of all subsets of \(V\)).  We generalize the application of \(f \in \mathcal{F}\) to act on \(2^V\) by the definition \[ W\subseteq V:\ f(W) = \{f(w)\ |\ w \in W\},\] <em>i.e.</em>, we apply \(f\) to every element of the subset.  This gives us an edge relation for a graph \(\mathcal{G}^\star = (2^V, \mathcal{E}^\star)\): we have \[(U, W) \in \mathcal{E}^\star \iff \bigl(\exists f \in \mathcal{F}:\ f(U) = W\bigr).\] The goal is to find a path through this &ldquo;power-graph&rdquo; leading to the state \(S_\star = \{s^\star\}\), the singleton set containing only the goal state.</p>
+<p>A completely hacked-together implementation of this idea for the coins-on-a-plate problem is given here:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> typing <span style="color:#ff79c6">as</span> ty
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> functools <span style="color:#ff79c6">import</span> reduce
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> collections <span style="color:#ff79c6">import</span> deque
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Some nicer names for the nodes in the graph</span>
+</span></span><span style="display:flex;"><span>Node <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">str</span>
+</span></span><span style="display:flex;"><span>S1: Node <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;S1&#34;</span>
+</span></span><span style="display:flex;"><span>S2d: Node <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;S2d&#34;</span>
+</span></span><span style="display:flex;"><span>S2s: Node <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;S2s&#34;</span>
+</span></span><span style="display:flex;"><span>S_star: Node <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;S_star&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TransitionFunction <span style="color:#ff79c6">=</span> ty<span style="color:#ff79c6">.</span>Callable[[Node], ty<span style="color:#ff79c6">.</span>Set[Node]]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># To easily keep track of what has been visited</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">_hash</span>(s: ty<span style="color:#ff79c6">.</span>Set[Node]):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">hash</span>(<span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">.</span>join(<span style="color:#8be9fd;font-style:italic">str</span>(<span style="color:#8be9fd;font-style:italic">hash</span>(n)) <span style="color:#ff79c6">for</span> n <span style="color:#ff79c6">in</span> s))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Computes the set of next nodes obtained by applying `op` from some uncertainty set</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">_next_nodes</span>(nodes: ty<span style="color:#ff79c6">.</span>Set[Node], op: TransitionFunction):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> reduce(<span style="color:#ff79c6">lambda</span> acc, new_nodes: acc <span style="color:#ff79c6">|</span> new_nodes, (op(w) <span style="color:#ff79c6">for</span> w <span style="color:#ff79c6">in</span> nodes), <span style="color:#8be9fd;font-style:italic">set</span>())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># The robust implementation of BFS</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">uncertain_bfs</span>(nodes: ty<span style="color:#ff79c6">.</span>Set[Node], ops: ty<span style="color:#ff79c6">.</span>Dict[<span style="color:#8be9fd;font-style:italic">str</span>, TransitionFunction]):
+</span></span><span style="display:flex;"><span>    visited <span style="color:#ff79c6">=</span> {_hash(nodes)}
+</span></span><span style="display:flex;"><span>    queue <span style="color:#ff79c6">=</span> deque([((<span style="color:#f1fa8c">&#34;START&#34;</span>,), nodes)])
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> queue:
+</span></span><span style="display:flex;"><span>        path, nodes <span style="color:#ff79c6">=</span> queue<span style="color:#ff79c6">.</span>pop()
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> name, op <span style="color:#ff79c6">in</span> ops<span style="color:#ff79c6">.</span>items():
+</span></span><span style="display:flex;"><span>            new_nodes <span style="color:#ff79c6">=</span> _next_nodes(nodes, op)
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (hsh <span style="color:#ff79c6">:=</span> _hash(new_nodes)) <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">in</span> visited:
+</span></span><span style="display:flex;"><span>                visited<span style="color:#ff79c6">.</span>add(hsh)
+</span></span><span style="display:flex;"><span>                queue<span style="color:#ff79c6">.</span>append(((<span style="color:#ff79c6">*</span>path, name), new_nodes))
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> new_nodes <span style="color:#ff79c6">==</span> {S_star}:
+</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;SUCCESS: </span><span style="color:#f1fa8c">{</span>(<span style="color:#ff79c6">*</span>path, name)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;FAILURE!&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Helper to make transition functions with S_star being an absorbing state</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">_make_op</span>(mapping: ty<span style="color:#ff79c6">.</span>Dict[Node, Node]) <span style="color:#ff79c6">-&gt;</span> TransitionFunction:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">op</span>(v: Node) <span style="color:#ff79c6">-&gt;</span> ty<span style="color:#ff79c6">.</span>Set[Node]:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> v <span style="color:#ff79c6">==</span> S_star:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> {S_star}
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> mapping[v]
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> op
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># The operations on the coins</span>
+</span></span><span style="display:flex;"><span>flip_diag <span style="color:#ff79c6">=</span> _make_op({S1: {S1}, S2d: {S_star}, S2s: {S2s}})
+</span></span><span style="display:flex;"><span>flip_side <span style="color:#ff79c6">=</span> _make_op({S1: {S1}, S2d: {S2s}, S2s: {S2d, S_star}})
+</span></span><span style="display:flex;"><span>flip_one <span style="color:#ff79c6">=</span> _make_op({S1: {S2d, S_star, S2s}, S2d: {S1}, S2s: {S1}})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># The possible starting positions</span>
+</span></span><span style="display:flex;"><span>nodes <span style="color:#ff79c6">=</span> {S1, S2d, S2s, S_star}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># And names for the transition functions</span>
+</span></span><span style="display:flex;"><span>transition_functions <span style="color:#ff79c6">=</span> {<span style="color:#f1fa8c">&#34;flip_diag&#34;</span>: flip_diag, <span style="color:#f1fa8c">&#34;flip_one&#34;</span>: flip_one, <span style="color:#f1fa8c">&#34;flip_side&#34;</span>: flip_side}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Which we finally run the algorithm on</span>
+</span></span><span style="display:flex;"><span>uncertain_bfs(nodes, transition_functions)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>\[\texttt{SUCCESS: (&lsquo;START&rsquo;, &lsquo;flip\_diag&rsquo;, &lsquo;flip\_side&rsquo;, &lsquo;flip\_diag&rsquo;, &lsquo;flip\_one&rsquo;, &lsquo;flip\_diag&rsquo;, &lsquo;flip\_side&rsquo;, &lsquo;flip\_diag&rsquo;)}\]</p>
+<p>And indeed, this code outputs the same policy I came up with ad-hoc in the previous section.</p>
+
+
+<h2 class="group " id="conclusion"
+    >Conclusion<a href="#conclusion"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>I thought that the puzzle described at the beginning of this article was very neat and wanted to write down a complete solution.  We saw how the idea of symmetries were crucial for solving the puzzle, and that these symmetries can be described through the language of <strong>equivalence classes</strong>.  Moreover, the remarkable cyclic decomposition theorem for <strong>permutations</strong> (nothing but bijections on finite sets) tell us that we can <strong>partition</strong> all the possible states of the coins on the plate into a collection of cycles and equivalence classes.  Some of these sets are <strong>invariant</strong> to certain operations on the coins, and therefore create self-loops in a graph describing how the state of the puzzle evolves.  Diagramming this graph allowed us to write down an ad-hoc solution to the coins-on-a-plate puzzle.</p>
+<p>The idea of searching in a graph when you don&rsquo;t know your starting point generalized to a form of <strong>robust breadth-first search</strong>.  In this algorithm, we keep track of an entire <strong>uncertainty set</strong> of nodes that we can plausibly be, and stop once that set contains nothing but the goal state.  I have few ideas for what such an algorithm might be practically useful for, but there it is!</p></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="Share to twitter"
+                href="https://twitter.com/share?&text=I%20review%20some%20elementary%20discrete%20math%20concepts,%20use%20them%20to%20describe%20and%20solve%20a%20neat%20brain-teaser,%20and%20generalize%20the%20solution%20into%20a%20form%20of%20robust%20breadth%20first%20search.&url=https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><i class="eva eva-twitter hover:text-theme"></i
+            ></a><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="Share to weibo"
+                href="https://service.weibo.com/share/share.php?url=https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/&title=Group%20Theory,%20Symmetry,%20and%20a%20Brain%20Teaser&sudaref=rjtk.github.io"
+                target="_blank"
+                rel="noopener noreferrer"
+            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="Copy Link" data-clipboard-text="https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/"></i></div>
+<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
+    <div>
+        <a
+            href="/posts/lyapunov-stability-linear-systems-and-semidefinite-programming/"
+            title="Lyapunov Stability, Linear Systems, and Semidefinite Programming"
+            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
+            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+                <i class="eva eva-chevron-left-outline"></i>
+            </span>
+            <span>Prev</span>
+        </a>
+    </div><div class="hidden items-center text-xs xl:flex">
+        Unless otherwise stated, this blog is licensed under 「
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener noreferrer" class="text-theme">CC BY-NC-SA 4.0</a>
+        」
+    </div>
+    <div class="flex items-center text-sm xl:hidden">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener noreferrer" class="text-theme">
+            <img src="/Cc-by-nc-sa.svg" alt="CC BY-NC-SA 4.0" title="CC BY-NC-SA 4.0" class="w-24" />
+        </a>
+    </div>
+
+    <a
+        href=""
+        title=""
+        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText">
+        <span>Next</span>
+        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+            <i class="eva eva-chevron-right-outline"></i>
+        </span>
+    </a>
+</div>
+
+        </div>
+    </div>
+</div>
+</div>
+                </main><footer>
+    <div
+        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
+    >
+        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
+            <span class="">© 2022 - 2023</span>
+            <span class="mx-1.5 opacity-50"> | </span>Powered by <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a></div>
+
+        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://rjtk.github.io/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
+                    <span>RSS</span>
+                </a><a data-no-swup href="https://rjtk.github.io/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
+                    <span>Sitemap</span>
+                </a><div id="google_translate_element" class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
+    <span>Run time: </span><b id="run-time-d">0</b>
+    <span class="text-xs">days</span>
+    <b id="run-time-h">0</b>
+    <span class="text-xs">h</span>
+    <b id="run-time-m">0</b>
+    <span class="text-xs">m</span>
+    <b id="run-time-s">0</b>
+    <span class="text-xs">s</span>
+</div>
+</div>
+
+    <script type="text/javascript">
+window.__theme = {
+    cdn: '',
+    pjax: true ,
+    isServer: false ,
+    $version:"",
+    lang: 'en-us',
+    imageZoom: true ,
+    lazyload: true ,
+    bionicReading: {
+        enabled: true ,
+        skipLinks: false ,
+        autoBionic: false ,
+        excludeWords:[],
+        excludeClasses:[],
+        excludeNodeNames:[],
+    },
+    katex: true ,
+    search: true ,
+    backtop: true ,
+    pangu: false ,
+    autoDarkMode: false ,
+    googleAnalytics:false,
+    hugoEncrypt: {
+        wrongPasswordText: 'Password is incorrect',
+        userStorage:window['sessionStorage'],
+    },
+    console: {
+        enabled: true ,
+        leftColor: '#dd6065',
+        rightColor: '#feb462',
+        leftText: 'Hugo Theme Luna',
+        rightText: 'Powered by Hugo ❤ Luna',
+    },
+    assets: {
+        error_svg: "\/images\/error.svg",
+        search_svg: "\/images\/search.svg",
+    },
+    i18n: {
+        copy: {
+            success: "Copy success",
+            failed: "Copy failed",
+            copyCode: "Copy code",
+        },
+        search: {
+            untitled: "Untitled",
+            loadFailure: "Initialization of the search engine failed",
+            input: "Type something...",
+        },
+        darkMode: {
+            dark: "Switch to dark mode",
+            light: "Switch to light mode"
+        }
+    },creatTime: "2022\/12\/11"}
+</script>
+<script type="text/javascript" src="/ts/main.988b77b29f6061a05182a3737ac3fe3b34578e939adc83437110316c5e2023d5.js" defer integrity="sha256-mIt3sp9gYaBRgqNzesP&#43;OzRXjpOa3INDcRAxbF4gI9U="></script><script type="text/javascript" src="/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js" defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type="text/javascript">
+    window.translateelement_styles = "\/sass\/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";
+    function googleTranslateElementInit(){
+        new google.translate.TranslateElement({
+            pageLanguage: 'en-us',
+            includedLanguages: 'af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi',
+            autoDisplay:false
+        },'google_translate_element');
+    }
+</script>
+
+
+
+
+
+<script>
+    
+    
+</script>
+
+<script data-swup-reload-script>
+    
+    
+</script>
+</footer>
+</div>
+        </div><a
+        href="#nav"
+        title="Back to top"
+        id="back-top"
+        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
+    >
+        <div class="relative">
+            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
+                <i class="eva eva-arrow-upward-outline"></i>
+            </div>
+            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
+                <circle
+                    transform="rotate(-90, 27 , 27)"
+                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
+                    cx="27"
+                    cy="27"
+                    r="25"
+                    fill="none"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke="var(--theme)"
+                />
+            </svg>
+        </div>
+    </a><noscript>
+    <style>
+        .dark-mode-switch,
+        #run-time,
+        #bionicReading,
+        .noscript-hidden,
+        [data-clipboard-text],
+        [data-lazyload] {
+            display: none;
+        }
+        #back-top {
+            opacity: 1;
+        }
+        .noscript-show {
+            display: initial;
+        }
+    </style>
+</noscript>
+</body>
+</html>

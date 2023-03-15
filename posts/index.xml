@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Quant Out of Water</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 17 Dec 2022 00:00:00 -0600</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Feb 2023 00:00:00 -0600</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Group Theory, Symmetry, and a Brain Teaser</title>
+      <link>https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/</link>
+      <pubDate>Sun, 19 Feb 2023 00:00:00 -0600</pubDate>
+      
+      <guid>https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/</guid>
+      <description>&lt;p&gt;I review some elementary discrete math concepts, use them to describe and solve a neat brain-teaser, and generalize the solution into a form of robust breadth first search.&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Lyapunov Stability, Linear Systems, and Semidefinite Programming</title>
       <link>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-semidefinite-programming/</link>
