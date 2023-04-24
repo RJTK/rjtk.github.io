@@ -13,9 +13,276 @@
         <link>https://rjtk.github.io/</link>
         <managingEditor>qoow</managingEditor>
         <description>Quant Out of Water</description>
-        <lastBuildDate>Sun, 19 Feb 2023 00:00:00 -0600</lastBuildDate>
+        <lastBuildDate>Sun, 23 Apr 2023 00:00:00 -0700</lastBuildDate>
         <language>en-us</language>
         <generator>Hugo -- gohugo.io</generator><item>
+            <title>Nature&#39;s Dartboard: The Axioms of Probability</title>
+            <link>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</link>
+            <pubDate>Sun, 23 Apr 2023 00:00:00 -0700</pubDate>
+            <guid>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</guid><description>&lt;p&gt;The basic axioms of probability and the idea of a random variable as a function from the sample space to \(\mathbb{R}\) are quite abstract and rather confusing at first pass.  However, the axioms can be well motivated from our intuition, and defining random variables simply as functions turns out to be a brilliant and intuitive abstraction.  My goal in this post is to try to explain the ideas behind the axiomatization of probability theory, and hopefully make the study of measure-theoretic probability seem a bit less intimidating.&lt;/p&gt;
+&lt;h2 class=&#34;group &#34; id=&#34;mathematics-and-axiomatization&#34;
+    &gt;Mathematics and Axiomatization&lt;a href=&#34;#mathematics-and-axiomatization&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Exactly what is &lt;em&gt;Mathematics&lt;/em&gt; is not necessarily an easy thing to pin down, and to try to give some sort of clear formal definition would be senseless.  However, it is easy to say what it is &lt;em&gt;not&lt;/em&gt;: it is not simply a prescribed set of rules for calculating numbers, or &amp;ldquo;solving for \(x\)&amp;rdquo; &amp;ndash; a prescribed set of calculating rules has another name: an &lt;em&gt;algorithm&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;In contrast to the mechanical process described by an algorithm, mathematics is a highly creative endeavour.  Indeed, many mathematicians are motivated largely by the aesthetics and the &amp;ldquo;beauty&amp;rdquo; of their results.  To many mathematicians, it is the abstraction and the concepts themselves that are of interest, and they may not even be entirely interested in their results and calculations are \(100\%\) correct!  A great book about the process of doing math (which can be got for rather low prices) is &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/41Rgdeb&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;The Mathematical Experience&lt;/a
+&gt;
+ 💁‍♂️&lt;/p&gt;
+&lt;p&gt;Still, many mathematicians are at the same time concerned with correctness and &lt;em&gt;rigor&lt;/em&gt;.  That is, they want to be able to say with supreme confidence that their results are true and correct, with no room for doubt.  Essential to this is the idea of a mathematical &lt;em&gt;proof&lt;/em&gt; &amp;ndash; a sequence of logical deductions which begin from some specified premises \(P\) and lead inexorably to some conclusion \(Q\).  If the logical deductions are correct, then the mathematician has rigorously obtained a proof of the implication \(P \implies Q\).  That is, given that the premises \(P\) are true, it must be the case that the conclusions \(Q\) are true.  Mathematicians call this \(P \implies Q\) implication a &lt;em&gt;Theorem&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Once a mathematician (or a group of them, perhaps spanning continents and generations) has amassed a rather sizable number of implications, and understands something about the various connections amongst them, the mathematician might attempt to lay down a &lt;em&gt;fundamental&lt;/em&gt; set of premises from which all of their conclusions can be derived.  This set of fundamental premises, which cannot be derived (as far as the mathematician can tell) from any other still more fundamental premises, are called &lt;em&gt;axioms&lt;/em&gt;.  The axioms are the basic starting point for a &lt;em&gt;theory&lt;/em&gt;, that is, for all the further conclusions the mathematician has derived.  Axioms are ultimately just premises, but the former term tends to imply that it is a &lt;em&gt;foundational&lt;/em&gt; premise &amp;ndash; &lt;em&gt;i.e.&lt;/em&gt;, something that is self-evident that can serve as a starting point.&lt;/p&gt;
+&lt;p&gt;The most famous set of axioms are &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Euclidean_geometry&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Euclid&amp;rsquo;s Axioms&lt;/a
+&gt;
+ laying the classical foundation for geometry.  Another being those of &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Zermelo%E2%80%93Fraenkel_set_theory&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ZF Set Theory&lt;/a
+&gt;
+, which lay the foundations for set theory, and therefore of more-or-less all of modern &amp;ldquo;mainstream&amp;rdquo; mathematics.  The axioms I care about discussing in this post are the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Probability_axioms&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;axioms of Probability Theory&lt;/a
+&gt;
+.&lt;/p&gt;
+&lt;p&gt;As opposed to the rigorous series of logical deductions by which proofs proceed, the way that the &lt;em&gt;idea&lt;/em&gt; of a Theorem comes about (&lt;em&gt;i.e.&lt;/em&gt;, the thought that some implication might possibly be true) is much more creative and messy.  Often, one begins with a conclusion \(Q\) that &amp;ldquo;seems true&amp;rdquo;, and then proceeds to search for the set of premises \(P\) that &lt;em&gt;make&lt;/em&gt; it true, possibly going back and forth many times tweaking the premises and the conclusion &amp;ndash; a process reminiscent of Rawl&amp;rsquo;s &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Reflective_equilibrium&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;reflective equilibrium&lt;/a
+&gt;
+ in philosphy.  The mathematician is done with this inquiry when they have obtained a Theorem which they think is &amp;ldquo;good&amp;rdquo;.  I have seen it claimed that a Theorem is &lt;em&gt;good&lt;/em&gt; if it is surprising, deep, and can be used to derive other good theorems.  My memory tells me that this should be attributed to Polya, but I cannot find a reference (please email me if you know where this is from!).&lt;/p&gt;
+&lt;p&gt;As well, we usually come up with axioms long after having figured out most of the conclusions (possibly using stronger or more numerous premises).  Axiomatization is a process of &lt;em&gt;cleaning up&lt;/em&gt; the theory and placing it upon a nice, beautiful, and simple foundation.  Thus, I think it can be rather confusing, from a didactic standpoint, to write textbooks or teach classes which simply begin with the axioms and proceed to derive all of the conclusions &amp;ndash; the student is left confused and wondering what the axioms mean, where did they come from, &lt;em&gt;etc&lt;/em&gt;.  To be comfortable in following this process straight from the axioms requires some amount of experience and mathematical maturity.&lt;/p&gt;
+&lt;p&gt;Indeed, the process of derivation from a set of axioms is not reflective of how the theory was developed, and it is hardly even reflective of how mathematicians think about the theory themselves.  My hope is that the rest of this post can clarify some of the intuition behind the axioms of probability.&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;the-axioms-of-probability&#34;
+    &gt;The Axioms of Probability&lt;a href=&#34;#the-axioms-of-probability&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;The purpose of probability theory is to provide a set of mathematical tools for reasoning about events which are &lt;em&gt;random&lt;/em&gt;.  Exactly what random &lt;em&gt;means&lt;/em&gt; is on one hand left to intuition (&lt;em&gt;e.g.&lt;/em&gt;, we think of a dice roll as random, because we have no practical means of determining what the outcome will be), and on the other hand, is rigorously axiomatized by the theory of probability.  My purpose here is to help to make the axiomatization itself more intuitive.&lt;/p&gt;
+&lt;p&gt;The rigorous theory of probability was axiomatized in 1933 by Russian mathematician &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Andrey_Kolmogorov&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Andrey Kolmogorov&lt;/a
+&gt;
+ (1903-1987).  This axiomatization begins with a set \(\Omega\) called the &lt;em&gt;sample space&lt;/em&gt;.  What this set is exactly need not be fully specified &amp;ndash; it is just some abstract set, and it may be a finite set like \(\{\mathsf{H}, \mathsf{T}\}\) (to model flipping a coin), it may be a countably infinite set like \(\{1, 2, \ldots\}\), it could be an uncountably infinite set like \(\mathbb{R}\), or some even more abstract set.&lt;/p&gt;
+&lt;p&gt;To set the stage, the following sections will introduce the probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) consisting of a sample space \(\Omega\), a $σ$-algebra \(\mathcal{F}\) thereof, and the probability measure \(\mathbb{P}\).  On this triple we axiomatize probability with the following three premises:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The domain of \(\mathbb{P}\) is \(\mathcal{F}\) and for any \(S \in \mathcal{F}\) we have \(P(S) \ge 0\) (non-negativity)&lt;/li&gt;
+&lt;li&gt;\(\mathbb{P}(\Omega) = 1\) (Normalization)&lt;/li&gt;
+&lt;li&gt;If \(S_1, S_2, \ldots \in \mathcal{F}\) are disjoint, then \(\mathbb{P}\bigl(\bigcup_{i = 1}^\infty S_i \bigr) = \sum_{i = 1}^\infty \mathbb{P}(S_i)\) (Countable Additivity)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;By the end of this section, I hope the reader will have some understanding of what all of this means, and why these axioms are so beautiful.  It is remarkable that probability theory flows from these three simple statements!&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;samples-and-events&#34;
+    &gt;Samples and Events&lt;a href=&#34;#samples-and-events&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;In probability theory, an element \(\omega \in \Omega\) of the sample space is called a &lt;em&gt;sample&lt;/em&gt;.  We don&amp;rsquo;t know what this sample is, but it encodes the &lt;strong&gt;state of the universe&lt;/strong&gt;.  Subsets \(S \subseteq \Omega\) are called &lt;em&gt;events&lt;/em&gt; (actually, they must be elements \(S \in \mathcal{F}\), which is a set of subsets of \(\Omega\) &amp;ndash; more on this later), and we imagine that an event has &lt;em&gt;occurred&lt;/em&gt; if \(\omega \in S\).&lt;/p&gt;
+&lt;p&gt;Intuitively, there are many states of the universe that might lead to the same event; e.g., the outcome of a coin toss ultimately depends upon, at least, the arrangement of molecules in the air through which the coin travels, and there are many more than two such arrangements.  Thus, there are many \(\omega\) (arrangements of molecules) which result in the &amp;ldquo;Heads&amp;rdquo; outcome of the coin toss.&lt;/p&gt;
+&lt;p&gt;When we do modelling in practice, we usually don&amp;rsquo;t work directly with \(\Omega\).  Instead, we work with &lt;em&gt;random variables&lt;/em&gt;, which are functions from the sample space into \(\mathbb{R}\).  The sample space is kept as an abstract entity &amp;ldquo;in the background&amp;rdquo;.  But, before we discuss this additional layer of abstraction, we need to understand \((\Omega, \mathcal{F}, \mathbb{P})\).&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;nature-s-dartboard&#34;
+    &gt;Nature&amp;rsquo;s Dartboard&lt;a href=&#34;#nature-s-dartboard&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;On an &lt;em&gt;intuitive&lt;/em&gt; level, I think of the set \(\Omega\) as being &lt;em&gt;Nature&amp;rsquo;s Dartboard&lt;/em&gt; &amp;ndash; it is just a disc, and &amp;ldquo;Mother Nature&amp;rdquo; is throwing a dart at it.  The exact location at which the dart lands selects for us a state of the universe \(\omega \in \Omega\).&lt;/p&gt;
+
+
+&lt;p&gt;In addition to the set \(\Omega\), we are given a &lt;em&gt;function&lt;/em&gt; \(\mathbb{P}\) called a &lt;em&gt;probability measure&lt;/em&gt;.  The function \(\mathbb{P}\) is a bit more abstract than the sort of function (a curve) that one might usually encounter in calculus.  Instead, \(\mathbb{P}\) is a function which maps from &lt;em&gt;subsets&lt;/em&gt; of \(\Omega\) into some number between \([0, 1]\).  That is, if we have some set \(S \subset \Omega\), we would like \(\mathbb{P}\) to assign some number to \(S\) as in \(\mathbb{P}(S)\).  This number is called the probability of the event (subset), and is directly analogous to the &lt;em&gt;volume&lt;/em&gt; of \(S\).&lt;/p&gt;
+&lt;p&gt;Indeed, if we imagine that Mother Nature throws her dart at the dartboard \(\Omega\) completely &amp;ldquo;at random&amp;rdquo; (following our intuition) then our intuitive idea of the probability of the dart landing within some region \(S \subseteq \Omega\) of the dartboard is nothing but \(\text{vol}(S) / \text{vol}(\Omega)\), where \(\text{vol}(S)\) measures the &lt;em&gt;volume&lt;/em&gt; (in this case, just an &lt;em&gt;area&lt;/em&gt;) of the set \(S\).&lt;/p&gt;
+&lt;p&gt;Now, if we imagine that \(\mathbb{P}(S) = \text{vol}(S) / \text{vol}(\Omega)\), then the axiom \(\mathbb{P}(S) \ge 0\) is natural since volumes cannot be negative, and \(\mathbb{P}(\Omega) = 1\) is elementary algebra.  &lt;strong&gt;&lt;strong&gt;This is the basic intuition&lt;/strong&gt;&lt;/strong&gt; of the axioms of probability &amp;ndash; we measure the probability of &lt;strong&gt;events&lt;/strong&gt; \(S\), which are nothing but subsets of the sample space \(\Omega\), by appealing to the volume of the dartboard that they occupy.&lt;/p&gt;
+&lt;p&gt;Continuing this line of reasoning, imagine we have some set \(S \subseteq \Omega\) which has some probability \(\mathbb{P}(S)\).  If we break this set into two pieces (&lt;em&gt;i.e.,&lt;/em&gt; two disjoint sets \(S_1, S_2\) with \(S_1 \cup S_2 = S\) and \(S_1 \cap S_2 = \emptyset\)) then it stands to reason that we should have \[\mathbb{P}(S) = \mathbb{P}(S_1) + \mathbb{P}(S_2),\] since the volume of one set must be the sum of the volumes of any &lt;strong&gt;partition&lt;/strong&gt; of that set.  This is the idea behind Axiom 3, &lt;strong&gt;additivity&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;That Axiom 3 is stated for &lt;em&gt;countably infinite&lt;/em&gt; partitions of events (&lt;em&gt;i.e.&lt;/em&gt;, infinite sums) is a technical condition: &lt;strong&gt;countable additivity&lt;/strong&gt;.  Simple finite additivity turns out to not be strong enough to result in a rich enough theory.  Making the axioms works &lt;em&gt;rigorously&lt;/em&gt; for these infinite sums, and for infinite sample spaces, is the whole point of the formalism surrounding the $σ$-algebra \(\mathcal{F}\).  We turn to this next.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;the-banach-tarski-paradox-volume-and-measure&#34;
+    &gt;The Banach-Tarski Paradox: Volume and Measure&lt;a href=&#34;#the-banach-tarski-paradox-volume-and-measure&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;The object \(\mathcal{F}\) is called a $σ$-algebra of subsets of \(\Omega\), and it is in general a subset of the set of all subsets of \(\Omega\).  Understanding this $σ$-algebra is part of the difficult technical work that goes into learning rigorous probability theory, but the &lt;strong&gt;purpose&lt;/strong&gt; of \(\mathcal{F}\) is to eliminate certain pathological sets in \(2^\Omega\) which are not &lt;strong&gt;measurable&lt;/strong&gt; (see: &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Measure_%28mathematics%29&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Measure Theory&lt;/a
+&gt;
+).  That is, there are some sets (&lt;em&gt;e.g.&lt;/em&gt;, &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://proofwiki.org/wiki/Vitali_Theorem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Vitali Sets&lt;/a
+&gt;
+) for which it simply makes no sense to assign a notion of volume, and the issue arises directly as a result of dealing with infinite sets.&lt;/p&gt;
+&lt;p&gt;A famous example illustrating this issue is the &lt;strong&gt;Banach-Tarski&lt;/strong&gt; paradox.  This paradox shows that we can take a sphere, partition it into six pieces, and then, after rotating some of those pieces in
+a clever way, reassemble &lt;strong&gt;two&lt;/strong&gt; copies of the original sphere.  Here is a &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://www.youtube.com/watch?v=s86-Z-CbaHA&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Video explanation&lt;/a
+&gt;
+ of the procedure as well as a &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://www.quantamagazine.org/how-a-mathematical-paradox-allows-infinite-cloning-20210826/&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Quanta Magazine article&lt;/a
+&gt;
+.  The fact that we can take a set, partition that set, and then reassemble &lt;strong&gt;two&lt;/strong&gt; identical copies of that set is rather problematic when it comes to assigning volumes!  It seems that we can derive \(\mathbb{P}(S) = 2\mathbb{P}(S)\) where \(S\) is a sphere!  This is a pathology that needs to be eliminated.&lt;/p&gt;
+&lt;p&gt;Indeed, we would really like for it to be the case that \(\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)\) if \(A \cap B = \emptyset\) and where \(\mathbb{P}(S) = \text{vol}(S) / \text{vol}(\Omega)\) is consistent with our notion of volume.  But, this can only be done if we simply &lt;strong&gt;exclude a-priori&lt;/strong&gt; so-called non-measurable sets.  This is more-or-less what the $σ$-algebra \(\mathcal{F}\) is doing &amp;ndash; it is a special collection of subsets of \(\Omega\) which ensures that any \(S \in \mathcal{F}\) is a measurable set to which we can assign a notion of volume that corresponds with our intuition.  In the language of probability, it means that only certain subsets of \(\Omega\) can be assigned a probability: the measurable subsets.  There are some pathological subsets of Nature&amp;rsquo;s dartboard which we simply cannot measure.&lt;/p&gt;
+&lt;p&gt;Specifically, a collection of subsets \(\mathcal{F}\) of \(\Omega\) is a $σ$-algebra of subsets if the following conditions are satisfied:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;\(\Omega \in \mathcal{F}\) (The universe is one of the sets)&lt;/li&gt;
+&lt;li&gt;\(A, B \in \mathcal{F} \implies A \setminus B \in \mathcal{F}\) (Closed under set differences)&lt;/li&gt;
+&lt;li&gt;If \(A_1, A_2, \ldots \in \mathcal{F}\) and \(A_i \cap A_j = \emptyset\) if \(i \ne j\), then \(\bigcup_{i = 1}^\infty A_i \in \mathcal{F}\) (Closed under countable disjoint union)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Notice that these are basically nothing but the conditions that make the axioms of probability &amp;ldquo;work&amp;rdquo;, particularly closure under countable unions.  That is, the notion of a $σ$-algebra is cooked up exactly for the purpose of making sure that measure corresponds to our intuition of volume.&lt;/p&gt;
+&lt;p&gt;To actually construct a volume measure for the dartboard, one begins by constructing a measure on the real line \(\mathbb{R}\) by defining \(\mathbb{P}([a, b]) = b - a\), and then generating a $σ$-algebra out of intervals (by taking complements and countable unions &lt;em&gt;etc&lt;/em&gt;.).  This guarantees that the resulting \(\sigma\) algebra is generated by &amp;ldquo;reasonable&amp;rdquo; operations on the sets, excluding those which are not measurable.  Then, by putting together the rules of the $σ$-algebra above, and using the basic intuition of \(\mathbb{P}([a, b]) = b - a\), we can eventually construct what is called &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Lebesgue_measure&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Lebesgue Measure&lt;/a
+&gt;
+, a rigorous way of assigning volume to (measurable) subsets of \(\mathbb{R}\).  This is enough to get us to a suitable notion of volume, and therefore to a construction of a probability measure \(\mathbb{P}\)!&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Axiom of Choice): The problem of measure is not entirely inescapable.  If we did not accept the&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Axiom_of_choice&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Axiom of Choice&lt;/a
+&gt;
+, &lt;kbd&gt;which basically just says that it is possible to choose an arbitrary element from an infinite set, then non-measurable sets could not be constructed, and the problem would disappear.  Some mathematicians thus view the existence of non-measurable sets, which are incredibly pathological, as a reason to refuse to accept the axiom of choice.  However, we need to pick our poison; there are at the same time a vast number of perfectly intuitive and incredibly useful theorems which &lt;em&gt;depend&lt;/em&gt; on the axiom of choice.  My favourite example being the&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Hahn%E2%80%93Banach_theorem#Hahn.E2.80.93Banach_separation_theorem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Hanh-Banach Theorem&lt;/a
+&gt;
+, &lt;kbd&gt;the cornerstone of convex analysis (named after the same Banach as the Banach-Tarski Paradox).  Instead of doing without more-or-less all of functional analysis, most instead choose to accept non-measurable sets as a fact of (mathematical) life, and carry around all the baggage associated with $\sigma$-algebras and measure theory.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;random-variables&#34;
+    &gt;Random Variables&lt;a href=&#34;#random-variables&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;All of the formalism laid out in understanding the probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) is rather complicated.  Fortunately, in most &amp;ldquo;practical&amp;rdquo; scenarios where we want to &lt;em&gt;use&lt;/em&gt; probability for modelling, we just let this formalism sit back as an abstract foundation, more-or-less out of sight.  We instead work more directly with &lt;em&gt;random variables&lt;/em&gt; which are defined as nothing but &lt;em&gt;functions from \(\Omega\) into \(\mathbb{R}\)&lt;/em&gt; as in: \[X: \Omega \rightarrow \mathbb{R},\] sometimes written as \(X(\omega)\).&lt;/p&gt;
+&lt;p&gt;The &amp;ldquo;randomness&amp;rdquo; thus passes from Nature&amp;rsquo;s Dartboard \(\Omega\), an abstract set that we don&amp;rsquo;t want to think about too much, to \(\mathbb{R}\), a natural set that we like to work with.  The way this works is as follows &amp;ndash; suppose we want to compute the probability that \(X(\omega)\) is less than some real number \(x\), that is \(F(x) = \mathbb{P}(X \le x)\).  This is an important function called the &lt;em&gt;cumulative distribution function&lt;/em&gt; of \(X\) and it turns out to be enough to fully determine the random behaviour of \(X\).  The notation \(\mathbb{P}(X \le x)\) is really nothing but a shorthand for \[F(x) = \mathbb{P}(\{\omega: X(\omega) \le x\}).\]&lt;/p&gt;
+&lt;p&gt;That is, the common notation \(\mathbb{P}(X \le x)\), which is used to mean &amp;ldquo;the probability that the random variable \(X\) is less than or equal to the real number \(x\)&amp;rdquo; is really a shorthand for \(\mathbb{P}(\{\omega:\ X(\omega) \le x\})\) which is &amp;ldquo;the volume of the set of all events \(\omega\) such that the function \(X\) evaluated \(X(\omega)\) is less than or equal to the real number \(x\)&amp;rdquo;.  We can simplify this further:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+F(x)
+&amp;amp;= \mathbb{P}(\{\omega: X(\omega) \le x\})\\
+&amp;amp;= \mathbb{P}(\{\omega: X(\omega) \in (-\infty, x]\})\\
+&amp;amp;= \mathbb{P}(X^{-1} ((-\infty, x]))\\
+&amp;amp;= \mathbb{P} \circ X^{-1} ((-\infty, x]).
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;These elementary manipulations show us that that the cumulative distribution function \(F\) is nothing but the composition of the probability measure \(\mathbb{P}\) with the inverse mapping of \(X\) (the domain of which are all the half-open intervals like \((-\infty, x]\))!  What does this mean?  It allows us to define events on \(\mathbb{R}\), like the probability of the event \(X \le x\) by measuring the size of the set of all \(\omega\) which satisfy \(X(\omega) \le x\).  So, what we do &amp;ldquo;in practice&amp;rdquo; is that we start by positing a distribution function \(F\) (like a Gaussian distribution) which we want to work with on \(\mathbb{R}\), and then we just trust that there is some appropriate probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) which is &amp;ldquo;adequately expressive&amp;rdquo; and some function \(X\) such that \(F = \mathbb{P} \circ X^{-1}\).  The function \(X\) is now a random variable having &lt;em&gt;c.d.f.&lt;/em&gt; \(F\).  This gives us a huge variety of possibilities for modelling, and the randomness on \(\mathbb{R}\) is inherited from the simple and intuitive notion of randomness as volume on Nature&amp;rsquo;s dartboard.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Measurable Functions): Technically, the random variable $X$ must be a&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Measurable_function&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;measurable function&lt;/a
+&gt;
+.  &lt;kbd&gt;This is another important technical condition, but irrelevant for developing an intuition.&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Functions of Random Variables): Suppose we have some function $g: \mathbb{R} \rightarrow \mathbb{R}$.  It is worthwhile to point out that a function of a random variable $g(X)$ defines a &lt;em&gt;new&lt;/em&gt; random variable $Y(\omega) = g \circ X(\omega)$, since it is nothing but a another function from $\Omega$ to $\mathbb{R}$.  The cumulative distribution function of this new random variable is given by $F_Y(y) = \mathbb{P} \circ X^{-1} \circ g^{-1}((-\infty, y])$.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;expectation&#34;
+    &gt;Expectation&lt;a href=&#34;#expectation&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Another essential concept in probability theory is that of the &lt;strong&gt;expectation&lt;/strong&gt;.  Intuitively, this is like a generalization of an &lt;em&gt;average&lt;/em&gt;.  If the sample space \(\Omega\) is finite, then we &lt;em&gt;define&lt;/em&gt; \[\mathbb{E}X = \sum_{i = 1}^N X(\omega) \mathbb{P}(\omega),\] and if \(\mathbb{P}(\omega) = \frac{1}{N}\) then it is exactly an average of the random variable over the sample space.  Generally, finite sample spaces aren&amp;rsquo;t rich enough to be interesting, so we define the expectation by means of an integral \[\mathbb{E}X = \int_\Omega X(\omega) \mathsf{d}\mathbb{P}(\omega).\]  This is called a &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Lebesgue_integration&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Lebesgue Integral&lt;/a
+&gt;
+, and our desire to define and use this integral is another part of the motivation for studying probability in the context of measure theory.  Regardless, it is usually possible to dispense with this integral &amp;ldquo;in practice&amp;rdquo; and to work directly with the distribution function \(F\).  This works as follows:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathbb{E}X
+&amp;amp;= \int_\Omega X(\omega) \mathsf{d}\mathbb{P}(\omega)\\
+&amp;amp;\overset{(a)}{=} \int_{X(\Omega)} x\ \mathsf{d} \mathbb{P} \circ X^{-1} (x)\\
+&amp;amp;\overset{(b)}{=} \int_{\mathbb{R}} x\ \mathsf{d} F(x)\\
+&amp;amp;\overset{( c)}{=} \int_{-\infty}^\infty xf(x)\ \mathsf{d}x,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \((a)\) comes from making the substitution \(x = X(\omega)\), \((b)\) just simplifies using \(F = \mathbb{P} \circ X^{-1}\), and \(( c)\) is a final simplification for &lt;strong&gt;continuous&lt;/strong&gt; random variables many readers may be used to: if \(F\) is a differentiable function, then the random variable admits a &lt;strong&gt;density function&lt;/strong&gt; \(f(x) = F^\prime(x)\) and \(\mathsf{d}F(x)\) turns into \(f(x)\mathsf{d}x\), resulting in an &amp;ldquo;ordinary&amp;rdquo; Riemann integral (as opposed to \(\int_\mathbb{R} x \mathsf{d} F(x)\) which is a &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Lebesgue%E2%80%93Stieltjes_integration&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Lebesgue-Stieltjes integral&lt;/a
+&gt;
+).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Expectations of Functions of Random Variables): Given a function $g: \mathbb{R} \rightarrow \mathbb{R}$, we may like to compute the expectation of the new random variable $g(X)$ as in $\mathbb{E}g(X) = \int_\Omega g(X(\omega)) \mathsf{d} \mathbb{P}(\omega).$ We could do so by determining the distribution function $G(x) = \mathbb{P}(g(X) \le x)$ of the new random variable $g(X)$ and then doing the calculation $\int_\mathbb{R} x \mathbb{d} G(x)$.  But alternatively, we can see by repeating the same substitution $x = X(\omega)$ in the integral that we made earlier that $\mathbb{E}g(X) = \int_\mathbb{R} g(x) \mathsf{d} F(x)$ which is still just an integral over the distribution of $X$!  This is an incredibly convenient fact called the&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Law_of_the_unconscious_statistician&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Law of the Unconcious Statistician&lt;/a
+&gt;
+.&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;data-and-sampling-the-passage-to-statistics&#34;
+    &gt;Data and Sampling &amp;ndash; the Passage to Statistics&lt;a href=&#34;#data-and-sampling-the-passage-to-statistics&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Many people are now drawn to the study of probability for the purposes of doing statistics, &lt;em&gt;i.e.&lt;/em&gt;, analyzing data.  So, I wanted to add some more commentary about random variables and their connection to the modelling of data.  That is, how do statistics and probability connect?&lt;/p&gt;
+&lt;p&gt;Statistics is often concerned with &lt;em&gt;experiments&lt;/em&gt;.  Suppose we plan an experiment where we are going to measure someone&amp;rsquo;s height.  The outcome of this experiment is not known a-priori, so it makes sense to model it using probability theory &amp;ndash; the outcome is random.  As well, a person&amp;rsquo;s height is a real number, and we now know that we can model random real numbers using &lt;em&gt;random variables&lt;/em&gt;.  Thus, we might like to construct a model of the measure of someone&amp;rsquo;s height as a random variable \(H(\omega)\).&lt;/p&gt;
+&lt;p&gt;If we measure the heights of many people, we will wind up with a multitude of random variables \(H_1, H_2, \ldots, H_N\), where \(N\) is the number of measurements we make.  These random variables all together define some &lt;em&gt;joint distribution&lt;/em&gt; \(F(h_1, \ldots, h_N) = \mathbb{P}(H_1 \le h_1, \ldots, H_N \le h_N)\), and statistics is often concerned with what can be learned about the distribution of these random variables through the actually observed outcomes of experiments.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;independent-and-identically-distributed-random-variables&#34;
+    &gt;Independent and Identically Distributed Random Variables&lt;a href=&#34;#independent-and-identically-distributed-random-variables&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;The multivariate distribution described above can be difficult to work with &amp;ndash; some assumptions need to be made.  The most common assumption is that the random variables are &lt;em&gt;independent and identically distributed&lt;/em&gt;, that is, &lt;em&gt;i.i.d.&lt;/em&gt;  What this means is that we &lt;em&gt;assume&lt;/em&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;\(\mathbb{P}(H_i \le h) = \mathbb{P}(H_j \le h)\) (identically distributed)&lt;/li&gt;
+&lt;li&gt;\(\mathbb{P}(H_1 \le h_1, \ldots, H_N \le h_N) = \mathbb{P}(H_1 \le h_1) \times \cdots \times \mathbb{P}(H_N \le h_N)\) (independent).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The idea of the random variables having an identical distribution is that we are observing separate outcomes of the same experiment.  Independence, where the joint distribution is nothing but the product of the individual (&lt;em&gt;marginal&lt;/em&gt;) distributions, encodes the idea that the outcome of one experiment does not influence (and is not influenced by) any other experiment.&lt;/p&gt;
+&lt;p&gt;Thus, one of the most common settings in statistics is that we are given a sequence \(X_1, X_2, \ldots, X_N\) of &lt;em&gt;i.i.d.&lt;/em&gt; random variables, and our goal is to learn something about the &lt;em&gt;statistics&lt;/em&gt; of their common distribution, call it \(F_X\).  The word &lt;em&gt;statistic&lt;/em&gt; here just means &amp;ldquo;functionals of the distribution&amp;rdquo;, &lt;em&gt;i.e.&lt;/em&gt;, functions which take the distribution function \(F_X\) as an input, and output some real number.  The mean value \(\mathbb{E}X = \int_{\mathbb{R}} x \mathsf{d} F_X(x)\) being an important example, &lt;em&gt;quantiles&lt;/em&gt; being another: \(\mathbb{P}(X \le x) = \int_{\mathbb{R}} \mathbf{1}[x \le q]\mathsf{d} F_X(x)\).&lt;/p&gt;
+&lt;p&gt;Given data, and statistical theorems about how collections of &lt;em&gt;i.i.d.&lt;/em&gt; random variables behave, statisticians are able to answer questions like: &amp;ldquo;what is the probability that a randomly selected person will be over six feet tall?&amp;rdquo;, &amp;ldquo;in a room of \(N\) people, what is the probability that there will be someone more than six feet five inches?&amp;rdquo;, &lt;em&gt;etc&lt;/em&gt;.  Going further, the combination of powerful computers with sophisticated statistical models can be used to produce striking results &amp;ndash; the dart throwing woman that serves as the cover photo of this blog post was itself generated from a statistical model.  That is, the image itself is essentially nothing but a particular realization of a random variable!&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (The LLN): The most natural estimator of&lt;/kbd&gt; \(\mathbb{E}X\) &lt;kbd&gt;given the sample is the &lt;em&gt;average&lt;/em&gt;&lt;/kbd&gt; \(\overline{X}_N = \frac{1}{N}\sum_{i = 1}^N X_i\) &lt;kbd&gt;and indeed, many of the most famous theorems in statistics (the&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Law_of_large_numbers&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Law of Large Numbers&lt;/a
+&gt;
+ &lt;kbd&gt;and the&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Central_limit_theorem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Central Limit Theorem&lt;/a
+&gt;
+) &lt;kbd&gt;are concerned exactly with how $\overline{X}_N$ behaves under various different assumptions about the common distribution.  Indeed, it can be shown that in almost all sensible cases $\overline{X}_N \rightarrow \mathbb{E}X \text{ as } N \rightarrow \infty$ (given an appropriate sense of convergence for random variables): the average of the sample converges to the expectation as the size of the sample increases.  This is a highly intuitive outcome that can be derived entirely from the axioms of probability, and it is an incredibly satisfying result!  Some historical formulations of probability &lt;em&gt;began&lt;/em&gt; with the postulate that this is true, so it is a testament to how effectively the axioms &amp;ldquo;clean up&amp;rdquo; the theory.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;conclusion&#34;
+    &gt;Conclusion&lt;a href=&#34;#conclusion&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Axiomatic and measure theoretic probability is a topic more than worth studying.  It is very difficult, if not impossible, to have a full understanding of probability (particularly stochastic processes) without eventually going down this path.  I hope that I have here shown that the elementary ideas are not just esoteric abstractions, but that they are well supported by a very natural intuition.  It is the technical need to deal with annoying pathologies (like the Banach-Tarski paradox) that necessitates some technical machinery.  But, the underlying intuition comes down to nothing but the measure of volumes in Nature&amp;rsquo;s Dartboard.  Indeed, most abstractions in mathematics have some completely natural and intelligible intuition behind them!&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Some book recommendations): The first book about probability I read was&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3mVmQ0l&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;An Intermediate Course in Probability&lt;/a
+&gt;
+ &lt;kbd&gt;by Allan Gut.  However, this book is not measure theoretic.  Instead,&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3mYdUY1&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this book by the same author&lt;/a
+&gt;
+ &lt;kbd&gt;can serve as a reasonable introduction, or the&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3LoD6jD&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;well known book by Billingsley&lt;/a
+&gt;
+ &lt;kbd&gt;which is more-or-less the canonical book to recommend.  Another great book which is somewhat less concerned with the details of measure theory, focusing more on probability, is&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/41Vq2YL&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Probability: Theory and Examples&lt;/a
+&gt;
+ &lt;kbd&gt;which contains all of the classic results and, as the name suggestions, a lot of very nice examples.  However, I only read this book long after I became well acquainted with measure-theoretic probability.  Since its treatment of measure is rather more limited, it&amp;rsquo;s difficult for me to know whether or not this is a good book to start with.&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Other topics):  There are a number of other rather famous books broadly in the area of machine learning and statistics &amp;ndash; examples being the following:&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3mYy0kY&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Theoretical Statistics&lt;/a
+&gt;
+, &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3N79MQ0&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Pattern Recognition and Machine Learning&lt;/a
+&gt;
+, &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3Aodk8Y&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Bayesian Data Analysis&lt;/a
+&gt;
+, &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3oxC101&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Deep Learning&lt;/a
+&gt;
+, and &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3V8mLD5&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Mathematics for Machine Learning&lt;/a
+&gt;
+ &lt;kbd&gt;(this last one I have not myself read).  These books are perfectly good, but they are emphatically &lt;em&gt;not&lt;/em&gt; about probability theory &amp;ndash; they are applied books in machine learning and statistics.  To learn probability theory itself, stick with the above.&lt;/kbd&gt;&lt;/p&gt;</description></item><item>
             <title>Group Theory, Symmetry, and a Brain Teaser</title>
             <link>https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/</link>
             <pubDate>Sun, 19 Feb 2023 00:00:00 -0600</pubDate>
@@ -216,65 +483,65 @@
 &lt;p&gt;A completely hacked-together implementation of this idea for the coins-on-a-plate problem is given here:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;34
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;35
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;36
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;37
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;38
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;39
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;40
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;41
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;42
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;43
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;44
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;45
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;46
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;47
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;48
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;49
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;50
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;51
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;52
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;53
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;54
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;55
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;56
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;57
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;58
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;59
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;34
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;35
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;36
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;37
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;38
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;39
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;40
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;41
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;42
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;43
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;44
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;45
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;46
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;47
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;48
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;49
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;50
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;51
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;52
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;53
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;54
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;55
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;56
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;57
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;58
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;59
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; typing &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; ty
@@ -468,21 +735,21 @@ I
 &lt;p&gt;which is a linear dynamical system.  Simulation of this system is straightforward.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; scipy.integrate &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; solve_ivp
@@ -533,25 +800,25 @@ I
  to solve an SDP we will encounter shortly:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; math &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; inf
@@ -659,23 +926,23 @@ V(Ax) - V(x) &amp;amp;&amp;lt; -\gamma V(x)\\
 &lt;p&gt;How do we incorporate the search for some such \(\gamma\) into our SDP?  All we need is that \(A^{\mathsf{T}}PA - (1 - \gamma)P \prec 0\), and indeed, we would like to find the largest satisfactory \(\gamma\).  Unfortunately, I do not believe it is possible to directly encode optimization over \(\gamma\) into a convex SDP, since the product $γ P $, where both \(\gamma\) and \(P\) are variables, is non-convex.  Instead, since \(\gamma \in \R\) is just a single parameter, we can apply &lt;em&gt;bisection&lt;/em&gt; to find an optimal \(\gamma\):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; math &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; inf
@@ -943,22 +1210,22 @@ Ax(\infty) &amp;amp;= b,
 &lt;p&gt;Some straightforward Python code implementing linear Jacobi iteration is provided in the listing below.  A realistic implementation should have a method of detecting divergence.  As well, checking the norm of the distance to the solution on every iteration is relatively expensive &amp;ndash; it essentially doubles the computational effort.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;solve_linear_system&lt;/span&gt;(A, b, x0&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;None&lt;/span&gt;, eps&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1e-6&lt;/span&gt;, maxiter&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;inf):
@@ -1127,45 +1394,45 @@ p_\tau(t + 1) &amp;amp;= \frac{k_\tau + c_\tau \mathsf{tanh}(p_c(t))}{m_\tau - c
 &lt;p&gt;Here&amp;rsquo;s a generic implementation of nonlinear Jacobi iteration:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;34
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;35
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;36
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;37
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;38
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;39
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;34
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;35
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;36
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;37
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;38
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;39
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; typing &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; List, Callable
@@ -1212,42 +1479,42 @@ p_\tau(t + 1) &amp;amp;= \frac{k_\tau + c_\tau \mathsf{tanh}(p_c(t))}{m_\tau - c
 &lt;/div&gt;&lt;p&gt;The code follows a functional programming style that mimics the mathematical description as closely as possible.  A particular implementation of our coffee-tea economy, including useful functions for plotting the progress of the algorithm, might look something like this:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;34
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;35
-&lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;36
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;34
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;35
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;36
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; math &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; tanh

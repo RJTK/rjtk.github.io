@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Quant Out of Water</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 Feb 2023 00:00:00 -0600</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Apr 2023 00:00:00 -0700</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Nature&#39;s Dartboard: The Axioms of Probability</title>
+      <link>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</link>
+      <pubDate>Sun, 23 Apr 2023 00:00:00 -0700</pubDate>
+      
+      <guid>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</guid>
+      <description>&lt;p&gt;The basic axioms of probability and the idea of a random variable as a function from the sample space to \(\mathbb{R}\) are quite abstract and rather confusing at first pass.  However, the axioms can be well motivated from our intuition, and defining random variables simply as functions turns out to be a brilliant and intuitive abstraction.  My goal in this post is to try to explain the ideas behind the axiomatization of probability theory, and hopefully make the study of measure-theoretic probability seem a bit less intimidating.&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Group Theory, Symmetry, and a Brain Teaser</title>
       <link>https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/</link>

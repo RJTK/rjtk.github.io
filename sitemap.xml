@@ -2,17 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/</loc>
-    <lastmod>2023-03-15T14:45:55-05:00</lastmod>
+    <loc>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</loc>
+    <lastmod>2023-04-23T20:23:55-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/posts/</loc>
-    <lastmod>2023-03-15T14:45:55-05:00</lastmod>
+    <lastmod>2023-04-23T20:23:55-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/</loc>
+    <lastmod>2023-04-23T20:23:55-07:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url><url>
+    <loc>https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/</loc>
     <lastmod>2023-03-15T14:45:55-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -33,7 +38,7 @@
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/about/</loc>
-    <lastmod>2023-02-21T21:47:57-06:00</lastmod>
+    <lastmod>2023-02-21T19:47:57-08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
