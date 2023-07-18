@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Quant Out of Water</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 23 Apr 2023 00:00:00 -0700</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 18 Jul 2023 00:00:00 -0700</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Generalized Eigenvalue Problems and Trace Optimization</title>
+      <link>https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/</link>
+      <pubDate>Tue, 18 Jul 2023 00:00:00 -0700</pubDate>
+      
+      <guid>https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/</guid>
+      <description>&lt;p&gt;Most people are familiar with the concept of matrix eigenvalues.  Less well known is that this concept can be fruitfully expanded to the &lt;em&gt;generalized eigenvalues&lt;/em&gt; of &lt;em&gt;pairs&lt;/em&gt; of matrices.  Closely related are matrix trace optimization problems, which extremizes the trace of certain matrix products.  Trace optimization constites a large class of practically solvable &lt;em&gt;non-convex&lt;/em&gt; optimization problems commonly useful for dimensionality reduction and which includes the unsupervised &lt;em&gt;weighted&lt;/em&gt; principle component analysis and the supervised method of Fisher&amp;rsquo;s Linear Discriminant.  The purpose of this post is to explore some of these problems, their intuition, and their applications.&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Nature&#39;s Dartboard: The Axioms of Probability</title>
       <link>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</link>

@@ -2,18 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</loc>
-    <lastmod>2023-04-23T23:30:02-07:00</lastmod>
+    <loc>https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/</loc>
+    <lastmod>2023-07-18T00:10:48-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/posts/</loc>
-    <lastmod>2023-04-23T23:30:02-07:00</lastmod>
+    <lastmod>2023-07-18T00:10:48-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/</loc>
-    <lastmod>2023-04-23T23:30:02-07:00</lastmod>
+    <lastmod>2023-07-18T00:10:48-07:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url><url>
+    <loc>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</loc>
+    <lastmod>2023-07-18T00:10:38-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>

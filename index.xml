@@ -9,13 +9,480 @@
 
     <channel>
         <title>Quant Out of Water</title>
-        <atom:link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://rjtk.github.io/index.xml%7d" rel="self" type="application/rss+xml" />
+        <atom:link href="%7balternate%20%7brss%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/index.xml%20https://rjtk.github.io/index.xml%7d" rel="self" type="application/rss+xml" />
         <link>https://rjtk.github.io/</link>
         <managingEditor>qoow</managingEditor>
         <description>Quant Out of Water</description>
-        <lastBuildDate>Sun, 23 Apr 2023 00:00:00 -0700</lastBuildDate>
+        <lastBuildDate>Tue, 18 Jul 2023 00:00:00 -0700</lastBuildDate>
         <language>en-us</language>
         <generator>Hugo -- gohugo.io</generator><item>
+            <title>Generalized Eigenvalue Problems and Trace Optimization</title>
+            <link>https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/</link>
+            <pubDate>Tue, 18 Jul 2023 00:00:00 -0700</pubDate>
+            <guid>https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/</guid><description>&lt;p&gt;Most people are familiar with the concept of matrix eigenvalues.  Less well known is that this concept can be fruitfully expanded to the &lt;em&gt;generalized eigenvalues&lt;/em&gt; of &lt;em&gt;pairs&lt;/em&gt; of matrices.  Closely related are matrix trace optimization problems, which extremizes the trace of certain matrix products.  Trace optimization constites a large class of practically solvable &lt;em&gt;non-convex&lt;/em&gt; optimization problems commonly useful for dimensionality reduction and which includes the unsupervised &lt;em&gt;weighted&lt;/em&gt; principle component analysis and the supervised method of Fisher&amp;rsquo;s Linear Discriminant.  The purpose of this post is to explore some of these problems, their intuition, and their applications.&lt;/p&gt;
+&lt;h2 class=&#34;group &#34; id=&#34;introduction&#34;
+    &gt;Introduction&lt;a href=&#34;#introduction&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;The eigenvalues of a matrix are profoundly important quantities and are usually encountered early on in one&amp;rsquo;s mathematical career.  The concept of the eigenvalues of a single matrix \(A\) can be expanded to the &lt;em&gt;generalized&lt;/em&gt; eigenvalues of a &lt;em&gt;pair&lt;/em&gt; of matrices \((A, B)\).  My purpose here is to summarize and distill some of what I&amp;rsquo;ve learned about the theory and application of generalized eigenvalues.&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;spectral-theory&#34;
+    &gt;Spectral Theory&lt;a href=&#34;#spectral-theory&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Before discussing eigenvalue problems, we need to set up some basic notation and review critical facts about matrices.&lt;/p&gt;
+&lt;p&gt;Consider an \(n \times n\) matrix \(A \in \R^{n \times n}\).  The &lt;em&gt;eigenvalues&lt;/em&gt; \(\lambda_i \in \mathbb{C}\) and &lt;em&gt;eigenvectors&lt;/em&gt; \(v_i \in \mathbb{C}^n\) of the matrix \(A\) are those (complex!) scalars and vectors such that \[Av_i = \lambda_i v_i.\]  That is, the eigenvectors are the &amp;ldquo;directions&amp;rdquo; in which the operation of the matrix \(A\) are &amp;ldquo;simple&amp;rdquo;, &lt;em&gt;i.e.&lt;/em&gt;, nothing but multiplication by a scalar.  It is one of the hallmarks of linear algebra that the eigenvectors of an \(n \times n\) matrix will often (not always) happen to provide us with a basis for \(\mathbb{R}^n\), i.e., we can use the eigenvectors as coordinate axes.  This is incredibly useful when working with the matrix \(A\), since the matrix does nothing but scale the axes in this basis, a rather simple operation.  When this is possible, we say that the matrix is &lt;em&gt;diagonalized&lt;/em&gt; by the change of basis.  Conditions of matrix diagonalizability are captured by the &lt;em&gt;Spectral Theorem&lt;/em&gt;, so called because the collection of eigenvalues of a matrix are often referred to as &amp;ldquo;the spectrum&amp;rdquo; (of the matrix).&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;the-spectral-theorem&#34;
+    &gt;The Spectral Theorem&lt;a href=&#34;#the-spectral-theorem&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;To &lt;em&gt;diagonalize&lt;/em&gt; the matrix \(A\) means that we can re-write it as \(A = V \Lambda V^{-1}\) where \(\Lambda = \mathsf{Dg}(\mathbf{\lambda})\) is a diagonal matrix of the eigenvalues of \(A\), and \(V = \begin{bmatrix}v_1 &amp;amp; v_2 &amp;amp; \cdots &amp;amp; v_n \end{bmatrix} \in \mathbb{C}^{n \times n}\) are the eigenvectors. The matrix \(V^{-1}\) represents a transformation &lt;em&gt;into&lt;/em&gt; an &lt;em&gt;eigenbasis&lt;/em&gt; and \(V\) is a transformation &lt;em&gt;out&lt;/em&gt; of it.  Unfortunately, diagonalizing a matrix is not always possible, and matrix diagonalizability is quite a slippery issue.  Fortunately though, there is a simple criteria, occuring frequently for matrices of interest in practice, that guarantees that \(A\) is diagonalizable.  The condition is that \(A\) be real-valued and &lt;em&gt;symmetric&lt;/em&gt;: \(A = A^{\mathsf{T}}\) (more generally, \(A\) can be &lt;em&gt;normal&lt;/em&gt;: \(AA^{\mathsf{T}} = A^{\mathsf{T}} A\)).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Spectral Theorem:&lt;/strong&gt; Let $A \in \R^{n \times n}$ be a symmetric matrix.  Then, there exist $n$ &lt;em&gt;real&lt;/em&gt; eigenvalues $\lambda_i$ of $A$ and $n$ eigenvectors $v_i \in \R^n$ such that $A_i v_i = \lambda_i v_i$.  Moreover, the vectors $v_i$ constitute an orthonormal basis of $\R^n$&lt;/kbd&gt;.&lt;/p&gt;
+&lt;p&gt;If we express \(x\) in the eigenbasis as \(x = \sum_{i = 1}^n \langle v_i, x \rangle v_i\) then the matrix-vector product is \(Ax = \sum_{i = 1}^n \lambda_i \langle v_i, x \rangle v_i\), and in matrix notation this is simply \(Ax = V\Lambda V^{\mathsf{T}}x\) where \(V = \begin{bmatrix}v_1\ \cdots v_n \end{bmatrix}\).   In fact, this shows that \(A = V\Lambda V^{\mathsf{T}}\), and since \(V\) is an orthonormal basis we have \(V^{\mathsf{T}}V = I_n = VV^{\mathsf{T}}\) meaning that \(V^{-1} = V^{\mathsf{T}}\).  So the eigenvectors of \(A\) diagonalize \(A\) itself.&lt;/p&gt;
+&lt;p&gt;The spectral theorem is one of the most important results in mathematics and generalizes in various ways to certain sorts of infinite dimensional operators.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: Conventionally, the eigenvalues are &lt;em&gt;sorted&lt;/em&gt; from low to high as in $\lambda_1(A) \le \cdots \le \lambda_n(A)$ (the opposite sorting convention is also common).&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;the-courant-fischer-variational-characterization&#34;
+    &gt;The Courant-Fischer Variational Characterization&lt;a href=&#34;#the-courant-fischer-variational-characterization&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;The &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Min-max_theorem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Courant-Fischer&lt;/a
+&gt;
+ theorem provides a &lt;em&gt;variational characterization&lt;/em&gt; of the eigenvalues of a symmetric matrix.  Basically, a variational characterization is a way to calculate some quantity in terms of an optimization problem, the term &amp;ldquo;variational&amp;rdquo; presumably arising from &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Calculus_of_variations&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;the Calculus of Variations&lt;/a
+&gt;
+, and the idea of an infinitestimal &amp;ldquo;variation&amp;rdquo; of a function.  Specifically, the smallest eigenvalue \(\lambda_1(A)\) of an \(n \times n\) symmetric matrix can be characterized by the optimization problem&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{x \in \R^n}{\text{maximize}}&amp;amp;\ x^{\mathsf{T}} A x\\
+\text{subject to}&amp;amp;\ ||x||_2 = 1,
+\end{aligned}\tag{$\lambda_n(A)$}
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where the maximum is obtained by an eigenvector corresponding to the smallest eigenvalue \(\lambda_n\), which is also the value of the problem.  Variational characterizations are incredibly useful in practice &amp;ndash; they are often providing one or both of: (a) a concrete procedure for calculating some quantity by means of an optimization algorithm or (b) a way to solve seemingly difficult optimization problems by directly calculating the quantity known to be the solution.  The optimization problem I called \((\lambda_n(A))\) above falls into the second category.  Particularly since it is not a convex problem, directly applying an iterative optimization algorithm to this problem is not likely to pan out well, but there do exist reliable algorithms for calculating matrix eigenvalues.&lt;/p&gt;
+&lt;p&gt;To see &lt;em&gt;why&lt;/em&gt; the problem \((\lambda_n(A))\) provides us with the smallest eigenvalue, we recognize that it is exactly equivalent to the following:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{u \in \R^n}{\text{maximize}}&amp;amp;\ u^{\mathsf{T}} \Lambda u\\
+\text{subject to}&amp;amp;\ ||u||_2 = 1,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \(\Lambda\) is the diagonal matrix of eigenvalues from \(A = V\Lambda V^{\mathsf{T}}\).  This equivalence follows since \(V\) is an orthonormal basis: for any \(x\) with \(||x||_2 = 1\) there exists a \(v\) such that \(x = Vu\) and \(||u||_2 = 1\) since \(||Vu||_2 = \sqrt{\lang Vu, Vu\rang} = \sqrt{\lang u, V^{\mathsf{T}} Vu\rang} = ||u||_2\).  The optimizer of this latter problem is clearly \(u^\star = (0, 0, \ldots, 1)\) (selecting out the largest eigenvalue) with the value \(\lambda_n\) and the corresponding solution of the original problem is \(x = Vu^\star = v_n\), an eigenvector associated with \(\lambda_n\).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: Incidentally, this also shows that $\lambda_n(A)$ is a convex function of&lt;/kbd&gt; \(A\) &lt;kbd&gt;since&lt;/kbd&gt; \(A \mapsto x^{\mathsf{T}} A x\) &lt;kbd&gt;is a linear function of the matrix&lt;/kbd&gt; $A,$ &lt;kbd&gt;and the maximum over a family of linear functions is a convex function.  Similarly, it can be shown that&lt;/kbd&gt; \(\lambda_1(A)\) &lt;kbd&gt;is a &lt;strong&gt;concave&lt;/strong&gt; function of $A,$ and can be obtained by replacing &amp;ldquo;maximize&amp;rdquo; with &amp;ldquo;minimize&amp;rdquo; in the variational problem.&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;The Courant-Fischer theorem takes this one step further by providing a variational characterization of &lt;em&gt;any&lt;/em&gt; of the eigenvalues.  Specifically,&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Theorem (Courant-Fischer)&lt;/strong&gt;: Let&lt;/kbd&gt; \(A \in \R^{n \times n}\) &lt;kbd&gt;be a real symmetric matrix.  Then&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\lambda_k = \underset{U}{\text{min}}\ \Bigl\{\underset{x \in \R^n}{\text{max}}\ x^{\mathsf{T}} A x\ \big|\ ||x||_2 = 1, x \in U, \mathsf{dim}(U) = k \Bigr\},\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;where the minimization is over subspaces of&lt;/kbd&gt; \(\R^n\).&lt;/p&gt;
+&lt;p&gt;Intuitively, if \(x\) can live in a \(k\) dimensional space, then the maximization over \(x\) can always attain &lt;em&gt;at least&lt;/em&gt; the value of the \(k^{\text{th}}\) smallest eigenvalue, no matter which \(k\) dimensional space it is confined to.  From the optimization problem described earlier, the maximizing \(x\) is given by the eigenvector corresponding to the largest eigenvalue, subject to the constraint that that eigenvector be in the space \(U\).  The minimizing space \(U\) is then of course given by the space spanned by the \(k\) smallest eigenvectors \(U = \mathsf{span}\{v_1, \ldots, v_k\}\).&lt;/p&gt;
+&lt;p&gt;To finally see the connection with trace optimization problems, it follows from the Courant-Fisher theorem that the value of the optimization problem (generalizing the first variational characterization above)&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{U \in \R^{n \times k}}{\text{minimize}}&amp;amp;\ \mathsf{tr}\ U^{\mathsf{T}} A U\\
+\text{subject to}&amp;amp;\ U^{\mathsf{T}} U = I
+\end{aligned}\tag{${\mathcal{E}_k}$}
+\end{equation}&lt;/p&gt;
+&lt;p&gt;is given by \(\lambda_1 + \cdots + \lambda_k\), and that an optimizing \(U = \begin{bmatrix}v_1\ \cdots\ v_k \end{bmatrix}\) is given by the \(n \times k\) matrix formed from the first \(k\) eigenvectors.  When reading this problem, be careful to remember that \(U^{\mathsf{T}} U = I_k\) definitely does not imply \(UU^{\mathsf{T}} = I_n\), unless \(n = k\).&lt;/p&gt;
+&lt;p&gt;This optimization problem can be obtained from the Courant-Fischer theorem more-or-less by simply taking the summation of the first \(k\) eigenvalues and stacking separate &amp;ldquo;\(x\)&amp;rdquo; optimization variables together into a matrix, along with elementary facts about traces.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Main Point&lt;/strong&gt;: The main point I am making here is that Problem&lt;/kbd&gt; $(\mathcal{E}_k),$ (parameterized by the number \(k\) of vectors in \(U\)) &lt;kbd&gt;which is a &lt;em&gt;non-convex&lt;/em&gt; optimization problem, can be solved by computing an eigendecomposition of the symmetric matrix&lt;/kbd&gt; $A.$  &lt;kbd&gt;This is remarkable, since there exist efficient algorithms for computing this factorization.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;generalized-eigenvalues&#34;
+    &gt;Generalized Eigenvalues&lt;a href=&#34;#generalized-eigenvalues&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;The eigenvalue problem of finding a pair \((\lambda, v)\) for a matrix \(A\) such that \(Av = \lambda v\) can be generalized in various ways.  One particular direction is to consider a generalized eigenvalue problem (GEVP) associated to a &lt;em&gt;pair&lt;/em&gt; of matrices \((A, B)\) wherein we seek to find \((\lambda, v)\) such that \(Av = \lambda Bv\).  Such pairs are now referred to as &lt;em&gt;generalized&lt;/em&gt; eigenpairs associated with \((A, B)\).&lt;/p&gt;
+&lt;p&gt;The case of most interest in applications is where \(A\) is symmetric, and \(B \succ 0\) is &lt;em&gt;positive definite&lt;/em&gt;.  Recall that a positive definite matrix can be characterized by the fact that they admit a &lt;em&gt;Cholesky factorization&lt;/em&gt; \(B = LL^{\mathsf{T}}\) where \(L\) is an invertible lower-triangular matrix &amp;ndash; this is a particular type of matrix square root.  Using this Cholesky decomposition, the GEVP can be reduced to an ordinary EVP:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+Av &amp;amp;= \lambda Bv\\
+\iff A L^{-\mathsf{T}} L^{\mathsf{T}} v &amp;amp;= \lambda LL^{\mathsf{T}} v\\
+\iff \bigl(L^{-1} A L^{-\mathsf{T}}) w &amp;amp;= \lambda w;\ w = L^{\mathsf{T}} v,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;wherein \(S \overset{\Delta}{=} L^{-1} A L^{-\mathsf{T}}\) is a symmetric matrix with eigenpairs \((\lambda, w)\) from which the generalized eigenvectors \(v = L^{-\mathsf{T}} w\) can be recovered.  (&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: I avoid the computation $B^{-1} A$ since this need not be symmetric.&lt;/kbd&gt;)&lt;/p&gt;
+&lt;p&gt;To understand the intuition of this situation, we first apply the fact that the eigenvectors \(W = \begin{bmatrix} w_1\ \cdots\ w_n \end{bmatrix}\) of \(S\) will form an orthogonal basis for \(\R^n\).  Thus, since \(W = L^{\mathsf{T}} V\) we must have&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+W^{\mathsf{T}} W &amp;amp;= I\\
+\implies V^{\mathsf{T}} LL^{\mathsf{T}} V &amp;amp;= I\\
+\implies V^{\mathsf{T}} B V &amp;amp;= I.
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;Thus, it becomes natural to construct the associated trace optimization problems for the pair \((A, B)\)&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{U \in \R^{n \times k}}{\text{minimize}}&amp;amp;\ \mathsf{tr}\ U^{\mathsf{T}} A U\\
+\text{subject to}&amp;amp;\ U^{\mathsf{T}} B U = I.
+\end{aligned}\tag{${\mathcal{G}_k}$}
+\end{equation}&lt;/p&gt;
+&lt;p&gt;To reiterate, the point here is that this is a class of &lt;em&gt;non-convex&lt;/em&gt; optimization problems which can be efficiently solved by eigenvalue algorithms.  Indeed, the value of this problem is given by \[\lambda_1(A, B) + \cdots + \lambda_k(A, B),\] the sum of the first \(k\) generalized eigenvalues, and the optimizing matrix \(U \in \R^{n \times k}\) constitutes the first \(k\) generalized eigenvectors of \((A, B)\).  Keep in mind that the problem is only well defined when \(A\) is symmetric, and \(B\) is positive-definite (though a reasonable solution for the semidefinite case can probably still be worked out).  If these assumptions do not hold, the situation becomes substantially more complicated.&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;interpretations-and-intuition&#34;
+    &gt;Interpretations and Intuition&lt;a href=&#34;#interpretations-and-intuition&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;The generalized eigenvectors \(V = \begin{bmatrix}v_1\ \cdots\ v_n \end{bmatrix}\) are still a basis for \(\R^n\) (since \(L\) is invertible) but they are no longer orthogonal.  Instead, they are orthogonal with respect to an inner product modified by the matrix $B.$  That is, if we write \(x^{\mathsf{T}} y \overset{\Delta}{=} \lang x, y \rang\) then we might generalize this by writing \[\lang x, y \rang_{B^{-1}} = x^{\mathsf{T}} B y = \lang L^{\mathsf{T}} x, L^{\mathsf{T}} y \rang,\] where the inner product \(\lang \cdot, \cdot \rang_{B^{-1}}\) (which, recall, describes the geometry of the space through the relationship to angles \(||x|| ||y|| \mathsf{cos}\ \theta_{xy} = \lang x, y \rang\) and distances \(||x|| = \sqrt{\lang x, x \rang}\)) has modified the geometry of \(\R^n\).  Using a subscript \(B^{-1}\), rather than just \(B\) for this inner product is, I believe, the convention.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ve now equipped \(\R^n\) with two different inner products &amp;ndash; the ordinary one \(\langle x, y \rangle = x^{\mathsf{T}}y\), and the new one \(\langle x, y \rangle_{B^{-1}} = x^{\mathsf{T}} B y\).  To gain some intuition for this new inner product, consider the ordinary euclidean ball \(\mathbb{B} = \{x \in \R^n\ |\ ||x||_2 \le 1\}\) and the ball in the norm \(||x||_{B^{-1}} = \sqrt{x^{\mathsf{T}} B^{} x}\), namely \[\mathbb{B}_B = \{x \in \R^n\ |\ ||x||_{B^{-1}} \le 1\},\] which is an ellipsoid.  Since if \(y = L^{-\mathsf{T}} x\) and \(||x||_2 \le 1\) then \(||L^{\mathsf{T}} y||_2 = ||y||_{B^{-1}} \le 1\) the mapping \(x \mapsto L^{-\mathsf{T}}\) transforms the ordinary euclidean ball into \(\mathbb{B}_B\) as in \(L^{-\mathsf{T}} \mathbb{B} = \mathbb{B}_B\).&lt;/p&gt;
+&lt;p&gt;To visualize the ball \(L^{-\mathsf{T}} \mathbb{B}\) recognize that if \(u_i\) is an (ordinary) eigenvector of \(B\), then \(u_i^{\mathsf{T}} B^{} u_i = \lambda_i(B)\) and therefore any vector proportional to \(u_i\) and with an euclidean length between \(0\) and \(1 / \sqrt{\lambda_i(B)}\) will be inside of the ball.  Essentially what this means is that the eigenvectors \(u_i\) of \(B\) define the &lt;em&gt;principle axes&lt;/em&gt; of the ellipse, each of which have a length \(1 / \sqrt{\lambda_i(B)}\).  After stretching the space through the mapping \(x \mapsto L^{-\mathsf{T}}x\) the directions associated with large eigenvalues are shortened, and directions associated with small eigenvalues of \(B\) are lengthened.  Another way to think about it is through a topographic map &amp;ndash; the terrain in the direction of small eigenvalues is very steep.&lt;/p&gt;
+
+
+&lt;p&gt;The figure above depicts the transformation of Euclidean space \(\R^n\) by the mapping \(x \mapsto L^{-\mathsf{T}}x\).  The dotted lines are points in the original space \(\R^n\), and the solid lines are the result of applying the transformation.  The ellipse in particular includes eigenvectors of \(B\) (as calculated by &lt;kbd&gt;scipy.linalg.eigh&lt;/kbd&gt;) scaled by \(1 / \sqrt{\lambda_i(B)}\) in white.  The contours are drawn for the function \(x \mapsto \frac{1}{2}x^{\mathsf{T}} B x\) and I&amp;rsquo;ve used the particular matrix \[B = \begin{bmatrix}5 &amp;amp; 1 \\ 1 &amp;amp; 1 \end{bmatrix},\] which has an eigendecomposition \[B \approx \begin{bmatrix}0.230 &amp;amp; -0.973 \\ -0.973 &amp;amp; -0.230 \end{bmatrix}\begin{bmatrix}0.764 &amp;amp; 0 \\ 0 &amp;amp; 5.236 \end{bmatrix}\begin{bmatrix}0.230 &amp;amp; -0.973 \\ -0.973 &amp;amp; -0.230 \end{bmatrix}^{\mathsf{T}}.\]&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;applications-and-computations&#34;
+    &gt;Applications and Computations&lt;a href=&#34;#applications-and-computations&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Practically speaking, a reliable means of solving generalized eigenvalue problems is by means of &lt;kbd&gt;scipy.linalg.eig&lt;/kbd&gt; (which will try to solve \(Av = \lambda B v\) for any square \(A, B\)) and &lt;kbd&gt;scipy.linalg.eigh&lt;/kbd&gt; (which assumes \(A\) is symmetric, \(B\) is positive definite and always returns a &lt;em&gt;real&lt;/em&gt; factorization).  These functions also provide the option to (efficiently) compute and return only a subset of eigenvalues (along with corresponding eigenvectors).  Moreover, this subset can be defined either by &lt;em&gt;indices&lt;/em&gt; (&lt;em&gt;e.g.,&lt;/em&gt; return the third, fourth, and fifth) or by &lt;em&gt;values&lt;/em&gt; (&lt;em&gt;e.g.,&lt;/em&gt; return eigenvalues between \(0\) and \(1\)).  These are incredibly useful featuers in practice.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;principle-component-analysis&#34;
+    &gt;Principle Component Analysis&lt;a href=&#34;#principle-component-analysis&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;The most famous application of trace optimization problems is the feature-extraction or dimensionality-reduction technique known as &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Principal_component_analysis&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Principle Component Analysis&lt;/a
+&gt;
+ (PCA).  Suppose we have a random variable \(X \in \R^n\) with mean zero \(\mathbb{E}[X] = 0\) and variance \(\mathbb{V}[X] = \Sigma \succ 0\).  The goal of PCA is to find a matrix \(V \in \R^{n \times k}\) having orthogonal columns (so that \(V^{\mathsf{T}} V = I\)) and such that the total variance of \(Y = V^{\mathsf{T}} X\) is &lt;em&gt;maximized&lt;/em&gt;.  The number \(k\) of columns of \(V\) is the key here &amp;ndash; we will usually choose \(k \ll n\) so that the idea of maximizing the variance corresponds to searching for the \(k\) &amp;ldquo;most explanatory&amp;rdquo; directions in \(\R^n\).  Another way to think about this is that we are finding a subspace of dimension \(k\) which &amp;ldquo;explains&amp;rdquo; the greatest amount of variability in \(X\).&lt;/p&gt;
+&lt;p&gt;It is easy to set this problem up as a trace optimization problem.  The total variance of \(Y\) (which is necessarily also zero mean) is given by&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathbb{E} Y^{\mathsf{T} }Y
+&amp;amp;= \mathbb{E} \mathsf{tr}\ YY^{\mathsf{T}}\\
+&amp;amp;= \mathbb{E} \mathsf{tr}\ V^{\mathsf{T}} X X^{\mathsf{T}} V\\
+&amp;amp;= \mathsf{tr}\ V^{\mathsf{T}} \Sigma V.\\
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;Thus, the problem comes down to solving:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{V \in \R^{n \times k}}{\text{maximize}}&amp;amp;\ \mathsf{tr}\ V^{\mathsf{T}} \Sigma V\\
+\text{subject to}&amp;amp;\ V^{\mathsf{T}} V = I,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which is a standard trace optimization problem.  The solution of which is, famously, given by \(k\) eigenvectors corresponding to the \(k\) largest eigenvalues of \(\Sigma\).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: Given an actual data matrix $X \in \R^{N \times n}$, one might naturally think to just estimate a covariance matrix $\widehat{\Sigma} \approx \frac{1}{N} X^{\mathsf{T}} X$.  However, this is a mistake.  The eigendecomposition of $\widehat{\Sigma}$ can be computed directly from a&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Singular_value_decomposition&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Singular Value Decomposition&lt;/a
+&gt;
+ &lt;kbd&gt;of the matrix $X$ itself.  Indeed, for most purposes I am aware of, the actual computation of $X^{\mathsf{T}} X$ is unnecessary and should not be performed in practice.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;weighted-principle-component-analysis&#34;
+    &gt;Weighted Principle Component Analysis&lt;a href=&#34;#weighted-principle-component-analysis&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;The choice in the last section of maximizing the total variance of \(Y = V^{\mathsf{T}} X\) was arbitrary.  There is a natural generalization of this formulation where we will still find a matrix \(V\) to compute some projection \(Y = V^{\mathsf{T}} X\) as usual, but now we will weight the &amp;ldquo;importance&amp;rdquo; of the various components of \(X\) by some matrix \(W\) (which is often likely to be diagonal, though this is not a requirement).  A natural objective is then the quantity \(\mathbb{E}||V^{\mathsf{T}} W^{1/2} X||_2^2 = \mathsf{tr}\ V^{\mathsf{T}} W^{1/2} \Sigma W^{1/2} V\).  This objective can be plugged into another trace optimization problem with constraint \(V^{\mathsf{T}} V = I\).&lt;/p&gt;
+&lt;p&gt;Interestingly, if we absorb the factor \(W^{1/2}\) into \(V\) as in \(\tilde{V}_W = W^{1/2} V\) we can re-write the constraint in terms of \(\tilde{V}_W\) as in \(V^{\mathsf{T}} V = \tilde{V}_W W^{-1} \tilde{V}_W = I\).  That is, the matrix \(\tilde{V}_W\) will be orthogonal with respect to the inner product \(\lang\cdot, \cdot\rang_W\).&lt;/p&gt;
+
+
+&lt;p&gt;The PCA weighting scheme will not necessarily make any significant difference in regards to the estimated or reconstructed vector \(\widehat{X} = \sum_{k = 1}^K \lang v_i, X \rang_W W^{-1} v_i\), particularly if both the covariance matrix of \(X\) and the weight matrix \(W\) are diagonal.  The differences arise when there is significant correlation structure in \(X\), in which case the weighting scheme can substantively impact the correlation structure of the factors \(v_i\).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: When reconstructing an estimate of an image (or other data) from a weighted PCA, one must be careful to carry out the linear projections with respect to the weighted inner product, otherwise the results will be nonsensical.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;rayleigh-quotients-and-fisher-s-linear-discriminant&#34;
+    &gt;Rayleigh Quotients and Fisher&amp;rsquo;s Linear Discriminant&lt;a href=&#34;#rayleigh-quotients-and-fisher-s-linear-discriminant&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Principle component analysis is a ubiquitous technique for dimensionality reduction.  However, it suffers a major drawback in that it is completely &lt;em&gt;unsupervised&lt;/em&gt;, whereas data often come attached with &lt;em&gt;class labels&lt;/em&gt;.  For example, we may have a random variable \(X\) and, associated with \(X\) is a random &lt;em&gt;class label&lt;/em&gt; \(Y \in [C] = \{1, \ldots, C\}\) indicating that \(X\) belongs to one of \(C\) separate classes.  These classes may represent a data source, a target label, or be simply some discrete feature of the data.&lt;/p&gt;
+&lt;p&gt;For some typical concrete examples, ponder these possibilities:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The data \(X\) are natural language embeddings and the labels \(Y\) are the language (English, French, Persian, &amp;hellip;)&lt;/li&gt;
+&lt;li&gt;Data \(X\) represent stock returns, labels \(Y\) indicate the stock&amp;rsquo;s industry&lt;/li&gt;
+&lt;li&gt;\(X\) is real-valued features of a house, and the class label \(Y\) is a categorical variable such as the neighbourhood.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In PCA, the projection matrix \(V\) is constructed from analyzing \(X\) alone, disregarding the class label \(Y\).  Ideally, we would use the information available in \(Y\) to construct \(V\), and Fisher&amp;rsquo;s Linear Discriminant (FLD) is one particular method to do so.  The idea is to find the projection \(V\) such that samples \(X_i\) which share a class label \(Y_i\) are clustered close to each other, and at the same time that clusters formed by samples with different class labels are far apart.&lt;/p&gt;
+&lt;p&gt;Quantitatively, first suppose that we&amp;rsquo;ve centered our data \(\mu = \mathbb{E}[X] = 0\).  Then, to establish more notation, let \(\mu_c = \mathbb{E}[X\ |\ Y = c]\) and \(\Sigma_c = \mathbb{E}[(X - \mu_c)(X - \mu_c)^{\mathsf{T}}\ |\ Y = c]\) be the &lt;em&gt;class conditional&lt;/em&gt; mean and variance of \(X\), respectively.  Finally, \(\mathbb{P}(Y = c) = \pi_c\) be the probability that each data sample is from class \(c\).&lt;/p&gt;
+&lt;p&gt;Now, just as we did for principle component analysis, let&amp;rsquo;s consider the variance of the projection \(V^{\mathsf{T}} X\).  To bring out the class labels, we will condition on the value of \(Y\):&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathbf{Var}[V^\mathsf{T} X]
+&amp;amp;= V^{\mathsf{T}} \mathbb{E}(X - \mathbb{E}[X])(X - \mathbb{E}[X])^{\mathsf{T}} V\\
+&amp;amp;= V^{\mathsf{T}} \mathbb{E}[XX^{\mathsf{T}}] V\\
+&amp;amp;= V^{\mathsf{T}} \mathbb{E}\mathbb{E}[XX^{\mathsf{T}} \ |\ Y]V\\
+&amp;amp;= V^{\mathsf{T}} \sum_c \pi_c \mathbb{E}[XX^{\mathsf{T}} \ |\ Y = c]V\\
+&amp;amp;\overset{(a)}{=} V^{\mathsf{T}} \sum_c \pi_c \bigl(\mathbf{Var}[X\ |\ Y = c] + \mathbb{E}[X\ |\ Y = c]\mathbb{E}[X\ |\ Y = c]^{\mathsf{T}}\bigr) V\\
+&amp;amp;= V^{\mathsf{T}} \sum_c \pi_c \bigl(\Sigma_c + \mu_c \mu_c^{\mathsf{T}} \bigr) V,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \((a)\) is rearranging the variance formula \(\mathbf{Var}(Z) = \mathbb{E}[ZZ^{\mathsf{T}}] - \mathbb{E}[Z]\mathbb{E}[Z]^{\mathsf{T}}\).  The same result could be got by applying the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Law_of_total_variance&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Law of Total Variance&lt;/a
+&gt;
+, which is what I did first before seeing that the above calculation is easier.&lt;/p&gt;
+&lt;p&gt;In the context of FLD, the term \(\Sigma_w = \sum_c \pi_c \Sigma_c\) is a measure of the average &lt;em&gt;within-class&lt;/em&gt; variance (&lt;em&gt;i.e.,&lt;/em&gt; the variance of the data conditioned on a class label) and \(\Sigma_b = \sum_c \pi_c \mu_c \mu_c^{\mathsf{T}}\) is the &lt;em&gt;between-class&lt;/em&gt; variance (&lt;em&gt;i.e.&lt;/em&gt;, a measure of the separation between the classes).&lt;/p&gt;
+&lt;p&gt;The key idea of FLD is to &lt;em&gt;maximize&lt;/em&gt; the within class variance (of the projection) \(V^{\mathsf{T}} \Sigma_w V\), and &lt;em&gt;minimize&lt;/em&gt; the between class variance \(V^{\mathsf{T}} \Sigma_b V\).  Projections which achieve this goal are identifying the axes which simultaneously explain the differences and similarities between classes.&lt;/p&gt;
+&lt;p&gt;To operationalize what it means to minimize the within-class variance, and maximize the between-class variance we need two things: (1) we need to turn the matrix-valued variances into a scalar and (2) we need to define the tradeoff between maximizing and minimizing.  There are surely many ways of doing this, but the choice of objective function made by FLD is to minimize the following scalar cost:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+J(V) = \mathsf{tr} (V^{\mathsf{T}} \Sigma_w V)^{-1} (V^{\mathsf{T}} \Sigma_b V).
+\end{equation}&lt;/p&gt;
+&lt;p&gt;The trace serves to turn the objective into a scalar, and inverting the within-class variance means that the minimization objective \(J\) will lead us to attempt to &lt;em&gt;maximize&lt;/em&gt; that wiithin-class variance.&lt;/p&gt;
+&lt;p&gt;While the function \(J(V)\) obviously looks like it has a lot of interesting structure, it may not be immediately clear what to do with it or how to optimize it (certainly, it is not a convex function of \(V\)).  However, we can recognize an &lt;em&gt;analogy&lt;/em&gt; &amp;ndash; suppose that \(V\) is just a vector, and that \(\Sigma_b = I\).  In this case, \(J(v) = \frac{v^{\mathsf{T}} \Sigma_w v}{v^{\mathsf{T}} v}\), which is a &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Rayleigh_quotient&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Rayleigh Quotient&lt;/a
+&gt;
+ for the matrix \(\Sigma_w\).  The reader familiar with how to connect Rayleigh quotients to eigenvalues should be inspired &amp;ndash; the Rayleigh Quotient is invariant to rescaling of the vector, so let&amp;rsquo;s consider a change of basis matrix \(C \in \mathbb{R}^{k \times k}\) (&lt;em&gt;i.e.&lt;/em&gt;, an invertible matrix) and check the objective:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+J(VC)
+&amp;amp;= \mathsf{tr}\ (C^{\mathsf{T}} V^{\mathsf{T}} BV C)^{-1} (C^{\mathsf{T}} V^{\mathsf{T}} A V C)\\
+&amp;amp;= \mathsf{tr}\ C^{-1} (V^{\mathsf{T}} BV)^{-1} C^{-\mathsf{T}} C^{\mathsf{T}} (V^{\mathsf{T}} A V) C\\
+&amp;amp;= \mathsf{tr}\ C^{-1} (V^{\mathsf{T}} BV)^{-1} C^{-\mathsf{T}} C^{\mathsf{T}} (V^{\mathsf{T}} A V) C\\
+&amp;amp;= \mathsf{tr}\ (V^{\mathsf{T}} BV)^{-1} (V^{\mathsf{T}} A V) \\
+&amp;amp;= J(V).
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;Therefore, the objective is invariant to a change of basis (just like ordinary Rayleigh Quotients are invariant to rescalings) so we might as well impose the convenient constraint that \(V^{\mathsf{T}} \Sigma_w V = I_k\) since if \(U\) is some minimizer of \(J\) which does not satisfy this condition, we can rescale \(U\) so that it does.  Thus, we are left with the GEVP:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{V \in \mathbb{R}^{n \times k}}{\text{minimize}}&amp;amp;\ \mathsf{tr}(V^{\mathsf{T}} \Sigma_b V)\\
+\text{subject to}&amp;amp;\ V^{\mathsf{T}} \Sigma_w V = I_k,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;the solutions of which provide a matrix \(V \in \R^{n \times k}\) which can be used to reduce the dimensionality of the data \(X\) such that the different classes are well separated in the lower dimensional space.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;Remark: Notice that optimizing the Rayleigh quotient provides another &lt;em&gt;variational characterization&lt;/em&gt; of the generalized eigenvalues!&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;There is however an important caveat.  Notice that \(\Sigma_w = \sum_c \pi_c \mu_c \mu_c^{\mathsf{T}}\) is a sum of \(C\) rank-1 matrices.  This matrix therefore has rank at most \(C\), and then \(V^{\mathsf{T}} \Sigma_w V\) must also have rank at most \(C\), though it is of dimension \(k \times k\) (where \(V\) is \(n \times k\) and \(k \le n\)).  Thus, we need to be careful that \(k \le C\) (smaller for degenerate cases), otherwise the inverse is not well defined &amp;ndash; this places a restriction on the dimensionality of the space onto which we project.&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;example&#34;
+    &gt;Example&lt;a href=&#34;#example&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;One of the most natural datasets on which to apply this technique is the classic &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/MNIST_database&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;MNIST handwritten digits data&lt;/a
+&gt;
+, for which I&amp;rsquo;ve just used the data &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://scikit-learn.org/stable/datasets/toy_dataset.html#optical-recognition-of-handwritten-digits-dataset&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;shipped with scikit-learn&lt;/a
+&gt;
+.  This dataset consists of \(1797\) examples of \(8 \times 8\) images of written digits between \(0\) and \(9\).  Pixel intensities are between \(0\) and \(16\).&lt;/p&gt;
+&lt;p&gt;Simply flattening out the \(8 \times 8\) images into a vector gives us a data matrix \(X \in \R^{1797 \times 64}\), which I&amp;rsquo;ll project into a lower dimensional subspace using either FLD or PCA &amp;ndash; the labels \(y \in \{0, \ldots, 9\}^{1797}\) are natural class labels for FLD.&lt;/p&gt;
+&lt;p&gt;Calculating the projections onto a \(K \ll 64\) dimensional subspace (after centering and standardizing the \(X\) matrix) results in two new datasets \(\widehat{X}_{\text{pca}} \in \R^{1797 \times K}\) and \(\widehat{X}_{\text{fld}} \in \R^{1797 \times K}\), the former being the projection onto the axes which maximizes the variance, and the latter being constructed to try to separate the clumps of classes.&lt;/p&gt;
+&lt;p&gt;In order to make a nice visual comparison between these two projections, I&amp;rsquo;d like to try to &amp;ldquo;line up&amp;rdquo; the projected data as well as possible so that if the data were to fall into similar clumps for PCA and FLD, that these clumps would appear in similar locations in a visualization.  To do so, I&amp;rsquo;ve rotated the matrix \(\widehat{X}_{\text{fld}}\) with an orthogonal matrix \(Q\) obtained from solving an &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Orthogonal Procrustes Problem&lt;/a
+&gt;
+.&lt;/p&gt;
+&lt;details&gt;
+  &lt;summary&gt;Orthogonal Procrustes Problem&lt;/summary&gt;
+  &lt;p&gt;This is a &lt;em&gt;bonus&lt;/em&gt; problem which is similar in spirit to a trace optimization problem, but takes on a different form and has a different solution than the problems I&amp;rsquo;ve considered so far.  Specifically, we solve&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{Q \in \R^{n \times n}}{\text{minimize}} &amp;amp;\quad \frac{1}{2}||Q\widehat{X}_{\text{fld}} - \widehat{X}_{\text{pca}}||_F^2\\
+\text{subject to} &amp;amp;\quad Q^\mathsf{T} Q = I,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;so that \(\widehat{X}_{\text{fld}}\) is rotated (and possibly reflected) to better line up with \(\widehat{X}_{\text{pca}}\).  We can make this look like a trace optimization problem by expanding the objective as in&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\frac{1}{2}||Q\widehat{X}_{\text{fld}} - \widehat{X}_{\text{pca}}||_F^2
+&amp;amp;= \frac{1}{2}\mathsf{tr}(\widehat{X}_{\text{fld}}^{\mathsf{T}}Q^{\mathsf{T}}Q\widehat{X}_{\text{fld}} + \widehat{X}_{\text{pca}}^{\mathsf{T}}\widehat{X}_{\text{pca}}) - 2\mathsf{tr}(Q^{\mathsf{T}} \widehat{X}_{\text{pca}}\widehat{X}_{\text{fld}}^{\mathsf{T}})\\
+&amp;amp;\overset{(a)}{=} \frac{1}{2}\mathsf{tr}(\widehat{X}_{\text{fld}}^{\mathsf{T}}\widehat{X}_{\text{fld}} + \widehat{X}_{\text{pca}}^{\mathsf{T}}\widehat{X}_{\text{pca}}) - \mathsf{tr}(Q^{\mathsf{T}} \widehat{X}_{\text{pca}}\widehat{X}_{\text{fld}}^{\mathsf{T}})\\
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \((a)\) uses the orthogonality constraint.  This leaves us with a sort of &amp;ldquo;one-sided&amp;rdquo; trace optimization problem, distinct from the problems encountered so far:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{Q \in \R^{n \times n}}{\text{maximize}} &amp;amp;\quad \mathsf{tr}(Q^{\mathsf{T}} \widehat{X}_{\text{pca}}\widehat{X}_{\text{fld}}^{\mathsf{T}})\\
+\text{subject to} &amp;amp;\quad Q^\mathsf{T} Q = I.
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;To actual see the solution of this problem, expand out the related term&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\frac{1}{2}||Q - \widehat{X}_{\text{pca} }\widehat{X}_{\text{fld}}^{\mathsf{T}}||_F^2 = \frac{1}{2}\mathsf{tr}(Q^{\mathsf{T}}Q + \widehat{X}_{\text{fld}}\widehat{X}_{\text{pca}}^{\mathsf{T}}\widehat{X}_{\text{pca}} \widehat{X}_{\text{fld}}^{\mathsf{T}}) - \mathsf{tr}(Q^{\mathsf{T}} \widehat{X}_{\text{pca}}\widehat{X}_{\text{fld}}^{\mathsf{T}}),\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which similarly involves constants and the above trace objective.  We can therefore equivalently solve \[\underset{Q: Q^{\mathsf{T}}Q = I}{\text{minimize}}\ \frac{1}{2}||Q - \widehat{X}_{\text{pca} }\widehat{X}_{\text{fld}}^{\mathsf{T}}||_F^2.\] Apply a &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Singular_value_decomposition&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Singular Value Decomposition&lt;/a
+&gt;
+ \(\widehat{X}_{\text{pca} }\widehat{X}_{\text{fld}}^{\mathsf{T}} = U\Sigma V^{\mathsf{T}}\) to the product, and using the fact that \(U, V\) are orthogonal, and therefore we can freely multiply by \(U, V\) inside the norm without change its value, leads to the solution \(Q = UV^{\mathsf{T}}\), with cost \(\sum_{i = 1}^m (1 - \sigma_i)^2\) for singular values \(\sigma_i\) of \(\widehat{X}_{\text{pca} }\widehat{X}_{\text{fld}}^{\mathsf{T}}\).  Precisely,&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{Q: Q^{\mathsf{T}}Q = I}{\text{min}}\ \frac{1}{2}||Q - \widehat{X}_{\text{pca}}\widehat{X}_{\text{fld}}^{\mathsf{T}}||_F^2
+&amp;amp;= \underset{Q: Q^{\mathsf{T}}Q = I}{\text{min}}\ \frac{1}{2}||Q - U\Sigma V^{\mathsf{T}}||_F^2\\
+&amp;amp;\overset{(a)}{=} \underset{D: D^{\mathsf{T}}D = I}{\text{min}}\ \frac{1}{2}||UDV^{\mathsf{T}} - U\Sigma V^{\mathsf{T}}||_F^2\\
+&amp;amp;\overset{(b)}{=} \underset{D: D^{\mathsf{T}}D = I}{\text{min}}\ \frac{1}{2}||D - \Sigma||_F^2\\
+&amp;amp;\overset{( c)}{=} \frac{1}{2}\sum_{i = 1}^m (1 - \sigma_i)^2,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \((a)\) expresses \(Q\) in the same basis (\(D\) is not yet necessarily diagonal! &lt;em&gt;e.g.,&lt;/em&gt; consider \(D = U^{\mathsf{T}} Q V\)), and \((b)\) uses the fact that \(U, V\) are orthogonal.  Minimizing the approximation error of the diagonal matrix \(\Sigma\) after equality \((b)\) &lt;em&gt;now&lt;/em&gt; requires that \(D\) be diagonal, and meeting the equality (which is derived from the requirement that \(Q^{\mathsf{T}}Q = I\)) necessitates (equality \(( c)\)) that $D = I.$   \(\ \square\)&lt;/p&gt;
+
+&lt;/details&gt;
+
+&lt;p&gt;I&amp;rsquo;ve used this matrix \(Q\) to better align the data in the animation below.  Notice that each coloured clump (corresponding to different digits) is roughly aligned in space &amp;ndash; there is nothing intrinsic about PCA and FLD that would encourage this alignment.&lt;/p&gt;
+
+
+&lt;p&gt;In addition to the figure, I also fit a simple &lt;kbd&gt;sklearn.svm.LinearSVC&lt;/kbd&gt; to the projected data in order to verify that the clusters are in fact well informed by the class labels.  The &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Phi_coefficient&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;MCC&lt;/a
+&gt;
+ value is annotated in the title of the each figure.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;optimizing-signal-to-noise-ratio&#34;
+    &gt;Optimizing Signal to Noise Ratio&lt;a href=&#34;#optimizing-signal-to-noise-ratio&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;As a final example, let&amp;rsquo;s examine a problem in signal processing.  Let \(X \in \R^{n}\) be an &lt;em&gt;unobserved&lt;/em&gt; zero mean random vector with variance \(\Sigma\) and \(E \in \R^{n}\) be another zero-mean and unobserved random vector with variance \(\Omega\).  The observed quantity is given by \(Y = X + E\), &lt;em&gt;i.e.&lt;/em&gt;, a noisy measurement of the signal of interest.&lt;/p&gt;
+&lt;p&gt;Similarly to PCA, we will find a matrix \(V \in \R^{n \times k}\) to project \(Y\) onto some lower dimensional space, but this time we will optimize the &lt;em&gt;signal-to-noise ratio&lt;/em&gt; (SNR), where the &amp;ldquo;signal&amp;rdquo; is \(V^{\mathsf{T}} X\) (containing information about the vector \(X\) that we care about) and the &amp;ldquo;noise&amp;rdquo; is \(V^{\mathsf{T}} E\) (which is just corrupted by \(E\)).  This leads to the optimization problem:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{V \in \R^{n \times k}}{\text{maximize}}&amp;amp;\ \frac{\mathbb{E}||V^{\mathsf{T}} X||_2^2}{\mathbb{E}||V^{\mathsf{T}} E||_2^2}\\
+\text{subject to}&amp;amp;\ V^{\mathsf{T}} V = I.
+\end{aligned}\tag{$\mathcal{P}$}
+\end{equation}&lt;/p&gt;
+&lt;p&gt;This is a generalization of PCA since if \(E\) is isotropic, \(\mathbb{E}||V^{\mathsf{T}} E||_2^2\) is a constant given the constraint, and can be dropped.  Moreover, this problem is different from the GEVPs encountered earlier, because we enforce the constraint that \(V^{\mathsf{T}}V = I\), as opposed to \(V^{\mathsf{T}}\Omega V = I\).&lt;/p&gt;
+&lt;p&gt;While this problem doesn&amp;rsquo;t immediately take the form of an eigenvalue problem, we can relate it to one with some clever manipulations (essentially drawn from &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://citeseerx.ist.psu.edu/document?repid=rep1&amp;amp;type=pdf&amp;amp;doi=0d185e6de595bd3844909d3606e9218a498a9bd8&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Kokiopoulou et. al.&lt;/a
+&gt;
+).  Supposing that \(s^\star &amp;gt; 0\) is the optimal SNR, it must be the case that \[\frac{\mathbb{E}||V^{\mathsf{T}} X||_2^2}{\mathbb{E}||V^{\mathsf{T}} E||_2^2} \le s^\star\] for every orthogonal matrix $V.$  Therefore, denoting by \(\mathcal{O}_k\) the set of \(n \times k\) matrices with orthogonal columns, we have&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\forall V \in \mathcal{O}_k:\ \mathbb{E}||V^{\mathsf{T}} X||_2^2 - s^\star \mathbb{E}||V^{\mathsf{T}} E||_2^2 &amp;amp;\le 0\\
+\implies \forall V \in \mathcal{O}_k:\ \mathbb{E} \mathsf{tr}\ V^{\mathsf{T}} XX^{\mathsf{T}} V - s^\star \mathbb{E} \mathsf{tr}\ V^{\mathsf{T}} EE^{\mathsf{T}} V &amp;amp; \le 0\\
+\implies \forall V \in \mathcal{O}_k:\ \mathsf{tr}\ V^{\mathsf{T}} \Sigma V - s^\star \mathsf{tr}\ V^{\mathsf{T}} \Omega V &amp;amp;\le 0\\
+\implies \forall V \in \mathcal{O}_k:\ \mathsf{tr}\ V^{\mathsf{T}} \bigl(\Sigma - s^\star \Omega\bigr) V &amp;amp;\le 0\\
+\implies \underset{V \in \mathcal{O}_k}{\text{max}}\ \mathsf{tr}\ V^{\mathsf{T}} \bigl(\Sigma - s^\star \Omega\bigr) V &amp;amp;\le 0.\\
+\end{aligned}
+\end{equation}&lt;/p&gt;
+&lt;p&gt;From what we know of eigenvalue problems, the maximizer \(V\) in \(\mathcal{O}_k\) of \(\mathsf{tr}\ V^{\mathsf{T}} \bigl(\Sigma - s \Omega \bigr) V\) is given by the last \(k\) eigenvectors of the matrix \(\Sigma - s \Omega\).  Lets call these \(V_s\).  We want to maximize the SNR, and thus find the largest \(s\) which satisfies the above inequalities &amp;ndash; i.e., the optimal value \(s^\star\) should be a root of the function \[\mathcal{S}(s) = \mathsf{tr}\ V^{\mathsf{T}}_s \bigl( \Sigma - s \Omega \bigr) V_s,\] a function which can be evaluated through an eigendecomposition of \(\Sigma - s \Omega\).  (&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: expressions like $\Sigma - s\Omega$ involving a matrix minus a scalar times another matrix are often referred to as &lt;em&gt;matrix pencils&lt;/em&gt;.  For what reason, I have no idea.&lt;/kbd&gt;)&lt;/p&gt;
+&lt;p&gt;To check that this can actually occur, notice that since \(\Omega \succ 0\), the function \(\mathcal{S}\) must be &lt;em&gt;monotone decreasing&lt;/em&gt; on \(\R_+\).  To establish the existence of an \(s^\star\) such that \(\mathcal{S}(s^\star) = 0\), and to apply bisection search, we need to show that \(\mathcal{S}\) does actually cross \(0\).  To this end, \(\mathcal{S}(0) &amp;gt; 0\) (since \(\Sigma \succ 0\)).  Since \(\mathcal{S}\) is strictly monotone, this is enough, but we&amp;rsquo;d like to find a compact interval where we know \(s^\star\) lies.  I show in the detail below that \(\mathcal{S}(s) &amp;lt; 0\) for any \(s &amp;gt; \lambda_n(\Sigma, \Omega)\), the largest generalized eigenvalue.&lt;/p&gt;
+&lt;details&gt;
+  &lt;summary&gt;Generalized Eigenvalue Decomposition&lt;/summary&gt;
+  &lt;p&gt;Supposing that \(\Lambda = \mathsf{Dg}(\lambda_1, \ldots, \lambda_n)\) is a diagonal matrix of generalized eigenvalues and \(V \in \mathbb{R}^{n \times n}\) contains the generalized eigenvectors in the columns, we can write the GEVP as \[\Sigma V = \Omega V \Lambda.\]  Then, since \(V^{\mathsf{T}} \Omega V = I\) we have \(VV^{\mathsf{T}} \Omega V = V\) which, since \(V\) is invertible (we know it is a basis for \(\R^n\)) implies that \(VV^{\mathsf{T}} \Omega = I\).  Multiplying the GEVP on the right by \(V^{\mathsf{T}} \Omega\) then provides to us a generalized eigenvalue decomposition of \(\Sigma\) with respect to \(\Omega\): \[\Sigma = \Omega V \Lambda V^{\mathsf{T}} \Omega.\]&lt;/p&gt;
+&lt;p&gt;We can use these facts to analyze the function \(\mathcal{S}\) as in&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathcal{S}(s)
+&amp;amp;= \mathsf{tr}\ (\Sigma - s\Omega)\\
+&amp;amp;= \mathsf{tr}\ (\Omega V \Lambda V^{\mathsf{T}} \Omega - s\Omega)\\
+&amp;amp;= \mathsf{tr}\ \Omega (V \Lambda V^{\mathsf{T}} \Omega - sI)\\
+&amp;amp;= \mathsf{tr}\ \Omega (V \Lambda V^{\mathsf{T}} \Omega - sVV^{\mathsf{T}} \Omega)\\
+&amp;amp;= \mathsf{tr}\ \Omega V (\Lambda - sI) V^{\mathsf{T}} \Omega \\
+&amp;amp;= \mathsf{tr}\ (\Lambda - sI)V^{\mathsf{T}} \Omega^2 V, \\
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;and since \(V^{\mathsf{T}} \Omega^2 V \succ 0\) we must have \(\mathcal{S}(s) &amp;lt; 0\) for any \(s &amp;gt; \lambda_n\).  \(\ \square\)&lt;/p&gt;
+
+&lt;/details&gt;
+
+&lt;p&gt;Now, it follows that \(s^\star\) is the &lt;em&gt;unique&lt;/em&gt; root of the monotone function \(\mathcal{S}\) and it lies in the interval \([0, \lambda_n(\Sigma, \Omega)]\).  Thus, we can find \(s^\star\) by performing bisection on \(\mathcal{S}\), and then recover the optimal matrix \(V_{s^\star}\) by computing the last \(k\) eigenvectors of \(\Sigma - s^\star \Omega\).  The value \(s^\star\), remember, is also the value of the optimal SNR.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;For the Reader&lt;/strong&gt;: I&amp;rsquo;ve glossed over another property that should be verified for $\mathcal{S}$ before making these conclusions.  What is it and why does it hold?&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;An example of this technique is given for the same faces dataset as the PCA example, where I&amp;rsquo;ve corrupted the images with noise that is locally correlated in space.  Clearly the result is not particularly &lt;strong&gt;good&lt;/strong&gt;, in an absolute sense, but the PCA reconstruction is completely corrupted by the anisotropic noise distribution.&lt;/p&gt;
+
+
+&lt;p&gt;Some code to implement this technique in &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://julialang.org/&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Julia&lt;/a
+&gt;
+ is below.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-julia&#34; data-lang=&#34;julia&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;using&lt;/span&gt; LinearAlgebra;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;function&lt;/span&gt; snr_pca(Σ, Ω, V)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;The objective function.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; tr(V&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; Σ &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; V) &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; tr(V&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; Ω &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; V)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;function&lt;/span&gt; optimal_snr_pca(Σ, Ω, k, eps&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1e-6&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&amp;#34;Computes the optimal projection matrix.&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    n &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; size(Σ)[&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    S &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; s &lt;span style=&#34;color:#ff79c6&#34;&gt;-&amp;gt;&lt;/span&gt; (sum &lt;span style=&#34;color:#ff79c6&#34;&gt;∘&lt;/span&gt; eigvals)(Σ &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; s &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; Ω, n &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; n)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    V &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; s &lt;span style=&#34;color:#ff79c6&#34;&gt;-&amp;gt;&lt;/span&gt; eigvecs(Σ &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; s &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; Ω)[&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt;, n &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; k &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; n]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    s_max &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; eigvals(Σ, Ω)[n]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    s_star &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; bisection(S, s_max, eps)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    V_star &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; V(s_star)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; V_star, s_star
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;function&lt;/span&gt; bisection(S, s_max, eps&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1e-6&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&amp;#34;Finds the zero of a monotone decreasing function in [0, s_max].&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    s_left &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    s_right &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; s_max
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;while&lt;/span&gt; abs(s_right &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; s_left) &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; eps
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        s &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; s_left &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; (s_right &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; s_left) &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; S(s) &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            s_left &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; s
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            s_right &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; s
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; s_left
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 class=&#34;group &#34; id=&#34;conclusion&#34;
+    &gt;Conclusion&lt;a href=&#34;#conclusion&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;This blog examines the theory and applications of eigenvalue problems and generalized eigenvalue problems.  We&amp;rsquo;ve seen through the Spectral Theorem that the symmetry of the matrix is essential for obtaining real-valued eigenvalue decompositions (and thus an ordering to the eigenvalues).  These eigenvalues can be characterized by variational problems, and useful applied problems (particularly PCA and its weighted version, and FLD) can be formulated in the same optimization problems.&lt;/p&gt;
+&lt;p&gt;The key implication of this is that these optimization problems admit of efficient solutions: eigenvalue decompositions.  These optimization problems are by no means convex, yet they still admit of efficient solutions through the use of &lt;kbd&gt;scipy.linalg.eigh&lt;/kbd&gt;.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ve also seen some &amp;ldquo;bonus&amp;rdquo; relationships with the singular value decomposition in the form of the Orthogonal Procrustes Problem, and the fact that you can compute the eigenvalues needed for PCA directly from \(X\), rather than having to form \(\widehat{\Sigma} = \frac{1}{N}X^{\mathsf{T}}X\).  As well, the detailed computations for signal to noise ratio optimization show us the generalized eigenvalue decomposition \(\Sigma = \Omega V \Lambda V^{\mathsf{T}}\Omega\) of \(\Sigma\) with respect to \(\Omega\).  This is another useful decomposition which generalizes the &amp;ldquo;vanilla&amp;rdquo; eigenvalue decomposition \(\Sigma = U \Lambda U^{\mathsf{T}}\).&lt;/p&gt;
+&lt;p&gt;These problems present plenty of further interesting avenues for exploration, which I invite the reader to meditate upon :)&lt;/p&gt;</description></item><item>
             <title>Nature&#39;s Dartboard: The Axioms of Probability</title>
             <link>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</link>
             <pubDate>Sun, 23 Apr 2023 00:00:00 -0700</pubDate>
@@ -32,7 +499,7 @@
 &gt;
  💁‍♂️&lt;/p&gt;
 &lt;p&gt;Still, many mathematicians are at the same time concerned with correctness and &lt;em&gt;rigor&lt;/em&gt;.  That is, they want to be able to say with supreme confidence that their results are true and correct, with no room for doubt.  Essential to this is the idea of a mathematical &lt;em&gt;proof&lt;/em&gt; &amp;ndash; a sequence of logical deductions which begin from some specified premises \(P\) and lead inexorably to some conclusion \(Q\).  If the logical deductions are correct, then the mathematician has rigorously obtained a proof of the implication \(P \implies Q\).  That is, given that the premises \(P\) are true, it must be the case that the conclusions \(Q\) are true.  Mathematicians call this \(P \implies Q\) implication a &lt;em&gt;Theorem&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;Once a mathematician (or a group of them, perhaps spanning continents and generations) has amassed a rather sizable number of implications, and understands something about the various connections amongst them, the mathematician might attempt to lay down a &lt;em&gt;fundamental&lt;/em&gt; set of premises from which all of their conclusions can be derived.  This set of fundamental premises, which cannot be derived (as far as the mathematician can tell) from any other still more fundamental premises, are called &lt;em&gt;axioms&lt;/em&gt;.  The axioms are the basic starting point for a &lt;em&gt;theory&lt;/em&gt;, that is, for all the further conclusions the mathematician has derived.  Axioms are ultimately just premises, but the former term tends to imply that it is a &lt;em&gt;foundational&lt;/em&gt; premise &amp;ndash; &lt;em&gt;i.e.&lt;/em&gt;, something that is self-evident that can serve as a starting point.&lt;/p&gt;
+&lt;p&gt;Once a mathematician (or a group of them, perhaps spanning continents and generations) has amassed a rather sizable number of theorems, and understands something about the various connections amongst them, the mathematician might attempt to lay down a &lt;em&gt;fundamental&lt;/em&gt; set of premises from which all of their conclusions can be derived.  This set of fundamental premises, which cannot be derived (as far as the mathematician can tell) from any other still more fundamental premises, are called &lt;em&gt;axioms&lt;/em&gt;.  The axioms are the basic starting point for a &lt;em&gt;theory&lt;/em&gt;, that is, for all the further conclusions the mathematician has derived.  Axioms are ultimately just premises, but the former term tends to imply that it is a &lt;em&gt;foundational&lt;/em&gt; premise &amp;ndash; &lt;em&gt;i.e.&lt;/em&gt;, something that is self-evident that can serve as a starting point.&lt;/p&gt;
 &lt;p&gt;The most famous set of axioms are &lt;a
     class=&#34;link&#34;
     href=&#34;https://en.wikipedia.org/wiki/Euclidean_geometry&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Euclid&amp;rsquo;s Axioms&lt;/a
@@ -156,13 +623,13 @@ a clever way, reassemble &lt;strong&gt;two&lt;/strong&gt; copies of the original
 &lt;p&gt;All of the formalism laid out in understanding the probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) is rather complicated.  Fortunately, in most &amp;ldquo;practical&amp;rdquo; scenarios where we want to &lt;em&gt;use&lt;/em&gt; probability for modelling, we just let this formalism sit back as an abstract foundation, more-or-less out of sight.  We instead work more directly with &lt;em&gt;random variables&lt;/em&gt; which are defined as nothing but &lt;em&gt;functions from \(\Omega\) into \(\mathbb{R}\)&lt;/em&gt; as in: \[X: \Omega \rightarrow \mathbb{R},\] sometimes written as \(X(\omega)\).&lt;/p&gt;
 &lt;p&gt;The &amp;ldquo;randomness&amp;rdquo; thus passes from Nature&amp;rsquo;s Dartboard \(\Omega\), an abstract set that we don&amp;rsquo;t want to think about too much, to \(\mathbb{R}\), a natural set that we like to work with.  The way this works is as follows &amp;ndash; suppose we want to compute the probability that \(X(\omega)\) is less than some real number \(x\), that is \(F(x) = \mathbb{P}(X \le x)\).  This is an important function called the &lt;em&gt;cumulative distribution function&lt;/em&gt; of \(X\) and it turns out to be enough to fully determine the random behaviour of \(X\).  The notation \(\mathbb{P}(X \le x)\) is really nothing but a shorthand for \[F(x) = \mathbb{P}(\{\omega: X(\omega) \le x\}).\]&lt;/p&gt;
 &lt;p&gt;That is, the common notation \(\mathbb{P}(X \le x)\), which is used to mean &amp;ldquo;the probability that the random variable \(X\) is less than or equal to the real number \(x\)&amp;rdquo; is really a shorthand for \(\mathbb{P}(\{\omega:\ X(\omega) \le x\})\) which is &amp;ldquo;the volume of the set of all events \(\omega\) such that the function \(X\) evaluated \(X(\omega)\) is less than or equal to the real number \(x\)&amp;rdquo;.  We can simplify this further:&lt;/p&gt;
-&lt;p&gt;\begin{equation}
+&lt;p&gt;\begin{equation*}
 \begin{aligned}
 F(x)
-&amp;amp;= \mathbb{P}(\{\omega: X(\omega) \le x\})\\
-&amp;amp;= \mathbb{P}(\{\omega: X(\omega) \in (-\infty, x]\})\\
-&amp;amp;= \mathbb{P}(X^{-1} ((-\infty, x]))\\
-&amp;amp;= \mathbb{P} \circ X^{-1} ((-\infty, x]).
+&amp;amp;= \mathbb{P}(\{ω: X(ω) ≤ x\})&lt;br /&gt;
+&amp;amp;= \mathbb{P}(\{ω: X(ω) ∈ (-∞, x]\})&lt;br /&gt;
+&amp;amp;= \mathbb{P}(X&lt;sup&gt;-1&lt;/sup&gt; ((-∞, x]))&lt;br /&gt;
+&amp;amp;= \mathbb{P} ˆ X&lt;sup&gt;-1&lt;/sup&gt; ((-∞, x]).
 \end{aligned}\notag
 \end{equation}&lt;/p&gt;
 &lt;p&gt;These elementary manipulations show us that that the cumulative distribution function \(F\) is nothing but the composition of the probability measure \(\mathbb{P}\) with the inverse mapping of \(X\) (the domain of which are all the half-open intervals like \((-\infty, x]\))!  What does this mean?  It allows us to define events on \(\mathbb{R}\), like the probability of the event \(X \le x\) by measuring the size of the set of all \(\omega\) which satisfy \(X(\omega) \le x\).  So, what we do &amp;ldquo;in practice&amp;rdquo; is that we start by positing a distribution function \(F\) (like a Gaussian distribution) which we want to work with on \(\mathbb{R}\), and then we just trust that there is some appropriate probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) which is &amp;ldquo;adequately expressive&amp;rdquo; and some function \(X\) such that \(F = \mathbb{P} \circ X^{-1}\).  The function \(X\) is now a random variable having &lt;em&gt;c.d.f.&lt;/em&gt; \(F\).  This gives us a huge variety of possibilities for modelling, and the randomness on \(\mathbb{R}\) is inherited from the simple and intuitive notion of randomness as volume on Nature&amp;rsquo;s dartboard.&lt;/p&gt;
@@ -211,7 +678,7 @@ F(x)
 &gt;&lt;/h2&gt;
 
 &lt;p&gt;Many people are now drawn to the study of probability for the purposes of doing statistics, &lt;em&gt;i.e.&lt;/em&gt;, analyzing data.  So, I wanted to add some more commentary about random variables and their connection to the modelling of data.  That is, how do statistics and probability connect?&lt;/p&gt;
-&lt;p&gt;Statistics is often concerned with &lt;em&gt;experiments&lt;/em&gt;.  Suppose we plan an experiment where we are going to measure someone&amp;rsquo;s height.  The outcome of this experiment is not known a-priori, so it makes sense to model it using probability theory &amp;ndash; the outcome is random.  As well, a person&amp;rsquo;s height is a real number, and we now know that we can model random real numbers using &lt;em&gt;random variables&lt;/em&gt;.  Thus, we might like to construct a model of the measure of someone&amp;rsquo;s height as a random variable \(H(\omega)\).&lt;/p&gt;
+&lt;p&gt;Statistics is often concerned with &lt;em&gt;experiments&lt;/em&gt;.  Suppose we plan an experiment where we are going to measure someone&amp;rsquo;s height.  The outcome of this experiment is not known a-priori, so it makes sense to model it using probability theory &amp;ndash; the outcome is random.  As well, a person&amp;rsquo;s height is a real number, and we now know that we can model random real numbers using &lt;em&gt;random variables&lt;/em&gt;.  Thus, we might like to construct a model of the measurement of someone&amp;rsquo;s height as a random variable \(H(\omega)\).&lt;/p&gt;
 &lt;p&gt;If we measure the heights of many people, we will wind up with a multitude of random variables \(H_1, H_2, \ldots, H_N\), where \(N\) is the number of measurements we make.  These random variables all together define some &lt;em&gt;joint distribution&lt;/em&gt; \(F(h_1, \ldots, h_N) = \mathbb{P}(H_1 \le h_1, \ldots, H_N \le h_N)\), and statistics is often concerned with what can be learned about the distribution of these random variables through the actually observed outcomes of experiments.&lt;/p&gt;
 
 
@@ -226,7 +693,7 @@ F(x)
 &lt;li&gt;\(\mathbb{P}(H_1 \le h_1, \ldots, H_N \le h_N) = \mathbb{P}(H_1 \le h_1) \times \cdots \times \mathbb{P}(H_N \le h_N)\) (independent).&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;The idea of the random variables having an identical distribution is that we are observing separate outcomes of the same experiment.  Independence, where the joint distribution is nothing but the product of the individual (&lt;em&gt;marginal&lt;/em&gt;) distributions, encodes the idea that the outcome of one experiment does not influence (and is not influenced by) any other experiment.&lt;/p&gt;
-&lt;p&gt;Thus, one of the most common settings in statistics is that we are given a sequence \(X_1, X_2, \ldots, X_N\) of &lt;em&gt;i.i.d.&lt;/em&gt; random variables, and our goal is to learn something about the &lt;em&gt;statistics&lt;/em&gt; of their common distribution, call it \(F_X\).  The word &lt;em&gt;statistic&lt;/em&gt; here just means &amp;ldquo;functionals of the distribution&amp;rdquo;, &lt;em&gt;i.e.&lt;/em&gt;, functions which take the distribution function \(F_X\) as an input, and output some real number.  The mean value \(\mathbb{E}X = \int_{\mathbb{R}} x \mathsf{d} F_X(x)\) being an important example, &lt;em&gt;quantiles&lt;/em&gt; being another: \(\mathbb{P}(X \le x) = \int_{\mathbb{R}} \mathbf{1}[x \le q]\mathsf{d} F_X(x)\).&lt;/p&gt;
+&lt;p&gt;Thus, one of the most common settings in statistics is that we are given a sequence \(X_1, X_2, \ldots, X_N\) of &lt;em&gt;i.i.d.&lt;/em&gt; random variables, and our goal is to learn something about the &lt;em&gt;statistics&lt;/em&gt; of their common distribution, call it \(F_X\).  The word &lt;em&gt;statistic&lt;/em&gt; here just means &amp;ldquo;functionals of the distribution&amp;rdquo;, &lt;em&gt;i.e.&lt;/em&gt;, functions which take the distribution function \(F_X\) as an input, and output some real number.  The mean value \(\mathbb{E}X = \int_{\mathbb{R}} x \mathsf{d} F_X(x)\) being an important example, &lt;em&gt;quantiles&lt;/em&gt; being another: \(\mathbb{P}(X \le q) = \int_{\mathbb{R}} \mathbf{1}[x \le q]\mathsf{d} F_X(x)\).&lt;/p&gt;
 &lt;p&gt;Given data, and statistical theorems about how collections of &lt;em&gt;i.i.d.&lt;/em&gt; random variables behave, statisticians are able to answer questions like: &amp;ldquo;what is the probability that a randomly selected person will be over six feet tall?&amp;rdquo;, &amp;ldquo;in a room of \(N\) people, what is the probability that there will be someone more than six feet five inches?&amp;rdquo;, &lt;em&gt;etc&lt;/em&gt;.  Going further, the combination of powerful computers with sophisticated statistical models can be used to produce striking results &amp;ndash; the dart throwing woman that serves as the cover photo of this blog post was itself generated from a statistical model.  That is, the image itself is essentially nothing but a particular realization of a random variable!&lt;/p&gt;
 &lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (The LLN): The most natural estimator of&lt;/kbd&gt; \(\mathbb{E}X\) &lt;kbd&gt;given the sample is the &lt;em&gt;average&lt;/em&gt;&lt;/kbd&gt; \(\overline{X}_N = \frac{1}{N}\sum_{i = 1}^N X_i\) &lt;kbd&gt;and indeed, many of the most famous theorems in statistics (the&lt;/kbd&gt; &lt;a
     class=&#34;link&#34;
