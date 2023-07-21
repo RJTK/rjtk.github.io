@@ -2,43 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://rjtk.github.io/posts/all-about-quadratic-forms/</loc>
+    <lastmod>2023-07-20T22:53:23-07:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url><url>
     <loc>https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/</loc>
-    <lastmod>2023-07-18T21:45:10-07:00</lastmod>
+    <lastmod>2023-07-20T22:53:26-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/posts/</loc>
-    <lastmod>2023-07-18T21:45:28-07:00</lastmod>
+    <lastmod>2023-07-20T22:53:41-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/</loc>
-    <lastmod>2023-07-18T21:45:28-07:00</lastmod>
+    <lastmod>2023-07-20T22:53:41-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/</loc>
-    <lastmod>2023-07-18T21:45:11-07:00</lastmod>
+    <lastmod>2023-07-20T22:53:27-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/posts/group-theory-symmetry-and-a-brain-teaser/</loc>
-    <lastmod>2023-07-18T21:45:12-07:00</lastmod>
+    <lastmod>2023-07-20T22:53:28-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/posts/lyapunov-stability-linear-systems-and-semidefinite-programming/</loc>
-    <lastmod>2023-07-18T21:45:22-07:00</lastmod>
+    <lastmod>2023-07-20T22:53:36-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/posts/solving-equations-with-jacobi-iteration/</loc>
-    <lastmod>2023-07-18T21:45:27-07:00</lastmod>
+    <lastmod>2023-07-20T22:53:40-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>
     <loc>https://rjtk.github.io/posts/introduction/</loc>
-    <lastmod>2023-07-18T21:45:28-07:00</lastmod>
+    <lastmod>2023-07-20T22:53:41-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url><url>

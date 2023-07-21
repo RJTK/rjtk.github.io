@@ -8,6 +8,15 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 18 Jul 2023 00:00:00 -0700</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>All About Quadratic Forms</title>
+      <link>https://rjtk.github.io/posts/all-about-quadratic-forms/</link>
+      <pubDate>Tue, 18 Jul 2023 00:00:00 -0700</pubDate>
+      
+      <guid>https://rjtk.github.io/posts/all-about-quadratic-forms/</guid>
+      <description>&lt;p&gt;Quadratic forms are functions defined through symmetric matrices and represent a ubiquitous class of functions for which there is an enormous amount of useful theoretical and computational results.  Indeed, in &amp;ldquo;linear-quadratic&amp;rdquo; models, it is possible to provide analytic solutions to more-or-less any question you would like to ask.  This post is a tour of some foundations and results relating to quadratic forms.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Generalized Eigenvalue Problems and Trace Optimization</title>
       <link>https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/</link>
       <pubDate>Tue, 18 Jul 2023 00:00:00 -0700</pubDate>

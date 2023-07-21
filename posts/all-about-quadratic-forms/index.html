@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en-us" class="lang-en-us">
+    <head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Quadratic forms are functions defined through symmetric matrices and represent a ubiquitous class of functions for which there is an enormous amount of useful theoretical and computational results. Indeed, in &amp;ldquo;linear-quadratic&amp;rdquo; models, it is possible to provide analytic solutions to more-or-less any question you would like to ask. This post is a tour of some foundations and results relating to quadratic forms.
+" />
+<meta itemprop="description" content="Quadratic forms are functions defined through symmetric matrices and represent a ubiquitous class of functions for which there is an enormous amount of useful theoretical and computational results. Indeed, in &amp;ldquo;linear-quadratic&amp;rdquo; models, it is possible to provide analytic solutions to more-or-less any question you would like to ask. This post is a tour of some foundations and results relating to quadratic forms.
+" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<meta itemprop="name" content="All About Quadratic Forms - Quant Out of Water" />
+<link href="https://rjtk.github.io/index.xml" title="All About Quadratic Forms - Quant Out of Water" type="application/rss+xml" rel="alternate" />
+<title>All About Quadratic Forms - Quant Out of Water</title><link rel="stylesheet" href="/main.1fcc545d2ef04212761e07c486eaac8b9c8e1c46af8fc344804b7383bb9116bc.css" integrity="sha256-H8xUXS7wQhJ2HgfEhuqsi5yOHEavj8NEgEtzg7uRFrw=" /><meta property="og:site_name" content="All About Quadratic Forms - Quant Out of Water" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="All About Quadratic Forms" />
+<meta property="og:description" content="Quadratic forms are functions defined through symmetric matrices and represent a ubiquitous class of functions for which there is an enormous amount of useful theoretical and computational results. Indeed, in &amp;ldquo;linear-quadratic&amp;rdquo; models, it is possible to provide analytic solutions to more-or-less any question you would like to ask. This post is a tour of some foundations and results relating to quadratic forms.
+" />
+<meta property="og:url" content="https://rjtk.github.io/posts/all-about-quadratic-forms/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/all-about-quadratic-forms/" /><meta property="article:published_time" content="2023-07-18T00:00:00-07:00" /><meta property="article:modified_time" content="2023-07-20T22:53:23-07:00" /><meta name="theme-color" content="#dd6065" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="All About Quadratic Forms - Quant Out of Water" />
+<meta name="apple-mobile-web-app-status-bar-style" content="white" />
+
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="All About Quadratic Forms - Quant Out of Water" />
+<meta name="twitter:description" content="Quadratic forms are functions defined through symmetric matrices and represent a ubiquitous class of functions for which there is an enormous amount of useful theoretical and computational results. Indeed, in &amp;ldquo;linear-quadratic&amp;rdquo; models, it is possible to provide analytic solutions to more-or-less any question you would like to ask. This post is a tour of some foundations and results relating to quadratic forms.
+" />
+<meta name="twitter:url" content="https://rjtk.github.io/posts/all-about-quadratic-forms/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
+<link href="/icon.png" rel="Bookmark" />
+<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "All About Quadratic Forms",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/rjtk.github.io\/posts\/all-about-quadratic-forms\/"
+  },"genre": "posts","wordcount": 6919 ,
+  "url": "https:\/\/rjtk.github.io\/posts\/all-about-quadratic-forms\/","datePublished": "2023-07-18T00:00:00-07:00","dateModified": "2023-07-20T22:53:23-07:00","author": {
+    "@type": "Person",
+    "name": "qoow"
+  },"description": ""
+}
+</script>
+
+
+    </head>
+
+    <body class="dark:bg-darkBg dark:text-darkText">
+        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
+            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header
+    class="relative"
+><div class=" border-b py-6 text-center dark:border-darkBorder"><div class="text-3xl">Quant Out of Water</div></div><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
+            <div class="route-items flex w-full items-center justify-around"><a
+                        title="Home"
+                        data-active-link="/"
+                        href="/"
+                        class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                    >
+                        <i
+                            class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                        ></i>
+                        <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Home</span>
+                    </a><a
+                        title="About"
+                        data-active-link="/about/"
+                        href="/about/"
+                        class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                    >
+                        <i
+                            class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                        ></i>
+                        <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">About</span>
+                    </a>
+            </div>
+        </nav><nav class="sub-navbar z-10 flex items-center border-b px-5 py-2 dark:border-darkBorder md:px-10"><a
+                    title="Tags"
+                    data-active-link="/tags/"
+                    href="/tags/"
+                    class=" relative mr-4 flex cursor-pointer items-center text-gray-400 transition duration-150 ease-[ease] hover:text-theme dark:text-darkText"
+                >
+                    <i class="eva eva-pricetags mr-1 leading-none"></i>
+                    <span>Tags</span>
+                </a></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
+    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
+</div>
+</header>
+<main class=" relative flex flex-grow" id="swup"><style>:root {
+        --font:Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }</style>
+<div class="type-posts layout- w-full"><div class="relative h-full">
+    <div class="relative h-full">
+        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div
+    style="padding-bottom:75%;"
+    class="article-cover h-0Page(/posts/quadraticForms/index.md) relative w-full"
+>
+    <picture class="noscript-hidden"><img
+            data-src="https://rjtk.github.io/posts/all-about-quadratic-forms/qf_contours.svg"
+            src="/images/outload.svg"
+            
+            
+            data-
+            alt="All About Quadratic Forms"
+            class="absolute left-0 top-0 h-full w-full object-cover object-center"
+            data-lazyload data-lazyload-blur
+
+        />
+    </picture>
+    <noscript>
+        <picture><img
+                src="https://rjtk.github.io/posts/all-about-quadratic-forms/qf_contours.svg"
+                
+                alt="All About Quadratic Forms"
+                
+                class="absolute left-0 top-0 h-full w-full object-cover object-center"
+            />
+        </picture>
+    </noscript>
+</div>
+<h1 class="article-title absolute bottom-0 left-0 w-full px-6 pb-8 pt-32 text-3xl text-white dark:text-darkText md:px-10 md:text-4xl">
+    All About Quadratic Forms
+</h1>
+</div>
+<div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
+    <div>
+        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+            <i class="eva eva-clock-outline mr-1"></i>
+            <span>
+                <time
+                    title="Published in 18 Jul 2023 00:00:00"datetime="2023-07-18T00:00:00-07:00">18 Jul 2023</time
+                >
+            </span>
+        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                    <i class="eva eva-edit-2-outline mr-1"></i>
+                    <span>
+                        <time
+                            title="Last modified on: 20 Jul 2023 22:53:23"datetime="2023-07-20T22:53:23-07:00">20 Jul 2023</time
+                        >
+                    </span>
+                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-flag-outline mr-1"></i>
+                <span>33 mins read</span>
+            </div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-bar-chart-outline mr-1"></i>
+                <span>6919 words</span>
+            </div></div></div>
+<aside
+            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
+        >
+            <header>
+                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">Table of Contents</h1>
+            </header>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a>
+      <ul>
+        <li><a href="#from-whence">From Whence?</a></li>
+        <li><a href="#completing-the-square">Completing the Square</a></li>
+      </ul>
+    </li>
+    <li><a href="#optimization">Optimization</a>
+      <ul>
+        <li><a href="#convexity">Convexity</a></li>
+        <li><a href="#minimizing-quadratic-forms">Minimizing Quadratic Forms</a></li>
+        <li><a href="#subspace-constraints">Subspace Constraints</a></li>
+      </ul>
+    </li>
+    <li><a href="#linear-algebra">Linear Algebra</a>
+      <ul>
+        <li><a href="#schur-complements">Schur Complements</a></li>
+        <li><a href="#square-roots-and-cholesky-factorization">Square Roots and Cholesky Factorization</a></li>
+      </ul>
+    </li>
+    <li><a href="#probability-and-statistics">Probability and Statistics</a>
+      <ul>
+        <li><a href="#computations-with-the-mean-and-the-variance">Computations with the Mean and the Variance</a></li>
+        <li><a href="#sampling">Sampling</a></li>
+        <li><a href="#linear-minimum-mean-squared-error-estimation">Linear Minimum Mean Squared Error Estimation</a></li>
+        <li><a href="#linear-regression">Linear Regression</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+        </aside><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="Faster Reads" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
+            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
+        ><p>Quadratic forms are functions defined through symmetric matrices and represent a ubiquitous class of functions for which there is an enormous amount of useful theoretical and computational results.  Indeed, in &ldquo;linear-quadratic&rdquo; models, it is possible to provide analytic solutions to more-or-less any question you would like to ask.  This post is a tour of some foundations and results relating to quadratic forms.</p>
+<h2 class="group " id="introduction"
+    >Introduction<a href="#introduction"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Quadratic forms are functions \(f: \R^n \rightarrow \mathbb{R}\) defined by a constant \(\kappa \in \mathbb{R}\), a vector \(q \in \mathbb{R}^n\) and a matrix \(Q \in \mathbb{S}^n\) (\(\mathbb{S}^n\) denoting the set of symmetric \(n \times n\) matrices), namely, \(f(x) = \frac{1}{2}x^{\mathsf{T}} Q x + q^{\mathsf{T}} x + \frac{1}{2}\kappa\).  That the matrix \(Q\) is assumed symmetric is without loss of generality since if \(Q\) were not symmetric, we could instead consider \(\frac{1}{2}Q + \frac{1}{2}Q^{\mathsf{T}}\) without affecting the value of the function.  The \(\frac{1}{2}\)&rsquo;s in the definition of \(f\) will be seen to be a convenient convention.</p>
+<p>Firstly, we can recognize that it is possible to expand this out explicitly as \[f(x) = \frac{1}{2}\sum_{i = 1}^n \sum_{j = 1}^n Q_{ij}x_i x_j + \sum_{i = 1}^n q_i x_i + \frac{1}{2}\kappa.\]  Thus, the function \(f\) is defined through a linear combination of all <em>pairs</em> of products in \(x\), but not higher order powers.  Another convenient way to write QFs is through a single matrix, augmenting \(x\) with a \(1\)</p>
+<p>\begin{equation}
+f(x) = \frac{1}{2}\begin{bmatrix}x\\ 1\\ \end{bmatrix}^{\mathsf{T}}\begin{bmatrix}Q &amp; q\\ q^{\mathsf{T}} &amp; \kappa \end{bmatrix}\begin{bmatrix}x\\ 1 \end{bmatrix},
+\notag
+\end{equation}</p>
+<p>so for the most part, techniques that work for the simpler case with \(q = 0\) and \(\kappa = 0\), also apply to the more general case.</p>
+<p><kbd><strong>Assumption</strong>: For the purposes of this post, I will usually assume that $Q$ is invertible.  This assumption is not essential, but if this does not hold, then the quadratic form is degenerate and breaks down into a lower-dimensional full-rank quadratic form (restricted to the span of the columns of $Q$) and a linear form restricted to the perpendicular complement thereof.  It is analogous to the assumption that $a \ne 0$ in the classical quadratic polynomial $ax^2 + bx + c$.</kbd></p>
+
+
+<h3 class="group " id="from-whence"
+    >From Whence?<a href="#from-whence"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Where do quadratic forms arise from?  At the most superficial level, they are nothing but a natural multivariate generalization of the quadratic polynomial \(ax^2 + bx + c\).  However, they also arise in extremely natural ways in numerous applications.  They are truly ubiquitous.</p>
+<p><kbd><strong>Least Squares</strong></kbd>: The least-squares cost function \(f(x) = \frac{1}{2}||y - Ax||_2^2\) is a quadratic form \(f(x) = \frac{1}{2}x^{\mathsf{T}} A^{\mathsf{T}} A x - (A^{\mathsf{T}} y)^{\mathsf{T}} x + \frac{1}{2}||y||_2^2\) where \(Q = A^{\mathsf{T}} A, q = A^{\mathsf{T}} y\) and \(\kappa = ||y||_2^2\).  The least-squares cost function arises in statistical regression, estimation, as a design objective, <em>etc.</em></p>
+<p><kbd><strong>Variance of a Sum</strong></kbd>: If we have some vector random variable \(Z\) with variance matrix \(\Sigma \in \mathbb{S}^n\), then the variance of the linear combination \(\text{Var}[Z^{\mathsf{T}} x] = x^{\mathsf{T}} \Sigma x\) is a quadratic form when viewed as a function of \(x\).</p>
+<p><kbd><strong>Local Approximation</strong></kbd>: Generally, differentiable functions \(f(x)\) can be expanded into a Taylor series about some point \(x_0\) as in \(f(x) = f(x_0) + \mathsf{D}f(x_0) (x - x_0) + \frac{1}{2} (x - x_0)^{\mathsf{T}} \mathsf{D}^2 f(x_0)(x - x_0) + R(x)\) where the remainder term \(R(x)\) is a \(3^{\text{rd}}\) order polynomial of the components of \((x - x_0)\).  Truncating the \(R(x)\) term results in a quadratic form that gives a local approximation of the function \(f\) near the point \(x_0\).  These approximations are used in (second order) iterative optimization algorithms &ndash; particularly Newton&rsquo;s method, sequential least squares, and interior point algorithms.</p>
+<p><kbd><strong>Gaussian Distributions</strong></kbd>: The Gaussian distribution is one of the most important distribution functions in probability.  It is characterized by two parameters \(\mu \in \mathbb{R}^n\) (the mean) and \(\Sigma \in \mathbb{S_{+}^n}\) (the positive semidefinite variance matrix).  When \(\Sigma\) is positive definite (hence invertible) Gaussian random variables have the density function \(f(x) \propto \text{exp}\bigl(\frac{1}{2}(x - \mu)^{\mathsf{T}} \Sigma^{-1} (x - \mu) \bigr)\), which involves a quadratic form.  Moreover, the characteristic function \(\psi(t) = \text{exp}\bigl(j\mu^{\mathsf{T}} t - \frac{1}{2}t^{\mathsf{T}} \Sigma t\bigr)\) is also a quadratic form in \(t\).  (<em>Remark</em>: The definition of the Gaussian should most properly be given in terms of \(\psi\), instead of the density, since the expression for \(\psi\) does not require that \(\Sigma\) be invertible!)</p>
+<p><kbd><strong>Use in Optimization</strong></kbd>: A huge number of general optimization problems, each of which have their own space of applications, involve quadratic forms in the objective function.  Examples are given by <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Quadratic_programming"target="_blank" rel="noopener">Quadratic Programming</a
+>
+ (including <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Support_vector_machine"target="_blank" rel="noopener">Support Vector Machines</a
+>
+), the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Quadratic_assignment_problem"target="_blank" rel="noopener">Quadratic Assignment Problem</a
+>
+, the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator"target="_blank" rel="noopener">Linear Quadratic Regulator</a
+>
+, and many more.</p>
+
+
+<h3 class="group " id="completing-the-square"
+    >Completing the Square<a href="#completing-the-square"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>For the classical quadratic polynomial \(ax^2 + bx + c\), to &ldquo;complete the square&rdquo; is an elementary algebraic operation wherein we eliminate the linear term \(bx\) by writing \(ax^2 + bx + c = a(x + b / (2a))^2 + c - b^2 / (4a^2)\).  This procedure enables one to derive the quadratic formula, identify minimizers and maximizers, etc.  There is an analogous procedure for general quadratic forms:</p>
+<p>\begin{equation}
+\begin{aligned}
+f(x)
+&amp;= \frac{1}{2}x^{\mathsf{T}} Q x + q^{\mathsf{T}} x + \frac{1}{2}\kappa\\
+&amp;= \frac{1}{2}(x + Q^{-1} q)^{\mathsf{T}} Q (x + Q^{-1} q) + \frac{1}{2}\kappa - q^{\mathsf{T}} Q^{-1} q,
+\end{aligned}\notag
+\end{equation}</p>
+<p>where the \(Q^{-1}\) can be replaced by a pseudo-inverse \(Q^\dagger\) if \(Q\) is not invertible but merely \(q \in \mathcal{R}(Q)\).  Completing the square is a useful technique for derivations involving quadratic forms &ndash; particularly, it will help us to recognize minimizers of \(f\), and it is commonly used for manipulating expressions relating to Gaussian distributions.  I solve a few optimization problems in this post, and nowhere do I resort to differentiation.</p>
+
+
+<h2 class="group " id="optimization"
+    >Optimization<a href="#optimization"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Quadratic forms are extremely important in optimization.  Since they are so tractable, many algorithms for solving general optimization problems proceed by solving quadratic optimization problems in sequence, iteratively refining the approximation as they proceed.</p>
+
+
+<h3 class="group " id="convexity"
+    >Convexity<a href="#convexity"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>There is a particular class of quadratic forms which are of particular interest in optimization &ndash; these are <em>convex</em> quadratic forms.  We will see later that, more generally, quadratic forms can be decomposed into convex, concave, and linear subspaces.</p>
+<p>Recall that a function \(f\) is <em>convex</em> if \[\forall t \in (0, 1), x, y \in \mathsf{dom}\ f: f(tx + (1 - t)y) \le tf(x) + (1 - t)f(y).\]  This means that the line joining two points on the graph of \(f\) is above the graph itself.  Intuitively, convex functions &ldquo;look like bowls&rdquo; and their importance stems, at least in part, from the fact that any <em>local</em> minimizer is also a <em>global</em> minimizer.  Thus, for example, gradient descent applied to convex functions is guaranteed to converge to a global minimizer of the function.  A function is <em>concave</em> if its negative is convex &ndash; these functions look like upside down bowls, and gradient <em>ascent</em> will converge to a global <em>maximizer</em>.</p>
+<p>How do we determine when a quadratic form is convex?  Without loss of generality, we consider simply the function \(f(x) = \frac{1}{2}x^{\mathsf{T}} Q x\) and calculate (notice that we need not resort to computing second order derivatives!):</p>
+<p>\begin{equation}
+\begin{aligned}
+&amp;\ f(tx + (1 - t)y) - tf(x) - (1 - t)f(y)\\
+&amp;= \frac{1}{2}t^2 x^{\mathsf{T}} Q x + t(1 - t) x^{\mathsf{T}} Q y + \frac{1}{2}(1 - t)^2 y^{\mathsf{T}} Q y - \frac{1}{2}tx^{\mathsf{T}}Q x - \frac{1}{2}(1 - t) y^{\mathsf{T}} Q y\\
+&amp;= \frac{1}{2}(t^2 - t) x^{\mathsf{T}} Q x + t(1 - t) x^{\mathsf{T}} Q y + \frac{1}{2}\bigl((1 - t)^2 - (1 - t)\bigr)y^{\mathsf{T}} Q y\\
+&amp;= -\frac{1}{2}t(1 - t) x^{\mathsf{T}} Q x + t(1 - t) x^{\mathsf{T}} Q y - \frac{1}{2}t (1 - t) y^{\mathsf{T}} Q y \\
+&amp;= -\frac{1}{2}t(1 - t) \bigl[x^{\mathsf{T}} Q x - 2x^{\mathsf{T}} Q y + y^{\mathsf{T}} Q y\bigr] \\
+&amp;= -\frac{1}{2}t(1 - t) (x - y)^{\mathsf{T}} Q (x - y)\\
+&amp;\overset{(a)}{\le} 0,
+\end{aligned}
+\notag
+\end{equation}</p>
+<p>where if the final inequality \((a)\) holds over all \(x, y, t\), then we will have verified the definition of convexity for the function \(f\).  Since \(t \in (0, 1)\) it must be that \(t(1 - t) \in (0, 1)\) as well, and because \(x, y\) appear only as the difference \((x - y)\), we can consider simply the condition where \(\forall z:\ z^{\mathsf{T}} Q z \ge 0\).  This is exactly what it means for the matrix \(Q\) to be <em>positive semi-definite</em>, denoted \(Q \succeq 0\).</p>
+<p>Thus (also using the fact that a convex function plus the linear function \(x \mapsto q^{\mathsf{T}} x\) is still convex), a quadratic form \(f\) is convex <em>if and only if</em> \(Q \succeq 0\).  If the matrix \(Q\) is both non-singular and positive semi-definite, then it is <em>positive-definite</em> written as \(Q \succ 0\), which also means that the inequality in the definition of convexity holds strictly, and we call the function <em>strictly convex</em>.</p>
+<p><kbd><strong>Remark:</strong> It is worth noting here that every quadratic form associated with a Gaussian random variable is a convex quadratic form (since variance matrices are positive semidefinite).  Moreover, for smooth functions, they are locally convex in the region of minimizers, and the local quadratic approximations of convex functions are themselves always convex.  As well, the quadratic form $\frac{1}{2}||Ax||_2^2 = x^{\mathsf{T}} A^{\mathsf{T}} A x$ will always be convex as well since $A^{\mathsf{T}} A \succeq 0$.  Convex quadratic forms arise almost as often as quadratic forms themselves!</kbd></p>
+
+
+<h3 class="group " id="minimizing-quadratic-forms"
+    >Minimizing Quadratic Forms<a href="#minimizing-quadratic-forms"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>From the representation of the quadratic form \(f\) after completing the square \[f(x) = \frac{1}{2}(x + Q^{-1} q)^{\mathsf{T}} Q (x + Q^{-1} q) + \kappa - q^{\mathsf{T}} Q^{-1} q,\] it appears rather immediate to identify a minimizer: \[x^\star = - Q^{-1} q.\]  However, we must be careful &ndash; in making this claim we have already assumed that a minimizer <em>exists,</em> and the existence of minimizers should not be taken lightly.  If the matrix \(Q\) is indefinite (<em>i.e.,</em> \(Q\) nor \(-Q\) are positive semi-definite), then the point \(-Q^{-1} q\) may be only a <em>saddle point</em> and in fact no minimizer exists: \(\underset{x \in \mathbb{R}^n}{\text{inf}}\ f(x) = -\infty\).  The question of existence in infinite dimensions is <a
+    class="link"
+    href="https://amzn.to/3FBRoKD"target="_blank" rel="noopener">incredibly interesting</a
+>
+, but it is straightforward in the present finite-dimensional case: we need only eliminate the possibility that the infimum is \(-\infty\) by the strict convexity assumption \(Q \succ 0\) (more generally, we can have \(Q \succeq 0\) and \(q \in \mathcal{R}(Q)\)).  If \(Q \prec 0\), then \(x^\star\) will be a <em>maximizer</em>.</p>
+<p>The actual value of the function \(f\) at the minimizer can also be easily identified by inspection after completing the square:</p>
+<p>\[f^\star := f(x^\star) = -q^{\mathsf{T}} Q^{-1} q + \kappa.\]</p>
+<p>It is an interesting observation that this is a <em>concave</em> quadratic form in \(q\).</p>
+
+
+<h4 class="group " id="the-shape-of-a-quadratic-form"
+    >The Shape of a Quadratic Form<a href="#the-shape-of-a-quadratic-form"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h4>
+
+<p>We can get some intuition about convex and non-convex quadratic forms from the contour plots below.  In the convex case, the function is a prototypical &ldquo;bowl-shaped&rdquo; function with a clearly defined minimizer, and the contour lines are concentric ellipses.  In the non-convex case, the function is hyperbolic and the only minimizing sequences diverge.  In this hyperbolic case, the point \(-Q^{-1} q\) is a saddle point.</p>
+<figure><img src="qf_contours.svg"
+         alt="Figure 1: Comparing Convex and Non-Convex Quadratic Forms"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Comparing Convex and Non-Convex Quadratic Forms</p>
+        </figcaption>
+</figure>
+
+<p>The prototypical hyperbolic function is \(f(x, y) = xy\).  However, it is clearly possible for functions containing \(xy\) terms to still be convex, <em>e.g.,</em> \(f(x, y) = \frac{1}{2}(x^2 - xy + y^2)\) (the function on the left in the figure), but not \(f(x, y) = \frac{1}{2}(x^2 - 2xy + y^2)\) (the function on the right).  Whether or not the function contains the pernicious hyperbolic behaviour comes down to the question of whether or not \(Q \succeq 0\).</p>
+
+
+<h3 class="group " id="subspace-constraints"
+    >Subspace Constraints<a href="#subspace-constraints"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>There are many important cases, particularly in optimization, where we want to restrict the domain of the function \(f\) to some subspace (actually, an <em>affine</em> space, which may include a constant offset from \(0\)) \(\mathbb{V} \subseteq \R^n\), of some dimension strictly less than \(n\), <em>i.e.</em>, \(f: \mathbb{V} \rightarrow \R\).  In practice, this typically arises through linear constraints \(Ax = b\) on the variable \(x\), where \(A \in \R^{n \times m}\).  The representation \(\mathbb{V} = \{x\ |\ Ax = b\}\) however is not analytically insightful.</p>
+<p>To obtain a more friendly representation of the space \(\mathbb{V}\), take a (compact) <a
+    class="link"
+    href="https://souravsengupta.com/cds2016/lectures/Strang_Paper1.pdf"target="_blank" rel="noopener">Singular Value Decomposition</a
+>
+ of the matrix: \(A = U\Sigma V^{\mathsf{T}}\) wherein \(U \in \R^{n \times r}\), \(\Sigma \in \R^{r \times r}\) and \(V \in \R^{m \times r}\); I use \(r \le \text{min}(m, n)\) to indicate the rank of the matrix \(A\).  It is essential to assume that \(b \in \mathcal{R}(A)\), <em>i.e.</em>, that \(b\) is in the range of \(A\) &ndash; if this is not the case then the subspace \(\mathbb{V}\) is ill-defined.  Now, recall that the columns of \(U\) constitute an orthonormal basis of \(\mathcal{R}(A)\) of dimension \(r\) and that the columns of \(V\) constitute an orthonormal basis for \(\mathcal{N}(A)^\perp\), the orthogonal complement of the nullspace of \(A\), which is of dimension \(n - r\).  Operationally, this means that \(U^{\mathsf{T}} U = I_r\) and \(V^{\mathsf{T}} V = I_r\) (but definitely not, at least in general, that \(UU^{\mathsf{T}} = I_n\) or \(VV^{\mathsf{T}} = I_m\)).  Thus, we can simplify the representation of the subspace \(\mathbb{V}\) as in:</p>
+<p>\begin{equation}
+\begin{aligned}
+\mathbb{V}
+&amp;= \{x\ |\ Ax = b\}\\
+&amp;= \{x\ |\ U\Sigma V^{\mathsf{T}} x = b\}\\
+&amp;\overset{(a)}{=} \{x\ |\ V^{\mathsf{T}} x = \Sigma^{-1} U^{\mathsf{T}} b\}\\
+&amp;\overset{(b)}{=} \{V \Sigma^{-1} U^{\mathsf{T}} b + \overline{V}u\ |\ u \in \R^{n - r}\}\\
+&amp;\overset{( c)}{=} \{A^{\dagger} b + \overline{V}u\ |\ u \in \R^{n - r}\},
+\end{aligned}\notag
+\end{equation}</p>
+<p>where in \((a)\) it is always the case that \(\Sigma\) is invertible (and also diagonal) for a compact SVD and in \((b)\) the matrix \(\overline{V} \in \R^{n \times (n - r)}\) is a matrix whose columns form a basis for the nullspace of \(A\) (which can be obtained, for example, by running a full SVD on \(A\)), and in \(( c)\) we use the definition of the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse"target="_blank" rel="noopener">Moore-Penrose inverse</a
+>
+ of \(A\), denoted by \(A^{\dagger} = V\Sigma^{-1} U^{\mathsf{T}}\).  The vector \(\bar{x} := V \Sigma^{-1} U^{\mathsf{T}} b\) is usually taken to be the nominal solution of \(Ax = b\) (it is easy to verify that it is a solution) and the remainder of the degrees of freedom are provided by the span of the columns of \(\overline{V}\).  This makes more clear that \(\mathbb{V}\) is an affine space: the subspace \(\{\bar{V}u\ |\ u \in \R^{n - r}\}\) is offset from \(0\) by \(A^\dagger b\).</p>
+<p>From here, a quadratic form \(f\) subject to the constraint \(x \in \mathbb{V}\) can be represented simply by modifying the parameters \(Q, q, \kappa\) and using the variable \(u\) from which the original \(x\) variable can be recovered by \(x(u) = A^{\dagger} b + \overline{V}u\):</p>
+<p>\begin{equation}
+\begin{aligned}
+f(x)
+&amp;= \frac{1}{2}x^{\mathsf{T}} Q x + q^{\mathsf{T}} x + \frac{1}{2}\kappa; \quad Ax = b\\
+\rightarrow f(x(u)) &amp;= \frac{1}{2}(A^{\dagger} b + \overline{V}u)^{\mathsf{T}} Q (A^{\dagger} b + \overline{V}u) + q^{\mathsf{T}} (A^{\dagger} b + \overline{V}u) + \frac{1}{2}\kappa\\
+\rightarrow \tilde{f}(u) &amp;= \frac{1}{2}u^{\mathsf{T}} \overline{V}^{\mathsf{T}} Q \overline{V} u + \bigl((\overline{V}^{\mathsf{T}} q + \overline{V}^{\mathsf{T}} QA^\dagger b \bigr)^{\mathsf{T}} u + q^{\mathsf{T}} A^\dagger b + \frac{1}{2}\kappa + \frac{1}{2} (A^\dagger b)^{\mathsf{T}} Q (A^{\dagger} b)\\
+&amp;= \frac{1}{2}u^{\mathsf{T}} \tilde{Q} u + \tilde{q}^{\mathsf{T}} u + \tilde{\kappa}\\
+\end{aligned}\notag
+\end{equation}</p>
+<p>where \(\tilde{Q} = \overline{V}^{\mathsf{T}} Q \overline{V}\), \(\tilde{q} = \overline{V}^{\mathsf{T}} (q + QA^\dagger b)\) and \(\tilde{\kappa} = \kappa + (A^\dagger b)^{\mathsf{T}} Q (A^{\dagger} b)\).  Thus, the quadratic form restricted to a subspace \(\mathbb{V}\) is yet again just another quadratic form.  Moreover, there are computationally tractable means of explicitly representing the subspace \(\mathbb{V}\) when it is described through the linear system \(Ax = b\).</p>
+
+
+<h4 class="group " id="convex-and-concave-subspaces"
+    >Convex and Concave Subspaces<a href="#convex-and-concave-subspaces"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h4>
+
+<p>To get some further geometric sense of the function \(f\), one will usually appeal to the eigendecomposition of the matrix \(Q\).  Since it is symmetric, it is guaranteed to be orthogonally diagonalizable, and admits of real eigenvalues.  This is <a
+    class="link"
+    href="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/"target="_blank" rel="noopener">The Spectral Theorem</a
+>
+.  Specifically, we have \[Q = V\Lambda V^{\mathsf{T}} = \sum_{i = 1}^N \lambda_i v_i v_i^{\mathsf{T}} \] where \(V \in \mathbb{R}^{n \times n}\) is an orthogonal matrix of eigenvectors, and \(\Lambda = \mathsf{Dg}(\lambda_1, \ldots, \lambda_n)\) is a diagonal matrix containing the associated eigenvalues.  The space can be split into three subspaces, call them</p>
+<p>\begin{equation}
+\begin{aligned}
+S_+ &amp;= \mathsf{span}\bigl\{v_i\ |\ \lambda_i &gt; 0\}\\
+S_- &amp;= \mathsf{span}\bigl\{v_i\ |\ \lambda_i &lt; 0\}\\
+S_0 &amp;= \mathsf{span}\bigl\{v_i\ |\ \lambda_i = 0\}.
+\end{aligned}
+\end{equation}</p>
+<p>The subspace \(S_+\) might be called the &ldquo;convex subspace&rdquo; since the function \(x \mapsto \frac{1}{2} x^{\mathsf{T}} Q x\) is convex when restricted to \(x \in S_+\), and \(S_-\) might be called the &ldquo;concave subspace&rdquo; since \(x \mapsto \frac{1}{2} x^{\mathsf{T}} Q x\) is concave when restricted to \(x \in S_-\).  The subspace \(S_0\) is the linear subspace since \(\forall x \in S_0:\ \frac{1}{2} x^{\mathsf{T}} Q x = 0\) &ndash; when a quadratic form is restricted to \(S_0\) it degenerates into a linear function.  The subspace \(S_0 = \{0\}\) if \(Q\) is non-singular, and \(S_- = \{0\}\) if \(Q \succeq 0\).</p>
+<p><kbd><strong>Remark:</strong> There are practical reasons why these subspace distinctions are interesting.  In some natural problems, we may encounter a matrix $Q$ which is indefinite, but where certain problem constraints guarantee that we are fully confined to the convex subspace $S_+$.  Therefore, given the constraints of the problem, the quadratic form associated with $Q$ is &ldquo;effectively&rdquo; convex.</kbd></p>
+<p>Using ideas from the previous section, we can animate 2-d slices of a quadratic form in \(\R^4\) where the 2-d slices are constructed to smoothly vary across convex and concave subspaces.  The transition between the two, where the subspace passes through \(S_+\) and \(S_-\) could be termed a <em>hyperbolic</em> subspace of the quadratic form.</p>
+<figure><img src="qf_animation.gif"
+         alt="Figure 2: Slices of a Quadratic Form Across Convex, Concave, and Hyperbolic Subspaces"/><figcaption>
+            <p><span class="figure-number">Figure 2: </span>Slices of a Quadratic Form Across Convex, Concave, and Hyperbolic Subspaces</p>
+        </figcaption>
+</figure>
+
+<p>I created this animation by constructing the matrix \(Q = 2q_1 q_1^{\mathsf{T}} + q_1 q_1^{\mathsf{T}} - p_1 p_1^{\mathsf{T}} - 2 p_2 p_2^{\mathsf{T}}\) where \(q_1, p_1, q_2, p_2\) form an orthogonal basis of \(\mathbb{R}^4\), and then using a matrix \[H(t) = [\frac{3}{2}(\frac{2}{3} - t)_+ q_1 + 3(t - \frac{2}{3})_+ p_1, \frac{3}{2}(t - \frac{1}{3})_+ p_2 + 3(\frac{1}{3} - t)_+ q_2]\] to project \(x = H(t) u\) onto convex, hyperbolic, and concave subspaces depending on the value of \(t\).  The plot is over \(u \in \mathbb{R}^2\) and animated over \(t \in [0, 1]\).</p>
+
+
+<h2 class="group " id="linear-algebra"
+    >Linear Algebra<a href="#linear-algebra"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>The linear algebra related to quadratic forms largely comes down to the linear algebra associated with the symmetric matrix \(Q\).  The main aspects are the Cholesky factorization and Schur complements.  The Cholesky decomposition is one of the most important (and fast!) matrix factorizations available, and the Schur complement arises in many different ways.  Moreover, these two aspects are intimately linked.</p>
+
+
+<h3 class="group " id="schur-complements"
+    >Schur Complements<a href="#schur-complements"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Quadratic forms often arise as <em>bivariate</em> quadratic forms (or more generally, multivariate quadratic forms with natural distinctions between different <em>blocks</em> of variables).  For now, consider the function of \(x \in \mathbb{R}^{n_x}\) and \(y \in \mathbb{R}^{n_y}\) given by</p>
+<p>\begin{equation}
+\begin{aligned}
+f(x, y) &amp;= \frac{1}{2}\begin{bmatrix}x\\ y\\ 1\end{bmatrix}^{\mathsf{T}}\begin{bmatrix}P &amp; C &amp; p\\ C^{\mathsf{T}} &amp; Q &amp; q\\ p^{\mathsf{T}} &amp; q^{\mathsf{T}} &amp; \kappa \end{bmatrix}\begin{bmatrix}x\\ y\\ 1\end{bmatrix}\\
+&amp;= \frac{1}{2}x^{\mathsf{T}}Px + \frac{1}{2}y^{\mathsf{T}}Qy + x^{\mathsf{T}} C y + p^{\mathsf{T}} x + q^{\mathsf{T}} y + \kappa
+\end{aligned}
+\notag
+\end{equation}</p>
+<p>where I&rsquo;ll assume \(P, Q\) are both symmetric, that \(P\) is non-singular, and that \(C\) is such that the overall block matrix is symmetric positive definite.  These assumptions mean that the function \(f(x, y)\) is jointly convex in the variables \((x, y)\).</p>
+<p>There are two other interesting functions associated with \(f\), namely, \[y \mapsto \underset{x}{\text{inf}}\ f(x, y),\] and \[x \mapsto \underset{y}{\text{inf}}\ f(x, y).\]</p>
+<p>The computation of these functions can be done through a mechanical procedure called <em>Schur-complementation</em>.  The idea of the Schur complement can serve as a natural &ldquo;chunk&rdquo; in one&rsquo;s cognition and enables easy manipulation of complicated expressions.</p>
+
+
+<h4 class="group " id="partial-minimization"
+    >Partial Minimization<a href="#partial-minimization"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h4>
+
+<p>The above functions are those formed from <em>partial minimization</em> of the function \(f\), and for concreteness I&rsquo;ll focus on the function $g(y) := \underset{x}{\text{inf}}\ f(x, y).$  We know from the previous section that we can guarantee that a minimizer exists if \(P \succ 0\), so we will also make this assumption here to avoid degeneracy.</p>
+<p>To identify the minimizer of \(f\) with respect to \(x\), we need only make the identifications \(q \leftarrow Cy + p\) and \(\kappa \leftarrow y^{\mathsf{T}} Q y + q^{\mathsf{T}} y + \kappa\) in the original general definition of a quadratic form to recognize that \(x^\star(y) = -P^{-1} (Cy + p)\).  An explicit formula for the function \(g\) is then obtained through the calculation</p>
+<p>\begin{equation}
+\begin{aligned}
+g(y)
+&amp;= \frac{1}{2}y^{\mathsf{T}} Q y - y^{\mathsf{T}} C^{\mathsf{T}} P^{-1} (C y + p) + q^{\mathsf{T}} y + \kappa \\
+&amp;= \frac{1}{2}y^{\mathsf{T}} (Q - C^{\mathsf{T}} P^{-1} C) y + (q - C^{\mathsf{T}}P^{-1} p)^{\mathsf{T}} y + \kappa\\
+&amp;= \frac{1}{2}\begin{bmatrix}y\\ 1 \end{bmatrix}^{\mathsf{T}} \begin{bmatrix}Q - C^{\mathsf{T}} P^{-1} C &amp; (q - C^{\mathsf{T}}P^{-1} p)\\ (q - C^{\mathsf{T}}P^{-1} p)^{\mathsf{T}} &amp; \kappa \end{bmatrix} \begin{bmatrix}y\\ 1\end{bmatrix}.
+\end{aligned}
+\notag
+\end{equation}</p>
+<p>The beauty of this partial minimization is that \(g\) is <em>still a quadratic form</em>.  If it is still convex (we&rsquo;ll check this next!) then we could say that the set of positive definite quadratic forms is <em>closed</em> under the operation of partial minimization.</p>
+<p>The formulas above seem rather complicated at first.  However, they follow a completely mechanical pattern and you can write down analytic expressions for cartoonishly complicated block quadratic forms with simple notation, and understand at a glance exactly what is going on (even if you&rsquo;re not reading every single equation in detail).</p>
+
+
+<h4 class="group " id="definiteness-conditions"
+    >Definiteness Conditions<a href="#definiteness-conditions"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h4>
+
+<p>What we have discovered through exploring this is called a <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Schur_complement"target="_blank" rel="noopener"><em>Schur Complement</em></a
+>
+.  Suppose for simplicity that \(p = q = 0\) and \(\kappa = 0\) and for sake of notation that \[\mathcal{Q} := \begin{bmatrix}P &amp; C\\ C^{\mathsf{T}} &amp; Q\end{bmatrix}.\]  Then, \(g(y) = y^{\mathsf{T}}(Q - C^{\mathsf{T}} P^{-1} C)y\) and the matrix \(Q - C^{\mathsf{T}} P^{-1} C\) is called <em>The Schur Complement of \(P\) in \(\mathcal{Q}\)</em> and it is usually denoted \(\mathcal{Q} / P\).  There is also a Schur complement of \(Q\) in \(\mathcal{Q}\) given by \(\mathcal{Q} / Q := P - CQ^{-1}C^{\mathsf{T}}\).  The way to remember which is which is to think of the &ldquo;\(/P\)&rdquo; as a form of division, analogous to \(P^{-1}\) (now you remember which matrix is being inverted) and then to just match up the shapes of \(C\) and \(C^{\mathsf{T}}\) with \(P\) or \(Q\) to figure out if you should write \(C^{\mathsf{T}} P^{-1} C\) or \(CP^{-1} C^{\mathsf{T}}\).</p>
+<p>Forming the matrix \(\mathcal{Q} / P\) requires at least that \(P\) be non-singular.  If, in addition, it is positive definite \(P \succ 0\), then \(g(y) = y^{\mathsf{T}} (\mathcal{Q} / P) y\) is the partial minimizer of the whole quadratic form with respect to \(x\).  In order for \(g(y)\) to have a minimizer (<em>i.e.,</em> the infimum is not \(-\infty\)) then the Schur complement must be positive-definite as well: \(\mathcal{Q} / P \succ 0\).  This, combined with the the fact that \[\underset{x}{\text{inf}}\ \underset{y}{\text{inf}}\ f(x, y) = \underset{y}{\text{inf}}\ \underset{x}{\text{inf}}\ f(x, y) = \underset{x, y}{\text{inf}}\ f(x, y),\] implies the following methods of checking definiteness:</p>
+<ul>
+<li>If \(P \succ 0\) and \(\mathcal{Q} / P \succ 0\), then \(\mathcal{Q} \succ 0\).</li>
+<li>If \(\mathcal{Q} \succ 0\) and \(P\) is non-singular, then \(P \succ 0\) and \(\mathcal{Q} / P \succ 0\).</li>
+</ul>
+<p>These relations have important theoretical use.</p>
+
+
+<h3 class="group " id="square-roots-and-cholesky-factorization"
+    >Square Roots and Cholesky Factorization<a href="#square-roots-and-cholesky-factorization"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>There is a natural way of discovering the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Cholesky_decomposition"target="_blank" rel="noopener">Cholesky Decomposition</a
+>
+ by continuing the minimization of the block quadratic form \(f(x, y)\).  Indeed, computing the minimizer \((x, y)\) of this function involves solving the linear system</p>
+<p>\begin{equation}
+\begin{aligned}
+\begin{bmatrix}P &amp; C\\ C^{\mathsf{T}} &amp; Q\end{bmatrix} \begin{bmatrix}x\\ y \end{bmatrix} = \begin{bmatrix}p\\ q \end{bmatrix},
+\end{aligned}
+\notag
+\end{equation}</p>
+<p>involving the matrix \(\mathcal{Q}\) discussed above.  Following the idea of (block) Gauss-Jordan elimination on this matrix, the Schur complement makes another appearance:</p>
+<p>\begin{equation}
+\begin{aligned}
+\begin{bmatrix}P &amp; C\\ C^{\mathsf{T}} &amp; Q\end{bmatrix}
+&amp;= \begin{bmatrix}I &amp; 0\\ C^{\mathsf{T}}P^{-1} &amp; I\end{bmatrix}\begin{bmatrix}P &amp; C\\ 0 &amp; Q - C^{\mathsf{T}} P^{-1} C\end{bmatrix},
+\end{aligned}
+\notag
+\end{equation}</p>
+<p>which is a block LU decomposition of \(\mathcal{Q}\), having a (dense) Schur-complement in the lower-right entry of the block upper triangular matrix.  Now, rather than a <em>block</em> triangular decomposition, what we would really like to have is a bona-fide triangular decomposition \(\mathcal{Q} = LU\) where \(L\) is lower-triangular and \(U\) is upper triangular.  Moreover, in analogy with non-negative numbers, which have square-roots, we would like to ask for even more of a positive definite matrix \(\mathcal{Q} \succ 0\) (the positive semi-definite case is possible, but more involved) &ndash; we would like an LU-decomposition \(\mathcal{Q} = LL^{\mathsf{T}}\), <em>i.e.</em>, where \(U = L^{\mathsf{T}}\), which is a <em>matrix square root</em>.</p>
+<p>Operating under the standing assumption that \(\mathcal{Q} \succ 0\), and that \(P\) is non-singular (hence \(P \succ 0\) by the above), we will obtain this factorization by induction.  Make the <em>induction hypothesis</em> that any positive definite matrix admits of a lower-triangular square root and let \(P = L_{11}L_{11}^{\mathsf{T}}\).  As well, using the induction hypothesis again, along with the definiteness theorem described in the last section, we know that the Schur complement \(\mathcal{Q} / P = Q - C^{\mathsf{T}} P^{-1} C \succ 0\) is also positive definite and thus admits another decomposition \(\mathcal{Q} / P = L_{22}L_{22}^{\mathsf{T}}\).  We can now write</p>
+<p>\begin{equation}
+\begin{aligned}
+\mathcal{Q} &amp;= \begin{bmatrix}I &amp; 0\\ C^{\mathsf{T}}P^{-1} &amp; I\end{bmatrix}\begin{bmatrix}P &amp; C\\ 0 &amp; Q - C^{\mathsf{T}} P^{-1} C\end{bmatrix}\\
+&amp;= \begin{bmatrix}I &amp; 0\\ C^{\mathsf{T}} (L_{11} L_{11}^{\mathsf{T}})^{-1} &amp; I\end{bmatrix}\begin{bmatrix}L_{11} L_{11} &amp; C\\ 0 &amp; L_{22}L_{22}^{\mathsf{T}} \end{bmatrix}\\
+&amp;= \begin{bmatrix}L_{11} &amp; 0\\ C^{\mathsf{T}} L_{11}^{-\mathsf{T}} &amp; L_{22} \end{bmatrix}\begin{bmatrix}L_{11} &amp; 0\\ C^{\mathsf{T}} L_{11}^{-\mathsf{T}} &amp; L_{22} \end{bmatrix}^{\mathsf{T}},
+\end{aligned}
+\notag
+\end{equation}</p>
+<p>which is a Cholesky decomposition obtained recursively from the decomposition of \(P\) and the Schur complement \(\mathcal{Q} / P\).  Beginning the recursion with \(P = \mathcal{Q}_{11}\) (the upper left entry) and \(L_{11} = \sqrt{P}\) leads to a practical <em>algorithm</em> for computing the decomposition.  The definiteness condition of \(\mathcal{Q} \succ 0\) is essential to continuing this process since otherwise we would not be able to recurse on the Schur complement \(\mathcal{Q} / P\).  What would happen in practice is that we would try to divide by zero or to take the square root of a negative number.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> numpy <span style="color:#ff79c6">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> math <span style="color:#ff79c6">import</span> sqrt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>FLOAT <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>float64
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">LinAlgError</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">cholesky</span>(A):
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;&#34;&#34;An extremely terrible Cholesky implementation.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    A <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>array(A, dtype<span style="color:#ff79c6">=</span>FLOAT)
+</span></span><span style="display:flex;"><span>    n <span style="color:#ff79c6">=</span> A<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>]  <span style="color:#6272a4"># A = [[P; C]; [C&#39;; Q]]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#8be9fd;font-style:italic">len</span>(A<span style="color:#ff79c6">.</span>shape) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">or</span> A<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">!=</span> n:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">raise</span> ValueError(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;A must be a square matrix but got </span><span style="color:#f1fa8c">{</span>A<span style="color:#ff79c6">.</span>shape<span style="color:#f1fa8c">=}</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">not</span> np<span style="color:#ff79c6">.</span>all(A <span style="color:#ff79c6">==</span> A<span style="color:#ff79c6">.</span>T):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">raise</span> ValueError(<span style="color:#f1fa8c">&#34;A must be a symmetric matrix!&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    L <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>zeros_like(A)
+</span></span><span style="display:flex;"><span>    Q <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>copy(A)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(n):
+</span></span><span style="display:flex;"><span>        P <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">float</span>(Q[<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span>        C <span style="color:#ff79c6">=</span> Q[<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>:][<span style="color:#ff79c6">None</span>, :]  <span style="color:#6272a4"># a row vector</span>
+</span></span><span style="display:flex;"><span>        Q <span style="color:#ff79c6">=</span> Q[<span style="color:#bd93f9">1</span>:, <span style="color:#bd93f9">1</span>:]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span>:
+</span></span><span style="display:flex;"><span>            L[i, i] <span style="color:#ff79c6">=</span> sqrt(P)  <span style="color:#6272a4"># This will detect negative eigenvalues</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">except</span> ValueError:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">raise</span> LinAlgError(<span style="color:#f1fa8c">&#34;Matrix A is not positive definite&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        L[i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span> :, i] <span style="color:#ff79c6">=</span> (<span style="color:#bd93f9">1</span> <span style="color:#ff79c6">/</span> L[i, i]) <span style="color:#ff79c6">*</span> C
+</span></span><span style="display:flex;"><span>        Q <span style="color:#ff79c6">=</span> Q <span style="color:#ff79c6">-</span> C<span style="color:#ff79c6">.</span>T <span style="color:#ff79c6">@</span> (C <span style="color:#ff79c6">/</span> P)  <span style="color:#6272a4"># Division by P will fail on a *semi*-definite matrix</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> L
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> n <span style="color:#ff79c6">in</span> np<span style="color:#ff79c6">.</span>random<span style="color:#ff79c6">.</span>randint(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">30</span>, size<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1000</span>):
+</span></span><span style="display:flex;"><span>    A <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>random<span style="color:#ff79c6">.</span>normal(size<span style="color:#ff79c6">=</span>(n, n))
+</span></span><span style="display:flex;"><span>    A <span style="color:#ff79c6">=</span> A <span style="color:#ff79c6">@</span> A<span style="color:#ff79c6">.</span>T
+</span></span><span style="display:flex;"><span>    L <span style="color:#ff79c6">=</span> cholesky(A)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">assert</span> np<span style="color:#ff79c6">.</span>allclose(L <span style="color:#ff79c6">@</span> L<span style="color:#ff79c6">.</span>T, A)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;Passed :)&#34;</span>  <span style="color:#6272a4"># org-mode recognizes this odd &#39;return&#39; as the output</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Passed :)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><kbd><strong>Remark</strong> (Testing Definiteness): The Cholesky decomposition is not only guaranteed to succeed if $\mathcal{Q} \succ 0$, it is also <em>guaranteed to fail</em> if $\mathcal{Q} \succ 0$ does not hold.  Thus, computationally, the Cholesky decomposition serves as a reliable means of testing the definiteness of a matrix: a matrix $A$ is positive definite <em>if and only if</em> a Cholesky decomposition algorithm successfully terminates in a factorization $A = LL^{\mathsf{T}}$.</kbd></p>
+<p><kbd><strong>Remark</strong> (Computing Schur Complements): Even though we&rsquo;ve derived the Cholesky decomposition from the Schur complement, we can also go the other way.  That is, the Cholesky decomposition algorithm can be used to compute Schur complements.  Moreover, this results directly in the Cholesky decomposition of the Schur complement itself, and therefore in a representation of $\mathcal{Q} / P$ which provides a numerical guarantee on the positive definiteness of the Schur complement.  To see this, consider the calculations below:</kbd></p>
+<p>\begin{equation}
+\begin{aligned}
+\mathcal{Q}
+&amp;= \begin{bmatrix}P &amp; C\\ C^{\mathsf{T}} &amp; Q\end{bmatrix}\\
+&amp;= \begin{bmatrix}L_{11} &amp; 0\\ L_{12} &amp; L_{22} \end{bmatrix}\begin{bmatrix}L_{11}^{\mathsf{T}} &amp; L_{12}^{\mathsf{T}} \\ 0 &amp; L_{22}^{\mathsf{T}} \end{bmatrix}\\
+&amp;= \begin{bmatrix}L_{11}L_{11}^{\mathsf{T}} &amp; L_{11}L_{12}^{\mathsf{T}} \\ L_{12}L_{11}^{\mathsf{T}} &amp; L_{12}L_{12}^{\mathsf{T}} + L_{22}L_{22}^{\mathsf{T}} \end{bmatrix}
+\end{aligned}
+\notag
+\end{equation}</p>
+<p><kbd>whereby we can calculate the Schur complement $$\mathcal{Q} / P = L_{12}L_{12}^{\mathsf{T}} + L_{22}L_{22}^{\mathsf{T}} - L_{12}L_{11}^{\mathsf{T}} (L_{11}L_{11}^{\mathsf{T}})^{-1} L_{11}L_{12} = L_{22}L_{22}^{\mathsf{T}}.$$  Thus, the Cholesky decomposition of $\mathcal{Q} / P$ is nothing but the bottom-right block of the Cholesky decomposition of the block matrix $\mathcal{Q}$.  The advantage of this method is in numerical stability: the subtraction $Q - C^{\mathsf{T}} P^{-1} C$ not only involves a pesky inversion of the matrix $P$, but it also involves the <em>difference</em> of two positive definite matrices, which, due to numerical roundoff, can result in a matrix which is in actuality indefinite.  Using this method, if the Cholesky algorithm succeeds, then we are in the clear.</kbd></p>
+
+
+<h2 class="group " id="probability-and-statistics"
+    >Probability and Statistics<a href="#probability-and-statistics"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Quadratic forms appear in many places in statistic, largely as a result of computing second order statistics (the mean and the variance).  Remarkably, though I derived them from examples in optimization, both the Schur complement and the Cholesky factorization play important roles in this theory as well.</p>
+
+
+<h3 class="group " id="computations-with-the-mean-and-the-variance"
+    >Computations with the Mean and the Variance<a href="#computations-with-the-mean-and-the-variance"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Two of the most important statistics of an $\mathbb{R}$-valued random variable, call it \(X\), are the mean and the variance \(\mu = \mathbb{E}X\) and \(\sigma^2 = \mathbb{E}(X - \mu)^2\).  Taken together, \((\mu, \sigma^2)\) are the <em>second-order statistics</em> of \(X\).  The mean value measures the central tendency of \(X\), serving as one estimate of its &ldquo;typical&rdquo; value, and the variance \(\sigma^2\) is the average squared distance of \(X\) from its mean value.  When \(\sigma^2\) is small, then the probability that \(X\) is close to \(\mu\) is high, and when \(\sigma^2\) is large, that probability is small.</p>
+<p>For vectors of random variables \(\mathbf{X} = (X_1, \ldots, X_n) \in \mathbb{R}^n\) the mean is simply defined element-wise \[\mathbb{E}\mathbf{X} = \begin{bmatrix}
+\mathbb{E}X_1\\ \vdots\\ \mathbb{E}X_n\\
+\end{bmatrix} = \begin{bmatrix}\mu_1\\ \vdots \\ \mu_n \end{bmatrix} = \bm{\mu}.\]  The variance of the vector random variable becomes somewhat more complicated, as the best definition is now a <em>matrix</em>.  This <em>variance matrix</em>, usually denoted \(\Sigma \in \mathbb{R}^{n \times n}\), is defined through an outer-product of the centered random variables \[\Sigma = \mathbb{E}(\mathbf{X} - \mathbf{\mu})(\mathbf{X} - \mathbf{\mu})^{\mathsf{T}},\] and includes all of the individual (<em>i.e.</em>, marginal) variance \(\Sigma_{ii} = \mathbb{E}(X_i - \mu_i)^2\), but also all of the <em>co-variances</em> \(\Sigma_{ij} = \mathbb{E}(X_i - \mu_i)(X_j - \mu_j)\).  These covariance terms provide a measure of how the random variables in the vector tend to move together &ndash; <em>i.e.</em>, they provide a quantitative measure of dependence.  The reason for this interpretation may become clear when we look at estimating one random variable given another.</p>
+
+
+<h3 class="group " id="sampling"
+    >Sampling<a href="#sampling"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>It is easy to see that the covariance matrix is symmetric &ndash; indeed, \(\Sigma_{ij} = \mathbb{E}(X_i - \mu_i)(X_j - \mu_j) = \mathbb{E}(X_j - \mu_j)(X_i - \mu_i) = \Sigma_{ji}\).  What is somewhat less obvious is that it is also <em>positive semi-definite</em> \(\Sigma \succeq 0\).  To see this:</p>
+<p>\begin{equation}
+\begin{aligned}
+a^{\mathsf{T}} \Sigma a^{\mathsf{T}}
+&amp;= a^{\mathsf{T} }\bigl[\mathbb{E}(\mathbf{X} - \bm{\mu})(\mathbf{X} - \bm{\mu})^{\mathsf{T}} \bigr] a\\
+&amp;\overset{(a)}{=} \mathbb{E} a^{\mathsf{T}} (\mathbf{X} - \bm{\mu})(\mathbf{X} - \bm{\mu})^{\mathsf{T}} a\\
+&amp;\overset{(b)}{=} \mathbb{E} ||a^{\mathsf{T}} (\mathbf{X} - \bm{\mu})||_2^2 \ge 0,
+\end{aligned}\notag
+\end{equation}</p>
+<p>where \((a)\) uses the <em>linearity of expectation</em> \(a\mathbb{E}X = \mathbb{E}[aX]\) and \((b)\) uses \(a^{\mathsf{T}} a = ||a||_2^2 := \sum_{i = 1}^n a_i^2\).  For simplicity, I will assume that \(\Sigma\) is <em>positive definite</em> \(\Sigma \succ 0\), which is generally the case &ndash; if \(\Sigma\) is not positive definite, then it can be shown that (at least) two components of the vector \(\mathbf{X}\) must be perfectly linearly related, <em>e.g.</em>, \(X_1 = X_2 - X_3\), a case we simply exclude.</p>
+<p>Since \(\Sigma \succ 0\), it must admit a Cholesky factorization \(\Sigma = LL^{\mathsf{T}}\).  This factorization can be used computationally to <em>sample</em> random variables with a prescribed variance matrix.  As long as it is possible to sample independent random variables with variance \(1\), then we can construct a random vector with variance equal to the \(n \times n\) identity matrix \(I_n\) (how?) &ndash; call this vector \(\mathbf{Z}\).  Supposing that \(\mathbf{Z}\) has zero mean \(\mathbb{E}\mathbf{Z} = 0\) (adding back a constant mean vector \(\bm{\mu}\) afterwards is easy) we can now transform \(\mathbf{Z}\) so that it has variance \(\Sigma\): let \(\mathbf{X} = L\mathbf{Z}\) and calculate:</p>
+<p>\begin{equation}
+\begin{aligned}
+\mathbb{E}\mathbf{XX}^{\mathsf{T}}
+&amp;= \mathbb{E}(L\mathbf{Z})(L\mathbf{Z})^{\mathsf{T}}\\
+&amp;= \mathbb{E}L\mathbf{Z}\mathbf{Z}^{\mathsf{T}} L^{\mathsf{T}}\\
+&amp;= L\bigl[\mathbb{E}\mathbf{Z}\mathbf{Z}^{\mathsf{T}} \bigr]L^{\mathsf{T}}\\
+&amp;= LI_n L^{\mathsf{T}}\\
+&amp;= \Sigma.
+\end{aligned}\notag
+\end{equation}</p>
+<p>Incidentally, a slight modification to the calculation above can show us that if \(\mathbf{X}\) has variance matrix \(\Sigma\), then for any matrix \(A\), the variance of \(A\mathbf{X}\) is given by \(A\Sigma A^{\mathsf{T}}\).</p>
+
+
+<h3 class="group " id="linear-minimum-mean-squared-error-estimation"
+    >Linear Minimum Mean Squared Error Estimation<a href="#linear-minimum-mean-squared-error-estimation"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>To understand more about the meaning of the variance matrix, let&rsquo;s see how it appears in a particularly important quadratic optimization problem: the linear minimum mean-squared error estimator (LMMSE estimator).  The setup for this problem is that we have a joint random variable \((X, Y)\) where \(X\) has dimension \(m\) and \(Y\) has dimension \(n\), and where \(X, Y\) have a <em>known</em> joint variance matrix:</p>
+<p>\begin{equation}
+\text{Var}\begin{bmatrix}X\\ Y\end{bmatrix} = \begin{bmatrix}\Sigma_X &amp; R\\ R^{\mathsf{T}} &amp; \Sigma_Y \end{bmatrix} := \Sigma
+\notag
+\end{equation}</p>
+<p>\(\Sigma \in \mathbb{S}_{++}^{n + m}\), and mean values \(\mu_X \in \mathbb{R}^m \mu_Y \in \mathbb{R}^n\).  We want to find a &ldquo;gain matrix&rdquo; \(K \in \mathbb{R}^{m \times n}\) and a &ldquo;bias vector&rdquo; \(b \in \mathbb{R}^{n}\) to solve the following problem:</p>
+<p>\begin{equation}
+\begin{aligned}
+\underset{K, b}{\text{minimize}}\ \frac{1}{2}\mathbb{E}||X - KY - b||_2^2.
+\end{aligned}\notag
+\end{equation}</p>
+<p>The interpretation of this problem is that we are making an actual observation of \(Y\), and want to use that to make some inference about what the value of \(X\) is, given the joint second order statistics (mean and variance) of \((X, Y)\).  An example application is that \(X\) is some &ldquo;state&rdquo; we are interested in (<em>e.g.</em>, temperature, position, velocity, <em>etc</em>.) and \(Y\) is the measurement of some sensor system.</p>
+<p>To solve this problem, first start by minimizing over \(b\).  If we expand the objective we have</p>
+<p>\begin{equation}
+\begin{aligned}
+\frac{1}{2}\mathbb{E} ||X - KY - b||_2^2
+&amp;= \frac{1}{2}\mathbb{E}||X - KY||_2^2 + \frac{1}{2}||b||_2^2 - \mathbb{E}(X - KY)^{\mathsf{T}} b\\
+&amp;= \frac{1}{2}\bigl((\mu_X - K\mu_Y) - b\bigr)^{\mathsf{T}} \bigl((\mu_X - K\mu_Y) - b\bigr) + \frac{1}{2}\mathbb{E}||X - KY||_2^2 - (\mu_X - K\mu_Y)^{\mathsf{T}}(\mu_X - K\mu_Y),
+\end{aligned}\notag
+\end{equation}</p>
+<p>from which it is clear the optimal value is \(b = \mu_X - K\mu_Y\).  It is quite convenient that the optimal value of \(b\) makes \(X - KY - b\) have zero mean.  Because of this we can simply assume, without loss of generality, that \(\mathbb{E}X = 0\) and \(\mathbb{E}Y = 0\); indeed, we could make the substitutions \(X_0 = X - \mu_X\) <em>etc.</em>, but this is unnecessarily cumbersome.  So, making this zero mean assumption, we again expand out the objective function</p>
+<p>\begin{equation}
+\begin{aligned}
+\mathbb{E}||X - KY||_2^2
+&amp;= \mathbb{E}(X - KY)^{\mathsf{T}}(X - KY)\\
+&amp;= \mathbb{E}\bigl( X^{\mathsf{T}} X - X^{\mathsf{T}}KY - Y^{\mathsf{T}}K^{\mathsf{T}}X - Y^{\mathsf{T}}K^{\mathsf{T}}KY \bigr)\\
+&amp;= \mathsf{tr}\bigl(\Sigma_X - KR^{\mathsf{T}} - R^{}K^{\mathsf{T}} + K\Sigma_Y K^{\mathsf{T}} \bigr)\\
+&amp;= \mathsf{tr}(K - R\Sigma_Y^{-1})\Sigma_Y(K - R\Sigma_Y^{-1})^{\mathsf{T}} + \mathsf{tr}(\Sigma_X - R \Sigma_Y^{-1} R^{\mathsf{T}}),
+\end{aligned}\notag
+\end{equation}</p>
+<p>where in the last step we are again completing the square.  The second trace term does not depend upon \(K\), and the first term is minimized by the choice \(K = R\Sigma_Y^{-1}\) (why?  Obtain a generalization for quadratic forms and use \(\Sigma_Y \succ 0\)).  Remarkably, the <em>value</em> of the objective at the optimum is given exactly by</p>
+<p>\begin{equation}
+\underset{K}{\text{min}}\ \mathbb{E}||X - KY||_2^2 = \mathsf{tr}(\Sigma_X - R \Sigma_Y^{-1} R^{\mathsf{T}}) = \mathsf{tr}(\Sigma / \Sigma_Y),
+\notag
+\end{equation}</p>
+<p>which is another Schur complement!  More generally, at \(K^\star = R\Sigma_Y^{-1}\) we have that \(\text{Var}(X - K^\star Y) = \Sigma / \Sigma_Y\) so that the variance matrix of the error vector \(E = X - KY\) is given exactly by a Schur complement in the original joint variance matrix.  This Schur complement is measuring the amount of variance which is removed from \(\Sigma_X\) by conditioning on \(Y\).  Another worthwhile observation is that \(\mathsf{tr}E^{\mathsf{T}} K^\star Y = \mathsf{tr}(X - R\Sigma_Y^{-1} Y)^{\mathsf{T}} R\Sigma_Y^{-1} Y = 0\), which is to say that <em>the estimate is orthogonal to the error</em>.  This is not a coincidence and is a consequence of the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Hilbert_projection_theorem"target="_blank" rel="noopener">Projection Theorem</a
+>
+.</p>
+<p>We can construct an illustrative example of these calculations, along with the sampling scheme of the previous section in two dimensions.  For this illustration I&rsquo;m using the variance matrix \(\Sigma = \begin{bmatrix}\sigma_X^2 &amp; \rho\sigma_X \sigma_Y \\ \rho \sigma_X \sigma_Y &amp; \sigma_Y^2 \end{bmatrix}\) and thus the optimal gain is \(K = \rho \sigma_X \sigma_Y \times \frac{1}{\sigma_y^2} = \rho \frac{\sigma_X}{\sigma_Y}\) which leads to \(\hat{X}|Y = \rho \frac{\sigma_X}{\sigma_Y} Y\), and \(\sigma^2_{X|Y} = (1 - \rho)\sigma_X^2\) which are all worthwhile formulas to commit to memory.  The particular values used in the below example are \(\sigma_X^2 = 4, \sigma_Y^2 = 1, \rho = 0.8\).  The way that the estimator changes in response to changes in parameters can be visualized by inspecting the equations provided earlier &ndash; in particular, the gain \(K\) and the conditional variance \(\sigma^2_{X|Y}\) both change linearly in response to changes in \(\rho\) or \(\sigma_X^2\).</p>
+<figure><img src="lmmse.svg"
+         alt="Figure 3: Optimal Linear Estimators"/><figcaption>
+            <p><span class="figure-number">Figure 3: </span>Optimal Linear Estimators</p>
+        </figcaption>
+</figure>
+
+<p>It may at first look a bit odd that the regression line is not aligned with the principle axis of the contour plot.  This is not a mistake.  The regression line which <em>is</em> aligned with that &ldquo;natural looking&rdquo; direction is obtained from <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Principal_component_regression"target="_blank" rel="noopener">Principle Component Regression</a
+>
+, and is sub-optimal in this setting where we know exact statistics.  If the statistics \(\Sigma\) have to be estimated from available data, then it is possible that the regularization effect got from looking only at some top \(k\) principle components gives us overall lower squared error on a test set.</p>
+<p><kbd><strong>Remark</strong> (MMSE Estimator): As opposed to the LMMSE estimator, the MMSE estimator is the optimal estimator which is not constrained to be linear.  The MMSE in general depends upon all of the higher order statistics, and cannot be computed without full knowledge of the joint distribution of $X, Y$.</kbd></p>
+<p><kbd><strong>Remark</strong> (The Gaussian Distribution): These formulas also arise in the conditioning formulas for</kbd> <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Conditional_distributions"target="_blank" rel="noopener">the Gaussian distribution</a
+>
+.  <kbd>This is not exactly a coincidence &ndash; Gaussian&rsquo;s are fully characterized by their second order statistics and, as a family of distributions, are closed under linear combinations.  In the Gaussian case, the MMSE coincides with the LMMSE.</kbd></p>
+
+
+<h3 class="group " id="linear-regression"
+    >Linear Regression<a href="#linear-regression"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>Let&rsquo;s look at yet another example: linear regression.  This is a problem which is closely related to <a
+    class="link"
+    href="#linear-minimum-mean-squared-error-estimation">Linear Minimum Mean Squared Error Estimation</a
+>
+, but instead of using the observations \(Y\) of a sensor to estimate some state variable \(X\), we consider a <em>finite</em> dataset \(\mathcal{D}_N = \{(x_i, y_i)\}_{i = 1}^N\) of \(N\) examples.  The goal of linear regression is to find some model function \(f\) such that the average squared error of the model \[y_i \approx f(x_i)\] is minimized.  Formally, we would write</p>
+<p>\begin{equation}
+\underset{f \in \mathcal{F}}{\text{minimize}}\ \frac{1}{2N}\sum_{i = 1}^N \big(y_i - f(x_i)\big)^2
+\tag{$R_{\mathcal{F}}$}
+\end{equation}</p>
+<p>where \(\mathcal{F}\) is some &ldquo;admissible class&rdquo; of functions.</p>
+<p>The simplest useful class of functions \(\mathcal{F}\) are <em>linear functions</em> \(f(x) = x^{\mathsf{T}} \beta\), parameterized by some vector \(\beta\).  Specializing the problem to this case is the problem of (ordinary) <em>linear regression</em>.  By expanding the objective function we can easily pluck out the optimizer:</p>
+<p>\begin{equation}
+\begin{aligned}
+\frac{1}{2N}\sum_{i = 1}^N \big(y_i - f(x_i)\big)^2
+&amp;= \frac{1}{2N}\sum_{i = 1}^N \big(y_i - x_i^{\mathsf{T}} \beta \big)^2\\
+&amp;= \frac{1}{2N}\sum_{i = 1}^N y_i^2 - \frac{1}{N}\sum_{i = 1}^N y_i (x_i^{\mathsf{T}} \beta) + \frac{1}{2N}\sum_{i = 1}^N  (x_i^{\mathsf{T}} \beta)^2\\
+&amp;= \kappa - \big(\frac{1}{N}\sum_{i = 1}^N y_i x_i \big)^{\mathsf{T}} \beta + \frac{1}{2N}\sum_{i = 1}^N  \mathsf{tr}\ (x_i^{\mathsf{T}} \beta)(x_i^{\mathsf{T}} \beta) \\
+&amp;= \kappa -  \big(\frac{1}{N}\sum_{i = 1}^N y_i x_i \big)^{\mathsf{T}} \beta + \frac{1}{2} \beta^{\mathsf{T}} \big(\frac{1}{N}\sum_{i = 1}^N x_i x_i^{\mathsf{T}} \big) \beta,
+\end{aligned}\notag
+\end{equation}</p>
+<p>and hence \[\beta^\star_{lr} = \big( \frac{1}{N}\sum_{i = 1}^N x_i x_i^{\mathsf{T}} \big)^{-1} \big( \frac{1}{N}\sum_{i = 1}^N y_i x_i \big).\]</p>
+<p>The whole problem can be made considerably simpler by means of matrix notation</p>
+<p>\begin{equation}
+\mathbf{y} = \begin{bmatrix}y_1\\ \vdots\\ y_N \end{bmatrix}, \mathbf{X} = \begin{bmatrix}x_1^{\mathsf{T}} \\ \vdots \\ x_N^{\mathsf{T}} \end{bmatrix},\notag
+\end{equation}</p>
+<p>so that</p>
+<p>\begin{equation}
+\begin{aligned}
+\frac{1}{2N} \sum_{i = 1}^N \bigl( y_i - x_i^{\mathsf{T}} \beta \bigr)^2 &amp;= \frac{1}{2N}||\mathbf{y} - \mathbf{X}\beta||_2^2\\
+\implies \beta^\star_{lr} = \bigl(\mathbf{X}^{\mathsf{T}} \mathbf{X}\bigr)^{-1} \mathbf{X}^{\mathsf{T}} \mathbf{y},
+\end{aligned}\notag
+\end{equation}</p>
+<p>which is a rather famous expression.</p>
+<p><kbd><strong>Remark</strong> (Admissible Functions): Contrary to initial impressions, regression problem $R_\mathcal{F}$ can actually be solved, in closed form, at least up to an $\epsilon$ of approximation error, for an extremely large class of functions $\mathcal{F}$.  Indeed, for just one example when each $x$ is a single real number (to lighten notation) $x_i \in \R$ (as opposed to a vector) and $\mathcal{F}$ is the class of all <em>bounded and continuous</em> functions, then any $f \in \F$ can be (uniformly) approximated to arbitrary accuracy using a polynomial $f_a(x) \approx \sum_{k = 0}^K a_k x^k$ parameterized by the coefficients $a$</kbd> (this is the <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Stone%E2%80%93Weierstrass_theorem"target="_blank" rel="noopener">Stone-Weierstrass Theorem</a
+>
+).  <kbd>Each sample $x_i$ can then be transformed into a vector $(1, x_i, x_i^2, \ldots, x_i^K)$, and we can perform <em>linear</em> regression with the parameters $\beta = (1, a_1, \ldots, a_K)$.</kbd></p>
+<p><kbd><strong>Remark</strong>: The way I&rsquo;ve written the optimal solution $\beta_{lr}^\star$ is naive.  Computationally, the problem will usually be solved by means of a QR or Singular Value decomposition of the data matrix $X$ or by an iterative descent algorithm.  Analytically, it is also possible to write the optimal solution using the pseudo-inverse as in $\beta_{lr}^\star = X^\dagger y$, which is much more notationally compact, and doesn&rsquo;t assert the existence of an inverse matrix.  Indeed, writing out</kbd> \(\bigl(\mathbf{X}^{\mathsf{T}} \mathbf{X}\bigr)^{-1} \mathbf{X}^{\mathsf{T}} \mathbf{y}\) <kbd>is a plain waste of ink.</kbd></p>
+
+
+<h2 class="group " id="conclusion"
+    >Conclusion<a href="#conclusion"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>This post is a bit of a whirlwind tour of fundamental facts about quadratic forms and positive definite matrices.  All of these facts are truly elementary pieces of the computational linear algebra toolkit, and serve as building blocks for more sophisticated problems.  Indeed, a substantial motivation for writing all of this down is that now I can fearlessly use all these facts in future posts without feeling like I&rsquo;m skipping over important details!</p>
+<p>I hope you, dear reader (I trust there is at least one 🙏), have enjoyed this tour and can now comfortably apply this knowledge to your own problems :)</p></section>
+<div class="flex items-center justify-center px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14"><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="Share to twitter"
+                href="https://twitter.com/share?&text=Quadratic%20forms%20are%20functions%20defined%20through%20symmetric%20matrices%20and%20represent%20a%20ubiquitous%20class%20of%20functions%20for%20which%20there%20is%20an%20enormous%20amount%20of%20useful%20theoretical%20and%20computational%20results.%20Indeed,%20in%20&amp;ldquo;linear-quadratic&amp;rdquo;%20models,%20it%20is%20possible%20to%20provide%20analytic%20solutions%20to%20more-or-less%20any%20question%20you%20would%20like%20to%20ask.%20This%20post%20is%20a%20tour%20of%20some%20foundations%20and%20results%20relating%20to%20quadratic%20forms.&url=https://rjtk.github.io/posts/all-about-quadratic-forms/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><i class="eva eva-twitter hover:text-theme"></i
+            ></a><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="Share to weibo"
+                href="https://service.weibo.com/share/share.php?url=https://rjtk.github.io/posts/all-about-quadratic-forms/&title=All%20About%20Quadratic%20Forms&sudaref=rjtk.github.io"
+                target="_blank"
+                rel="noopener noreferrer"
+            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="Copy Link" data-clipboard-text="https://rjtk.github.io/posts/all-about-quadratic-forms/"></i></div>
+<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
+    <div>
+        <a
+            href="/posts/generalized-eigenvalue-problems-and-trace-optimization/"
+            title="Generalized Eigenvalue Problems and Trace Optimization"
+            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
+            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+                <i class="eva eva-chevron-left-outline"></i>
+            </span>
+            <span>Prev</span>
+        </a>
+    </div><div class="hidden items-center text-xs xl:flex">
+        Unless otherwise stated, this blog is licensed under 「
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener noreferrer" class="text-theme">CC BY-NC-SA 4.0</a>
+        」
+    </div>
+    <div class="flex items-center text-sm xl:hidden">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener noreferrer" class="text-theme">
+            <img src="/Cc-by-nc-sa.svg" alt="CC BY-NC-SA 4.0" title="CC BY-NC-SA 4.0" class="w-24" />
+        </a>
+    </div>
+
+    <a
+        href=""
+        title=""
+        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText">
+        <span>Next</span>
+        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+            <i class="eva eva-chevron-right-outline"></i>
+        </span>
+    </a>
+</div>
+
+
+        </div>
+    </div>
+</div>
+
+</div>
+                </main><footer>
+    <div
+        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
+    >
+        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
+            <span class="">© 2022 - 2023</span>
+            <span class="mx-1.5 opacity-50"> | </span>Powered by <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a></div>
+
+        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://rjtk.github.io/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
+                    <span>RSS</span>
+                </a><a data-no-swup href="https://rjtk.github.io/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
+                    <span>Sitemap</span>
+                </a></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
+    <span>Run time: </span><b id="run-time-d">0</b>
+    <span class="text-xs">days</span>
+    <b id="run-time-h">0</b>
+    <span class="text-xs">h</span>
+    <b id="run-time-m">0</b>
+    <span class="text-xs">m</span>
+    <b id="run-time-s">0</b>
+    <span class="text-xs">s</span>
+</div>
+</div>
+
+    <script type="text/javascript">
+window.__theme = {
+    cdn: '',
+    pjax: true ,
+    isServer: false ,
+    $version:"",
+    lang: 'en-us',
+    imageZoom: true ,
+    lazyload: true ,
+    bionicReading: {
+        enabled: true ,
+        skipLinks: false ,
+        autoBionic: false ,
+        excludeWords:[],
+        excludeClasses:[],
+        excludeNodeNames:[],
+    },
+    katex: true ,
+    search: true ,
+    backtop: true ,
+    pangu: false ,
+    autoDarkMode: false ,
+    googleAnalytics:false,
+    hugoEncrypt: {
+        wrongPasswordText: 'Password is incorrect',
+        userStorage:window['sessionStorage'],
+    },
+    console: {
+        enabled: true ,
+        leftColor: '#dd6065',
+        rightColor: '#feb462',
+        leftText: 'Hugo Theme Luna',
+        rightText: 'Powered by Hugo ❤ Luna',
+    },
+    assets: {
+        error_svg: "\/images\/error.svg",
+        search_svg: "\/images\/search.svg",
+    },
+    i18n: {
+        copy: {
+            success: "Copy success",
+            failed: "Copy failed",
+            copyCode: "Copy code",
+        },
+        search: {
+            untitled: "Untitled",
+            loadFailure: "Initialization of the search engine failed",
+            input: "Type something...",
+        },
+        darkMode: {
+            dark: "Switch to dark mode",
+            light: "Switch to light mode"
+        }
+    },creatTime: "2022\/12\/11"}
+</script>
+<script type="text/javascript" src="/ts/main.3e551c0bbea8d18cea412abc67113efa9fd16c3bba1eb4867a7e762260ee32dc.js" defer integrity="sha256-PlUcC76o0YzqQSq8ZxE&#43;&#43;p/RbDu6HrSGen52ImDuMtw="></script>
+
+
+
+
+
+<script>
+    
+    
+</script>
+
+<script data-swup-reload-script>
+    
+    
+</script>
+</footer>
+</div>
+        </div><a
+        href="#nav"
+        title="Back to top"
+        id="back-top"
+        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
+    >
+        <div class="relative">
+            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
+                <i class="eva eva-arrow-upward-outline"></i>
+            </div>
+            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
+                <circle
+                    transform="rotate(-90, 27 , 27)"
+                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
+                    cx="27"
+                    cy="27"
+                    r="25"
+                    fill="none"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke="var(--theme)"
+                />
+            </svg>
+        </div>
+    </a><noscript>
+    <style>
+        .dark-mode-switch,
+        #run-time,
+        #bionicReading,
+        .noscript-hidden,
+        [data-clipboard-text],
+        [data-lazyload] {
+            display: none;
+        }
+        #back-top {
+            opacity: 1;
+        }
+        .noscript-show {
+            display: initial;
+        }
+    </style>
+</noscript>
+</body>
+</html>

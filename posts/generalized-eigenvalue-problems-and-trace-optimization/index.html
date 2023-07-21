@@ -8,19 +8,21 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 <meta itemprop="name" content="Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water" />
 <link href="https://rjtk.github.io/index.xml" title="Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water" type="application/rss+xml" rel="alternate" />
-<title>Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water</title><link rel="stylesheet" href="/main.efa856a7e699d6b8dc8748086f759f5a7bff94ff5428a65430ef983ad3b92d56.css" integrity="sha256-76hWp+aZ1rjch0gIb3WfWnv/lP9UKKZUMO+YOtO5LVY=" /><meta property="og:site_name" content="Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water" />
+<title>Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water</title><link rel="stylesheet" href="/main.1fcc545d2ef04212761e07c486eaac8b9c8e1c46af8fc344804b7383bb9116bc.css" integrity="sha256-H8xUXS7wQhJ2HgfEhuqsi5yOHEavj8NEgEtzg7uRFrw=" /><meta property="og:site_name" content="Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Generalized Eigenvalue Problems and Trace Optimization" />
 <meta property="og:description" content="Most people are familiar with the concept of matrix eigenvalues. Less well known is that this concept can be fruitfully expanded to the generalized eigenvalues of pairs of matrices. Closely related are matrix trace optimization problems, which extremizes the trace of certain matrix products. Trace optimization constites a large class of practically solvable non-convex optimization problems commonly useful for dimensionality reduction and which includes the unsupervised weighted principle component analysis and the supervised method of Fisher&amp;rsquo;s Linear Discriminant. The purpose of this post is to explore some of these problems, their intuition, and their applications.
 " />
-<meta property="og:url" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><meta property="article:published_time" content="2023-07-18T00:00:00-07:00" /><meta property="article:modified_time" content="2023-07-18T21:45:10-07:00" /><meta name="theme-color" content="#dd6065" />
+<meta property="og:url" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><meta property="article:published_time" content="2023-07-18T00:00:00-07:00" /><meta property="article:modified_time" content="2023-07-20T22:53:26-07:00" /><meta name="theme-color" content="#dd6065" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water" />
 <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+
 <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water" />
 <meta name="twitter:description" content="Most people are familiar with the concept of matrix eigenvalues. Less well known is that this concept can be fruitfully expanded to the generalized eigenvalues of pairs of matrices. Closely related are matrix trace optimization problems, which extremizes the trace of certain matrix products. Trace optimization constites a large class of practically solvable non-convex optimization problems commonly useful for dimensionality reduction and which includes the unsupervised weighted principle component analysis and the supervised method of Fisher&amp;rsquo;s Linear Discriminant. The purpose of this post is to explore some of these problems, their intuition, and their applications.
 " />
-<meta name="twitter:url" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
+<meta name="twitter:url" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
 <link href="/icon.png" rel="Bookmark" />
 <link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
 {
@@ -31,7 +33,7 @@
     "@type": "WebPage",
     "@id": "https:\/\/rjtk.github.io\/posts\/generalized-eigenvalue-problems-and-trace-optimization\/"
   },"genre": "posts","wordcount": 6162 ,
-  "url": "https:\/\/rjtk.github.io\/posts\/generalized-eigenvalue-problems-and-trace-optimization\/","datePublished": "2023-07-18T00:00:00-07:00","dateModified": "2023-07-18T21:45:10-07:00","author": {
+  "url": "https:\/\/rjtk.github.io\/posts\/generalized-eigenvalue-problems-and-trace-optimization\/","datePublished": "2023-07-18T00:00:00-07:00","dateModified": "2023-07-20T22:53:26-07:00","author": {
     "@type": "Person",
     "name": "qoow"
   },"description": ""
@@ -40,53 +42,54 @@
 
 
     </head>
-    
+
     <body class="dark:bg-darkBg dark:text-darkText">
         <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
-            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="relative"><div class=" text-center py-6 border-b dark:border-darkBorder"><div class="text-3xl">Quant Out of Water</div></div><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
-        <div class="route-items flex w-full items-center justify-around"><a
-                    title="Home"
-                    data-active-link="/"
-                    href="/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header
+    class="relative"
+><div class=" border-b py-6 text-center dark:border-darkBorder"><div class="text-3xl">Quant Out of Water</div></div><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
+            <div class="route-items flex w-full items-center justify-around"><a
+                        title="Home"
+                        data-active-link="/"
+                        href="/"
+                        class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                    >
+                        <i
+                            class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                        ></i>
+                        <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Home</span>
+                    </a><a
+                        title="About"
+                        data-active-link="/about/"
+                        href="/about/"
+                        class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                    >
+                        <i
+                            class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                        ></i>
+                        <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">About</span>
+                    </a>
+            </div>
+        </nav><nav class="sub-navbar z-10 flex items-center border-b px-5 py-2 dark:border-darkBorder md:px-10"><a
+                    title="Tags"
+                    data-active-link="/tags/"
+                    href="/tags/"
+                    class=" relative mr-4 flex cursor-pointer items-center text-gray-400 transition duration-150 ease-[ease] hover:text-theme dark:text-darkText"
                 >
-                    <i
-                        class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Home</span>
-                </a><a
-                    title="About"
-                    data-active-link="/about/"
-                    href="/about/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">About</span>
-                </a>
-        </div>
-    </nav><nav class="sub-navbar z-10 flex items-center border-b px-5 py-2 dark:border-darkBorder md:px-10"><a
-                title="Tags"
-                data-active-link="/tags/"
-                href="/tags/"
-                class=" relative flex cursor-pointer items-center mr-4 text-gray-400 dark:text-darkText transition duration-150 ease-[ease] hover:text-theme"
-            >
-                <i
-                    class="eva eva-pricetags leading-none mr-1"
-                ></i>
-                <span>Tags</span>
-            </a></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
+                    <i class="eva eva-pricetags mr-1 leading-none"></i>
+                    <span>Tags</span>
+                </a></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
     <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
 </div>
 </header>
-<main class="relative flex flex-grow " id="swup"><style>:root {
+<main class=" relative flex flex-grow" id="swup"><style>:root {
         --font:Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }</style><div class="type-posts layout- w-full"><div class="relative h-full">
+    }</style>
+<div class="type-posts layout- w-full"><div class="relative h-full">
     <div class="relative h-full">
         <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div
     style="padding-bottom:75%;"
-    class="article-cover relative h-0Page(/posts/generalizedEigenvalues/index.md) w-full"
+    class="article-cover h-0Page(/posts/generalizedEigenvalues/index.md) relative w-full"
 >
     <picture class="noscript-hidden"><img
             data-src="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/stretched_space.svg"
@@ -113,7 +116,9 @@
 </div>
 <h1 class="article-title absolute bottom-0 left-0 w-full px-6 pb-8 pt-32 text-3xl text-white dark:text-darkText md:px-10 md:text-4xl">
     Generalized Eigenvalue Problems and Trace Optimization
-</h1></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
+</h1>
+</div>
+<div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
     <div>
         <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
             <i class="eva eva-clock-outline mr-1"></i>
@@ -122,13 +127,21 @@
                     title="Published in 18 Jul 2023 00:00:00"datetime="2023-07-18T00:00:00-07:00">18 Jul 2023</time
                 >
             </span>
-        </div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                    <i class="eva eva-edit-2-outline mr-1"></i>
+                    <span>
+                        <time
+                            title="Last modified on: 20 Jul 2023 22:53:26"datetime="2023-07-20T22:53:26-07:00">20 Jul 2023</time
+                        >
+                    </span>
+                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
                 <i class="eva eva-flag-outline mr-1"></i>
                 <span>29 mins read</span>
             </div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
                 <i class="eva eva-bar-chart-outline mr-1"></i>
                 <span>6162 words</span>
-            </div></div></div><aside
+            </div></div></div>
+<aside
             class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
         >
             <header>
@@ -636,7 +649,8 @@ J(VC)
 <p>This blog examines the theory and applications of eigenvalue problems and generalized eigenvalue problems.  We&rsquo;ve seen through the Spectral Theorem that the symmetry of the matrix is essential for obtaining real-valued eigenvalue decompositions (and thus an ordering to the eigenvalues).  These eigenvalues can be characterized by variational problems, and useful applied problems (particularly PCA and its weighted version, and FLD) can be formulated in the same optimization problems.</p>
 <p>The key implication of this is that these optimization problems admit of efficient solutions: eigenvalue decompositions.  These optimization problems are by no means convex, yet they still admit of efficient solutions through the use of <kbd>scipy.linalg.eigh</kbd>.</p>
 <p>We&rsquo;ve also seen some &ldquo;bonus&rdquo; relationships with the singular value decomposition in the form of the Orthogonal Procrustes Problem, and the fact that you can compute the eigenvalues needed for PCA directly from \(X\), rather than having to form \(\widehat{\Sigma} = \frac{1}{N}X^{\mathsf{T}}X\).  As well, the detailed computations for signal to noise ratio optimization show us the generalized eigenvalue decomposition \(\Sigma = \Omega V \Lambda V^{\mathsf{T}}\Omega\) of \(\Sigma\) with respect to \(\Omega\).  This is another useful decomposition which generalizes the &ldquo;vanilla&rdquo; eigenvalue decomposition \(\Sigma = U \Lambda U^{\mathsf{T}}\).</p>
-<p>These problems present plenty of further interesting avenues for exploration, which I invite the reader to meditate upon :)</p></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a
+<p>These problems present plenty of further interesting avenues for exploration, which I invite the reader to meditate upon :)</p></section>
+<div class="flex items-center justify-center px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14"><a
                 class="mr-4 inline-flex h-5 w-5 items-center"
                 title="Share to twitter"
                 href="https://twitter.com/share?&text=Most%20people%20are%20familiar%20with%20the%20concept%20of%20matrix%20eigenvalues.%20Less%20well%20known%20is%20that%20this%20concept%20can%20be%20fruitfully%20expanded%20to%20the%20generalized%20eigenvalues%20of%20pairs%20of%20matrices.%20Closely%20related%20are%20matrix%20trace%20optimization%20problems,%20which%20extremizes%20the%20trace%20of%20certain%20matrix%20products.%20Trace%20optimization%20constites%20a%20large%20class%20of%20practically%20solvable%20non-convex%20optimization%20problems%20commonly%20useful%20for%20dimensionality%20reduction%20and%20which%20includes%20the%20unsupervised%20weighted%20principle%20component%20analysis%20and%20the%20supervised%20method%20of%20Fisher&amp;rsquo;s%20Linear%20Discriminant.%20The%20purpose%20of%20this%20post%20is%20to%20explore%20some%20of%20these%20problems,%20their%20intuition,%20and%20their%20applications.&url=https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/"
@@ -673,9 +687,9 @@ J(VC)
     </div>
 
     <a
-        href=""
-        title=""
-        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText">
+        href="/posts/all-about-quadratic-forms/"
+        title="All About Quadratic Forms"
+        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
         <span>Next</span>
         <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
             <i class="eva eva-chevron-right-outline"></i>
@@ -683,9 +697,11 @@ J(VC)
     </a>
 </div>
 
+
         </div>
     </div>
 </div>
+
 </div>
                 </main><footer>
     <div
@@ -696,7 +712,7 @@ J(VC)
             <span class="mx-1.5 opacity-50"> | </span>Powered by <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a></div>
 
         <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://rjtk.github.io/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
-                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
+                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
                     <span>RSS</span>
                 </a><a data-no-swup href="https://rjtk.github.io/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
                     <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
@@ -768,7 +784,8 @@ window.__theme = {
         }
     },creatTime: "2022\/12\/11"}
 </script>
-<script type="text/javascript" src="/ts/main.177b43fcb0ebccfd45d84b9431690d76cc2d1f8cb229c1941a8a09043f7f7020.js" defer integrity="sha256-F3tD/LDrzP1F2EuUMWkNdswtH4yyKcGUGooJBD9/cCA="></script>
+<script type="text/javascript" src="/ts/main.3e551c0bbea8d18cea412abc67113efa9fd16c3bba1eb4867a7e762260ee32dc.js" defer integrity="sha256-PlUcC76o0YzqQSq8ZxE&#43;&#43;p/RbDu6HrSGen52ImDuMtw="></script>
+
 
 
 

@@ -16,6 +16,562 @@
         <lastBuildDate>Tue, 18 Jul 2023 00:00:00 -0700</lastBuildDate>
         <language>en-us</language>
         <generator>Hugo -- gohugo.io</generator><item>
+            <title>All About Quadratic Forms</title>
+            <link>https://rjtk.github.io/posts/all-about-quadratic-forms/</link>
+            <pubDate>Tue, 18 Jul 2023 00:00:00 -0700</pubDate>
+            <guid>https://rjtk.github.io/posts/all-about-quadratic-forms/</guid><description>&lt;p&gt;Quadratic forms are functions defined through symmetric matrices and represent a ubiquitous class of functions for which there is an enormous amount of useful theoretical and computational results.  Indeed, in &amp;ldquo;linear-quadratic&amp;rdquo; models, it is possible to provide analytic solutions to more-or-less any question you would like to ask.  This post is a tour of some foundations and results relating to quadratic forms.&lt;/p&gt;
+&lt;h2 class=&#34;group &#34; id=&#34;introduction&#34;
+    &gt;Introduction&lt;a href=&#34;#introduction&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Quadratic forms are functions \(f: \R^n \rightarrow \mathbb{R}\) defined by a constant \(\kappa \in \mathbb{R}\), a vector \(q \in \mathbb{R}^n\) and a matrix \(Q \in \mathbb{S}^n\) (\(\mathbb{S}^n\) denoting the set of symmetric \(n \times n\) matrices), namely, \(f(x) = \frac{1}{2}x^{\mathsf{T}} Q x + q^{\mathsf{T}} x + \frac{1}{2}\kappa\).  That the matrix \(Q\) is assumed symmetric is without loss of generality since if \(Q\) were not symmetric, we could instead consider \(\frac{1}{2}Q + \frac{1}{2}Q^{\mathsf{T}}\) without affecting the value of the function.  The \(\frac{1}{2}\)&amp;rsquo;s in the definition of \(f\) will be seen to be a convenient convention.&lt;/p&gt;
+&lt;p&gt;Firstly, we can recognize that it is possible to expand this out explicitly as \[f(x) = \frac{1}{2}\sum_{i = 1}^n \sum_{j = 1}^n Q_{ij}x_i x_j + \sum_{i = 1}^n q_i x_i + \frac{1}{2}\kappa.\]  Thus, the function \(f\) is defined through a linear combination of all &lt;em&gt;pairs&lt;/em&gt; of products in \(x\), but not higher order powers.  Another convenient way to write QFs is through a single matrix, augmenting \(x\) with a \(1\)&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+f(x) = \frac{1}{2}\begin{bmatrix}x\\ 1\\ \end{bmatrix}^{\mathsf{T}}\begin{bmatrix}Q &amp;amp; q\\ q^{\mathsf{T}} &amp;amp; \kappa \end{bmatrix}\begin{bmatrix}x\\ 1 \end{bmatrix},
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;so for the most part, techniques that work for the simpler case with \(q = 0\) and \(\kappa = 0\), also apply to the more general case.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Assumption&lt;/strong&gt;: For the purposes of this post, I will usually assume that $Q$ is invertible.  This assumption is not essential, but if this does not hold, then the quadratic form is degenerate and breaks down into a lower-dimensional full-rank quadratic form (restricted to the span of the columns of $Q$) and a linear form restricted to the perpendicular complement thereof.  It is analogous to the assumption that $a \ne 0$ in the classical quadratic polynomial $ax^2 + bx + c$.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;from-whence&#34;
+    &gt;From Whence?&lt;a href=&#34;#from-whence&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Where do quadratic forms arise from?  At the most superficial level, they are nothing but a natural multivariate generalization of the quadratic polynomial \(ax^2 + bx + c\).  However, they also arise in extremely natural ways in numerous applications.  They are truly ubiquitous.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Least Squares&lt;/strong&gt;&lt;/kbd&gt;: The least-squares cost function \(f(x) = \frac{1}{2}||y - Ax||_2^2\) is a quadratic form \(f(x) = \frac{1}{2}x^{\mathsf{T}} A^{\mathsf{T}} A x - (A^{\mathsf{T}} y)^{\mathsf{T}} x + \frac{1}{2}||y||_2^2\) where \(Q = A^{\mathsf{T}} A, q = A^{\mathsf{T}} y\) and \(\kappa = ||y||_2^2\).  The least-squares cost function arises in statistical regression, estimation, as a design objective, &lt;em&gt;etc.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Variance of a Sum&lt;/strong&gt;&lt;/kbd&gt;: If we have some vector random variable \(Z\) with variance matrix \(\Sigma \in \mathbb{S}^n\), then the variance of the linear combination \(\text{Var}[Z^{\mathsf{T}} x] = x^{\mathsf{T}} \Sigma x\) is a quadratic form when viewed as a function of \(x\).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Local Approximation&lt;/strong&gt;&lt;/kbd&gt;: Generally, differentiable functions \(f(x)\) can be expanded into a Taylor series about some point \(x_0\) as in \(f(x) = f(x_0) + \mathsf{D}f(x_0) (x - x_0) + \frac{1}{2} (x - x_0)^{\mathsf{T}} \mathsf{D}^2 f(x_0)(x - x_0) + R(x)\) where the remainder term \(R(x)\) is a \(3^{\text{rd}}\) order polynomial of the components of \((x - x_0)\).  Truncating the \(R(x)\) term results in a quadratic form that gives a local approximation of the function \(f\) near the point \(x_0\).  These approximations are used in (second order) iterative optimization algorithms &amp;ndash; particularly Newton&amp;rsquo;s method, sequential least squares, and interior point algorithms.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Gaussian Distributions&lt;/strong&gt;&lt;/kbd&gt;: The Gaussian distribution is one of the most important distribution functions in probability.  It is characterized by two parameters \(\mu \in \mathbb{R}^n\) (the mean) and \(\Sigma \in \mathbb{S_{+}^n}\) (the positive semidefinite variance matrix).  When \(\Sigma\) is positive definite (hence invertible) Gaussian random variables have the density function \(f(x) \propto \text{exp}\bigl(\frac{1}{2}(x - \mu)^{\mathsf{T}} \Sigma^{-1} (x - \mu) \bigr)\), which involves a quadratic form.  Moreover, the characteristic function \(\psi(t) = \text{exp}\bigl(j\mu^{\mathsf{T}} t - \frac{1}{2}t^{\mathsf{T}} \Sigma t\bigr)\) is also a quadratic form in \(t\).  (&lt;em&gt;Remark&lt;/em&gt;: The definition of the Gaussian should most properly be given in terms of \(\psi\), instead of the density, since the expression for \(\psi\) does not require that \(\Sigma\) be invertible!)&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Use in Optimization&lt;/strong&gt;&lt;/kbd&gt;: A huge number of general optimization problems, each of which have their own space of applications, involve quadratic forms in the objective function.  Examples are given by &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Quadratic_programming&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Quadratic Programming&lt;/a
+&gt;
+ (including &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Support_vector_machine&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Support Vector Machines&lt;/a
+&gt;
+), the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Quadratic_assignment_problem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Quadratic Assignment Problem&lt;/a
+&gt;
+, the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Linear Quadratic Regulator&lt;/a
+&gt;
+, and many more.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;completing-the-square&#34;
+    &gt;Completing the Square&lt;a href=&#34;#completing-the-square&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;For the classical quadratic polynomial \(ax^2 + bx + c\), to &amp;ldquo;complete the square&amp;rdquo; is an elementary algebraic operation wherein we eliminate the linear term \(bx\) by writing \(ax^2 + bx + c = a(x + b / (2a))^2 + c - b^2 / (4a^2)\).  This procedure enables one to derive the quadratic formula, identify minimizers and maximizers, etc.  There is an analogous procedure for general quadratic forms:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+f(x)
+&amp;amp;= \frac{1}{2}x^{\mathsf{T}} Q x + q^{\mathsf{T}} x + \frac{1}{2}\kappa\\
+&amp;amp;= \frac{1}{2}(x + Q^{-1} q)^{\mathsf{T}} Q (x + Q^{-1} q) + \frac{1}{2}\kappa - q^{\mathsf{T}} Q^{-1} q,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where the \(Q^{-1}\) can be replaced by a pseudo-inverse \(Q^\dagger\) if \(Q\) is not invertible but merely \(q \in \mathcal{R}(Q)\).  Completing the square is a useful technique for derivations involving quadratic forms &amp;ndash; particularly, it will help us to recognize minimizers of \(f\), and it is commonly used for manipulating expressions relating to Gaussian distributions.  I solve a few optimization problems in this post, and nowhere do I resort to differentiation.&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;optimization&#34;
+    &gt;Optimization&lt;a href=&#34;#optimization&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Quadratic forms are extremely important in optimization.  Since they are so tractable, many algorithms for solving general optimization problems proceed by solving quadratic optimization problems in sequence, iteratively refining the approximation as they proceed.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;convexity&#34;
+    &gt;Convexity&lt;a href=&#34;#convexity&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;There is a particular class of quadratic forms which are of particular interest in optimization &amp;ndash; these are &lt;em&gt;convex&lt;/em&gt; quadratic forms.  We will see later that, more generally, quadratic forms can be decomposed into convex, concave, and linear subspaces.&lt;/p&gt;
+&lt;p&gt;Recall that a function \(f\) is &lt;em&gt;convex&lt;/em&gt; if \[\forall t \in (0, 1), x, y \in \mathsf{dom}\ f: f(tx + (1 - t)y) \le tf(x) + (1 - t)f(y).\]  This means that the line joining two points on the graph of \(f\) is above the graph itself.  Intuitively, convex functions &amp;ldquo;look like bowls&amp;rdquo; and their importance stems, at least in part, from the fact that any &lt;em&gt;local&lt;/em&gt; minimizer is also a &lt;em&gt;global&lt;/em&gt; minimizer.  Thus, for example, gradient descent applied to convex functions is guaranteed to converge to a global minimizer of the function.  A function is &lt;em&gt;concave&lt;/em&gt; if its negative is convex &amp;ndash; these functions look like upside down bowls, and gradient &lt;em&gt;ascent&lt;/em&gt; will converge to a global &lt;em&gt;maximizer&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;How do we determine when a quadratic form is convex?  Without loss of generality, we consider simply the function \(f(x) = \frac{1}{2}x^{\mathsf{T}} Q x\) and calculate (notice that we need not resort to computing second order derivatives!):&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+&amp;amp;\ f(tx + (1 - t)y) - tf(x) - (1 - t)f(y)\\
+&amp;amp;= \frac{1}{2}t^2 x^{\mathsf{T}} Q x + t(1 - t) x^{\mathsf{T}} Q y + \frac{1}{2}(1 - t)^2 y^{\mathsf{T}} Q y - \frac{1}{2}tx^{\mathsf{T}}Q x - \frac{1}{2}(1 - t) y^{\mathsf{T}} Q y\\
+&amp;amp;= \frac{1}{2}(t^2 - t) x^{\mathsf{T}} Q x + t(1 - t) x^{\mathsf{T}} Q y + \frac{1}{2}\bigl((1 - t)^2 - (1 - t)\bigr)y^{\mathsf{T}} Q y\\
+&amp;amp;= -\frac{1}{2}t(1 - t) x^{\mathsf{T}} Q x + t(1 - t) x^{\mathsf{T}} Q y - \frac{1}{2}t (1 - t) y^{\mathsf{T}} Q y \\
+&amp;amp;= -\frac{1}{2}t(1 - t) \bigl[x^{\mathsf{T}} Q x - 2x^{\mathsf{T}} Q y + y^{\mathsf{T}} Q y\bigr] \\
+&amp;amp;= -\frac{1}{2}t(1 - t) (x - y)^{\mathsf{T}} Q (x - y)\\
+&amp;amp;\overset{(a)}{\le} 0,
+\end{aligned}
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where if the final inequality \((a)\) holds over all \(x, y, t\), then we will have verified the definition of convexity for the function \(f\).  Since \(t \in (0, 1)\) it must be that \(t(1 - t) \in (0, 1)\) as well, and because \(x, y\) appear only as the difference \((x - y)\), we can consider simply the condition where \(\forall z:\ z^{\mathsf{T}} Q z \ge 0\).  This is exactly what it means for the matrix \(Q\) to be &lt;em&gt;positive semi-definite&lt;/em&gt;, denoted \(Q \succeq 0\).&lt;/p&gt;
+&lt;p&gt;Thus (also using the fact that a convex function plus the linear function \(x \mapsto q^{\mathsf{T}} x\) is still convex), a quadratic form \(f\) is convex &lt;em&gt;if and only if&lt;/em&gt; \(Q \succeq 0\).  If the matrix \(Q\) is both non-singular and positive semi-definite, then it is &lt;em&gt;positive-definite&lt;/em&gt; written as \(Q \succ 0\), which also means that the inequality in the definition of convexity holds strictly, and we call the function &lt;em&gt;strictly convex&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark:&lt;/strong&gt; It is worth noting here that every quadratic form associated with a Gaussian random variable is a convex quadratic form (since variance matrices are positive semidefinite).  Moreover, for smooth functions, they are locally convex in the region of minimizers, and the local quadratic approximations of convex functions are themselves always convex.  As well, the quadratic form $\frac{1}{2}||Ax||_2^2 = x^{\mathsf{T}} A^{\mathsf{T}} A x$ will always be convex as well since $A^{\mathsf{T}} A \succeq 0$.  Convex quadratic forms arise almost as often as quadratic forms themselves!&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;minimizing-quadratic-forms&#34;
+    &gt;Minimizing Quadratic Forms&lt;a href=&#34;#minimizing-quadratic-forms&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;From the representation of the quadratic form \(f\) after completing the square \[f(x) = \frac{1}{2}(x + Q^{-1} q)^{\mathsf{T}} Q (x + Q^{-1} q) + \kappa - q^{\mathsf{T}} Q^{-1} q,\] it appears rather immediate to identify a minimizer: \[x^\star = - Q^{-1} q.\]  However, we must be careful &amp;ndash; in making this claim we have already assumed that a minimizer &lt;em&gt;exists,&lt;/em&gt; and the existence of minimizers should not be taken lightly.  If the matrix \(Q\) is indefinite (&lt;em&gt;i.e.,&lt;/em&gt; \(Q\) nor \(-Q\) are positive semi-definite), then the point \(-Q^{-1} q\) may be only a &lt;em&gt;saddle point&lt;/em&gt; and in fact no minimizer exists: \(\underset{x \in \mathbb{R}^n}{\text{inf}}\ f(x) = -\infty\).  The question of existence in infinite dimensions is &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://amzn.to/3FBRoKD&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;incredibly interesting&lt;/a
+&gt;
+, but it is straightforward in the present finite-dimensional case: we need only eliminate the possibility that the infimum is \(-\infty\) by the strict convexity assumption \(Q \succ 0\) (more generally, we can have \(Q \succeq 0\) and \(q \in \mathcal{R}(Q)\)).  If \(Q \prec 0\), then \(x^\star\) will be a &lt;em&gt;maximizer&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The actual value of the function \(f\) at the minimizer can also be easily identified by inspection after completing the square:&lt;/p&gt;
+&lt;p&gt;\[f^\star := f(x^\star) = -q^{\mathsf{T}} Q^{-1} q + \kappa.\]&lt;/p&gt;
+&lt;p&gt;It is an interesting observation that this is a &lt;em&gt;concave&lt;/em&gt; quadratic form in \(q\).&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;the-shape-of-a-quadratic-form&#34;
+    &gt;The Shape of a Quadratic Form&lt;a href=&#34;#the-shape-of-a-quadratic-form&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;We can get some intuition about convex and non-convex quadratic forms from the contour plots below.  In the convex case, the function is a prototypical &amp;ldquo;bowl-shaped&amp;rdquo; function with a clearly defined minimizer, and the contour lines are concentric ellipses.  In the non-convex case, the function is hyperbolic and the only minimizing sequences diverge.  In this hyperbolic case, the point \(-Q^{-1} q\) is a saddle point.&lt;/p&gt;
+
+
+&lt;p&gt;The prototypical hyperbolic function is \(f(x, y) = xy\).  However, it is clearly possible for functions containing \(xy\) terms to still be convex, &lt;em&gt;e.g.,&lt;/em&gt; \(f(x, y) = \frac{1}{2}(x^2 - xy + y^2)\) (the function on the left in the figure), but not \(f(x, y) = \frac{1}{2}(x^2 - 2xy + y^2)\) (the function on the right).  Whether or not the function contains the pernicious hyperbolic behaviour comes down to the question of whether or not \(Q \succeq 0\).&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;subspace-constraints&#34;
+    &gt;Subspace Constraints&lt;a href=&#34;#subspace-constraints&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;There are many important cases, particularly in optimization, where we want to restrict the domain of the function \(f\) to some subspace (actually, an &lt;em&gt;affine&lt;/em&gt; space, which may include a constant offset from \(0\)) \(\mathbb{V} \subseteq \R^n\), of some dimension strictly less than \(n\), &lt;em&gt;i.e.&lt;/em&gt;, \(f: \mathbb{V} \rightarrow \R\).  In practice, this typically arises through linear constraints \(Ax = b\) on the variable \(x\), where \(A \in \R^{n \times m}\).  The representation \(\mathbb{V} = \{x\ |\ Ax = b\}\) however is not analytically insightful.&lt;/p&gt;
+&lt;p&gt;To obtain a more friendly representation of the space \(\mathbb{V}\), take a (compact) &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://souravsengupta.com/cds2016/lectures/Strang_Paper1.pdf&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Singular Value Decomposition&lt;/a
+&gt;
+ of the matrix: \(A = U\Sigma V^{\mathsf{T}}\) wherein \(U \in \R^{n \times r}\), \(\Sigma \in \R^{r \times r}\) and \(V \in \R^{m \times r}\); I use \(r \le \text{min}(m, n)\) to indicate the rank of the matrix \(A\).  It is essential to assume that \(b \in \mathcal{R}(A)\), &lt;em&gt;i.e.&lt;/em&gt;, that \(b\) is in the range of \(A\) &amp;ndash; if this is not the case then the subspace \(\mathbb{V}\) is ill-defined.  Now, recall that the columns of \(U\) constitute an orthonormal basis of \(\mathcal{R}(A)\) of dimension \(r\) and that the columns of \(V\) constitute an orthonormal basis for \(\mathcal{N}(A)^\perp\), the orthogonal complement of the nullspace of \(A\), which is of dimension \(n - r\).  Operationally, this means that \(U^{\mathsf{T}} U = I_r\) and \(V^{\mathsf{T}} V = I_r\) (but definitely not, at least in general, that \(UU^{\mathsf{T}} = I_n\) or \(VV^{\mathsf{T}} = I_m\)).  Thus, we can simplify the representation of the subspace \(\mathbb{V}\) as in:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathbb{V}
+&amp;amp;= \{x\ |\ Ax = b\}\\
+&amp;amp;= \{x\ |\ U\Sigma V^{\mathsf{T}} x = b\}\\
+&amp;amp;\overset{(a)}{=} \{x\ |\ V^{\mathsf{T}} x = \Sigma^{-1} U^{\mathsf{T}} b\}\\
+&amp;amp;\overset{(b)}{=} \{V \Sigma^{-1} U^{\mathsf{T}} b + \overline{V}u\ |\ u \in \R^{n - r}\}\\
+&amp;amp;\overset{( c)}{=} \{A^{\dagger} b + \overline{V}u\ |\ u \in \R^{n - r}\},
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where in \((a)\) it is always the case that \(\Sigma\) is invertible (and also diagonal) for a compact SVD and in \((b)\) the matrix \(\overline{V} \in \R^{n \times (n - r)}\) is a matrix whose columns form a basis for the nullspace of \(A\) (which can be obtained, for example, by running a full SVD on \(A\)), and in \(( c)\) we use the definition of the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Moore-Penrose inverse&lt;/a
+&gt;
+ of \(A\), denoted by \(A^{\dagger} = V\Sigma^{-1} U^{\mathsf{T}}\).  The vector \(\bar{x} := V \Sigma^{-1} U^{\mathsf{T}} b\) is usually taken to be the nominal solution of \(Ax = b\) (it is easy to verify that it is a solution) and the remainder of the degrees of freedom are provided by the span of the columns of \(\overline{V}\).  This makes more clear that \(\mathbb{V}\) is an affine space: the subspace \(\{\bar{V}u\ |\ u \in \R^{n - r}\}\) is offset from \(0\) by \(A^\dagger b\).&lt;/p&gt;
+&lt;p&gt;From here, a quadratic form \(f\) subject to the constraint \(x \in \mathbb{V}\) can be represented simply by modifying the parameters \(Q, q, \kappa\) and using the variable \(u\) from which the original \(x\) variable can be recovered by \(x(u) = A^{\dagger} b + \overline{V}u\):&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+f(x)
+&amp;amp;= \frac{1}{2}x^{\mathsf{T}} Q x + q^{\mathsf{T}} x + \frac{1}{2}\kappa; \quad Ax = b\\
+\rightarrow f(x(u)) &amp;amp;= \frac{1}{2}(A^{\dagger} b + \overline{V}u)^{\mathsf{T}} Q (A^{\dagger} b + \overline{V}u) + q^{\mathsf{T}} (A^{\dagger} b + \overline{V}u) + \frac{1}{2}\kappa\\
+\rightarrow \tilde{f}(u) &amp;amp;= \frac{1}{2}u^{\mathsf{T}} \overline{V}^{\mathsf{T}} Q \overline{V} u + \bigl((\overline{V}^{\mathsf{T}} q + \overline{V}^{\mathsf{T}} QA^\dagger b \bigr)^{\mathsf{T}} u + q^{\mathsf{T}} A^\dagger b + \frac{1}{2}\kappa + \frac{1}{2} (A^\dagger b)^{\mathsf{T}} Q (A^{\dagger} b)\\
+&amp;amp;= \frac{1}{2}u^{\mathsf{T}} \tilde{Q} u + \tilde{q}^{\mathsf{T}} u + \tilde{\kappa}\\
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \(\tilde{Q} = \overline{V}^{\mathsf{T}} Q \overline{V}\), \(\tilde{q} = \overline{V}^{\mathsf{T}} (q + QA^\dagger b)\) and \(\tilde{\kappa} = \kappa + (A^\dagger b)^{\mathsf{T}} Q (A^{\dagger} b)\).  Thus, the quadratic form restricted to a subspace \(\mathbb{V}\) is yet again just another quadratic form.  Moreover, there are computationally tractable means of explicitly representing the subspace \(\mathbb{V}\) when it is described through the linear system \(Ax = b\).&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;convex-and-concave-subspaces&#34;
+    &gt;Convex and Concave Subspaces&lt;a href=&#34;#convex-and-concave-subspaces&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;To get some further geometric sense of the function \(f\), one will usually appeal to the eigendecomposition of the matrix \(Q\).  Since it is symmetric, it is guaranteed to be orthogonally diagonalizable, and admits of real eigenvalues.  This is &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;The Spectral Theorem&lt;/a
+&gt;
+.  Specifically, we have \[Q = V\Lambda V^{\mathsf{T}} = \sum_{i = 1}^N \lambda_i v_i v_i^{\mathsf{T}} \] where \(V \in \mathbb{R}^{n \times n}\) is an orthogonal matrix of eigenvectors, and \(\Lambda = \mathsf{Dg}(\lambda_1, \ldots, \lambda_n)\) is a diagonal matrix containing the associated eigenvalues.  The space can be split into three subspaces, call them&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+S_+ &amp;amp;= \mathsf{span}\bigl\{v_i\ |\ \lambda_i &amp;gt; 0\}\\
+S_- &amp;amp;= \mathsf{span}\bigl\{v_i\ |\ \lambda_i &amp;lt; 0\}\\
+S_0 &amp;amp;= \mathsf{span}\bigl\{v_i\ |\ \lambda_i = 0\}.
+\end{aligned}
+\end{equation}&lt;/p&gt;
+&lt;p&gt;The subspace \(S_+\) might be called the &amp;ldquo;convex subspace&amp;rdquo; since the function \(x \mapsto \frac{1}{2} x^{\mathsf{T}} Q x\) is convex when restricted to \(x \in S_+\), and \(S_-\) might be called the &amp;ldquo;concave subspace&amp;rdquo; since \(x \mapsto \frac{1}{2} x^{\mathsf{T}} Q x\) is concave when restricted to \(x \in S_-\).  The subspace \(S_0\) is the linear subspace since \(\forall x \in S_0:\ \frac{1}{2} x^{\mathsf{T}} Q x = 0\) &amp;ndash; when a quadratic form is restricted to \(S_0\) it degenerates into a linear function.  The subspace \(S_0 = \{0\}\) if \(Q\) is non-singular, and \(S_- = \{0\}\) if \(Q \succeq 0\).&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark:&lt;/strong&gt; There are practical reasons why these subspace distinctions are interesting.  In some natural problems, we may encounter a matrix $Q$ which is indefinite, but where certain problem constraints guarantee that we are fully confined to the convex subspace $S_+$.  Therefore, given the constraints of the problem, the quadratic form associated with $Q$ is &amp;ldquo;effectively&amp;rdquo; convex.&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;Using ideas from the previous section, we can animate 2-d slices of a quadratic form in \(\R^4\) where the 2-d slices are constructed to smoothly vary across convex and concave subspaces.  The transition between the two, where the subspace passes through \(S_+\) and \(S_-\) could be termed a &lt;em&gt;hyperbolic&lt;/em&gt; subspace of the quadratic form.&lt;/p&gt;
+
+
+&lt;p&gt;I created this animation by constructing the matrix \(Q = 2q_1 q_1^{\mathsf{T}} + q_1 q_1^{\mathsf{T}} - p_1 p_1^{\mathsf{T}} - 2 p_2 p_2^{\mathsf{T}}\) where \(q_1, p_1, q_2, p_2\) form an orthogonal basis of \(\mathbb{R}^4\), and then using a matrix \[H(t) = [\frac{3}{2}(\frac{2}{3} - t)_+ q_1 + 3(t - \frac{2}{3})_+ p_1, \frac{3}{2}(t - \frac{1}{3})_+ p_2 + 3(\frac{1}{3} - t)_+ q_2]\] to project \(x = H(t) u\) onto convex, hyperbolic, and concave subspaces depending on the value of \(t\).  The plot is over \(u \in \mathbb{R}^2\) and animated over \(t \in [0, 1]\).&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;linear-algebra&#34;
+    &gt;Linear Algebra&lt;a href=&#34;#linear-algebra&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;The linear algebra related to quadratic forms largely comes down to the linear algebra associated with the symmetric matrix \(Q\).  The main aspects are the Cholesky factorization and Schur complements.  The Cholesky decomposition is one of the most important (and fast!) matrix factorizations available, and the Schur complement arises in many different ways.  Moreover, these two aspects are intimately linked.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;schur-complements&#34;
+    &gt;Schur Complements&lt;a href=&#34;#schur-complements&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Quadratic forms often arise as &lt;em&gt;bivariate&lt;/em&gt; quadratic forms (or more generally, multivariate quadratic forms with natural distinctions between different &lt;em&gt;blocks&lt;/em&gt; of variables).  For now, consider the function of \(x \in \mathbb{R}^{n_x}\) and \(y \in \mathbb{R}^{n_y}\) given by&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+f(x, y) &amp;amp;= \frac{1}{2}\begin{bmatrix}x\\ y\\ 1\end{bmatrix}^{\mathsf{T}}\begin{bmatrix}P &amp;amp; C &amp;amp; p\\ C^{\mathsf{T}} &amp;amp; Q &amp;amp; q\\ p^{\mathsf{T}} &amp;amp; q^{\mathsf{T}} &amp;amp; \kappa \end{bmatrix}\begin{bmatrix}x\\ y\\ 1\end{bmatrix}\\
+&amp;amp;= \frac{1}{2}x^{\mathsf{T}}Px + \frac{1}{2}y^{\mathsf{T}}Qy + x^{\mathsf{T}} C y + p^{\mathsf{T}} x + q^{\mathsf{T}} y + \kappa
+\end{aligned}
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where I&amp;rsquo;ll assume \(P, Q\) are both symmetric, that \(P\) is non-singular, and that \(C\) is such that the overall block matrix is symmetric positive definite.  These assumptions mean that the function \(f(x, y)\) is jointly convex in the variables \((x, y)\).&lt;/p&gt;
+&lt;p&gt;There are two other interesting functions associated with \(f\), namely, \[y \mapsto \underset{x}{\text{inf}}\ f(x, y),\] and \[x \mapsto \underset{y}{\text{inf}}\ f(x, y).\]&lt;/p&gt;
+&lt;p&gt;The computation of these functions can be done through a mechanical procedure called &lt;em&gt;Schur-complementation&lt;/em&gt;.  The idea of the Schur complement can serve as a natural &amp;ldquo;chunk&amp;rdquo; in one&amp;rsquo;s cognition and enables easy manipulation of complicated expressions.&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;partial-minimization&#34;
+    &gt;Partial Minimization&lt;a href=&#34;#partial-minimization&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;The above functions are those formed from &lt;em&gt;partial minimization&lt;/em&gt; of the function \(f\), and for concreteness I&amp;rsquo;ll focus on the function $g(y) := \underset{x}{\text{inf}}\ f(x, y).$  We know from the previous section that we can guarantee that a minimizer exists if \(P \succ 0\), so we will also make this assumption here to avoid degeneracy.&lt;/p&gt;
+&lt;p&gt;To identify the minimizer of \(f\) with respect to \(x\), we need only make the identifications \(q \leftarrow Cy + p\) and \(\kappa \leftarrow y^{\mathsf{T}} Q y + q^{\mathsf{T}} y + \kappa\) in the original general definition of a quadratic form to recognize that \(x^\star(y) = -P^{-1} (Cy + p)\).  An explicit formula for the function \(g\) is then obtained through the calculation&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+g(y)
+&amp;amp;= \frac{1}{2}y^{\mathsf{T}} Q y - y^{\mathsf{T}} C^{\mathsf{T}} P^{-1} (C y + p) + q^{\mathsf{T}} y + \kappa \\
+&amp;amp;= \frac{1}{2}y^{\mathsf{T}} (Q - C^{\mathsf{T}} P^{-1} C) y + (q - C^{\mathsf{T}}P^{-1} p)^{\mathsf{T}} y + \kappa\\
+&amp;amp;= \frac{1}{2}\begin{bmatrix}y\\ 1 \end{bmatrix}^{\mathsf{T}} \begin{bmatrix}Q - C^{\mathsf{T}} P^{-1} C &amp;amp; (q - C^{\mathsf{T}}P^{-1} p)\\ (q - C^{\mathsf{T}}P^{-1} p)^{\mathsf{T}} &amp;amp; \kappa \end{bmatrix} \begin{bmatrix}y\\ 1\end{bmatrix}.
+\end{aligned}
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;The beauty of this partial minimization is that \(g\) is &lt;em&gt;still a quadratic form&lt;/em&gt;.  If it is still convex (we&amp;rsquo;ll check this next!) then we could say that the set of positive definite quadratic forms is &lt;em&gt;closed&lt;/em&gt; under the operation of partial minimization.&lt;/p&gt;
+&lt;p&gt;The formulas above seem rather complicated at first.  However, they follow a completely mechanical pattern and you can write down analytic expressions for cartoonishly complicated block quadratic forms with simple notation, and understand at a glance exactly what is going on (even if you&amp;rsquo;re not reading every single equation in detail).&lt;/p&gt;
+
+
+&lt;h4 class=&#34;group &#34; id=&#34;definiteness-conditions&#34;
+    &gt;Definiteness Conditions&lt;a href=&#34;#definiteness-conditions&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h4&gt;
+
+&lt;p&gt;What we have discovered through exploring this is called a &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Schur_complement&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;em&gt;Schur Complement&lt;/em&gt;&lt;/a
+&gt;
+.  Suppose for simplicity that \(p = q = 0\) and \(\kappa = 0\) and for sake of notation that \[\mathcal{Q} := \begin{bmatrix}P &amp;amp; C\\ C^{\mathsf{T}} &amp;amp; Q\end{bmatrix}.\]  Then, \(g(y) = y^{\mathsf{T}}(Q - C^{\mathsf{T}} P^{-1} C)y\) and the matrix \(Q - C^{\mathsf{T}} P^{-1} C\) is called &lt;em&gt;The Schur Complement of \(P\) in \(\mathcal{Q}\)&lt;/em&gt; and it is usually denoted \(\mathcal{Q} / P\).  There is also a Schur complement of \(Q\) in \(\mathcal{Q}\) given by \(\mathcal{Q} / Q := P - CQ^{-1}C^{\mathsf{T}}\).  The way to remember which is which is to think of the &amp;ldquo;\(/P\)&amp;rdquo; as a form of division, analogous to \(P^{-1}\) (now you remember which matrix is being inverted) and then to just match up the shapes of \(C\) and \(C^{\mathsf{T}}\) with \(P\) or \(Q\) to figure out if you should write \(C^{\mathsf{T}} P^{-1} C\) or \(CP^{-1} C^{\mathsf{T}}\).&lt;/p&gt;
+&lt;p&gt;Forming the matrix \(\mathcal{Q} / P\) requires at least that \(P\) be non-singular.  If, in addition, it is positive definite \(P \succ 0\), then \(g(y) = y^{\mathsf{T}} (\mathcal{Q} / P) y\) is the partial minimizer of the whole quadratic form with respect to \(x\).  In order for \(g(y)\) to have a minimizer (&lt;em&gt;i.e.,&lt;/em&gt; the infimum is not \(-\infty\)) then the Schur complement must be positive-definite as well: \(\mathcal{Q} / P \succ 0\).  This, combined with the the fact that \[\underset{x}{\text{inf}}\ \underset{y}{\text{inf}}\ f(x, y) = \underset{y}{\text{inf}}\ \underset{x}{\text{inf}}\ f(x, y) = \underset{x, y}{\text{inf}}\ f(x, y),\] implies the following methods of checking definiteness:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;If \(P \succ 0\) and \(\mathcal{Q} / P \succ 0\), then \(\mathcal{Q} \succ 0\).&lt;/li&gt;
+&lt;li&gt;If \(\mathcal{Q} \succ 0\) and \(P\) is non-singular, then \(P \succ 0\) and \(\mathcal{Q} / P \succ 0\).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These relations have important theoretical use.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;square-roots-and-cholesky-factorization&#34;
+    &gt;Square Roots and Cholesky Factorization&lt;a href=&#34;#square-roots-and-cholesky-factorization&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;There is a natural way of discovering the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Cholesky_decomposition&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Cholesky Decomposition&lt;/a
+&gt;
+ by continuing the minimization of the block quadratic form \(f(x, y)\).  Indeed, computing the minimizer \((x, y)\) of this function involves solving the linear system&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\begin{bmatrix}P &amp;amp; C\\ C^{\mathsf{T}} &amp;amp; Q\end{bmatrix} \begin{bmatrix}x\\ y \end{bmatrix} = \begin{bmatrix}p\\ q \end{bmatrix},
+\end{aligned}
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;involving the matrix \(\mathcal{Q}\) discussed above.  Following the idea of (block) Gauss-Jordan elimination on this matrix, the Schur complement makes another appearance:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\begin{bmatrix}P &amp;amp; C\\ C^{\mathsf{T}} &amp;amp; Q\end{bmatrix}
+&amp;amp;= \begin{bmatrix}I &amp;amp; 0\\ C^{\mathsf{T}}P^{-1} &amp;amp; I\end{bmatrix}\begin{bmatrix}P &amp;amp; C\\ 0 &amp;amp; Q - C^{\mathsf{T}} P^{-1} C\end{bmatrix},
+\end{aligned}
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which is a block LU decomposition of \(\mathcal{Q}\), having a (dense) Schur-complement in the lower-right entry of the block upper triangular matrix.  Now, rather than a &lt;em&gt;block&lt;/em&gt; triangular decomposition, what we would really like to have is a bona-fide triangular decomposition \(\mathcal{Q} = LU\) where \(L\) is lower-triangular and \(U\) is upper triangular.  Moreover, in analogy with non-negative numbers, which have square-roots, we would like to ask for even more of a positive definite matrix \(\mathcal{Q} \succ 0\) (the positive semi-definite case is possible, but more involved) &amp;ndash; we would like an LU-decomposition \(\mathcal{Q} = LL^{\mathsf{T}}\), &lt;em&gt;i.e.&lt;/em&gt;, where \(U = L^{\mathsf{T}}\), which is a &lt;em&gt;matrix square root&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Operating under the standing assumption that \(\mathcal{Q} \succ 0\), and that \(P\) is non-singular (hence \(P \succ 0\) by the above), we will obtain this factorization by induction.  Make the &lt;em&gt;induction hypothesis&lt;/em&gt; that any positive definite matrix admits of a lower-triangular square root and let \(P = L_{11}L_{11}^{\mathsf{T}}\).  As well, using the induction hypothesis again, along with the definiteness theorem described in the last section, we know that the Schur complement \(\mathcal{Q} / P = Q - C^{\mathsf{T}} P^{-1} C \succ 0\) is also positive definite and thus admits another decomposition \(\mathcal{Q} / P = L_{22}L_{22}^{\mathsf{T}}\).  We can now write&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathcal{Q} &amp;amp;= \begin{bmatrix}I &amp;amp; 0\\ C^{\mathsf{T}}P^{-1} &amp;amp; I\end{bmatrix}\begin{bmatrix}P &amp;amp; C\\ 0 &amp;amp; Q - C^{\mathsf{T}} P^{-1} C\end{bmatrix}\\
+&amp;amp;= \begin{bmatrix}I &amp;amp; 0\\ C^{\mathsf{T}} (L_{11} L_{11}^{\mathsf{T}})^{-1} &amp;amp; I\end{bmatrix}\begin{bmatrix}L_{11} L_{11} &amp;amp; C\\ 0 &amp;amp; L_{22}L_{22}^{\mathsf{T}} \end{bmatrix}\\
+&amp;amp;= \begin{bmatrix}L_{11} &amp;amp; 0\\ C^{\mathsf{T}} L_{11}^{-\mathsf{T}} &amp;amp; L_{22} \end{bmatrix}\begin{bmatrix}L_{11} &amp;amp; 0\\ C^{\mathsf{T}} L_{11}^{-\mathsf{T}} &amp;amp; L_{22} \end{bmatrix}^{\mathsf{T}},
+\end{aligned}
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which is a Cholesky decomposition obtained recursively from the decomposition of \(P\) and the Schur complement \(\mathcal{Q} / P\).  Beginning the recursion with \(P = \mathcal{Q}_{11}\) (the upper left entry) and \(L_{11} = \sqrt{P}\) leads to a practical &lt;em&gt;algorithm&lt;/em&gt; for computing the decomposition.  The definiteness condition of \(\mathcal{Q} \succ 0\) is essential to continuing this process since otherwise we would not be able to recurse on the Schur complement \(\mathcal{Q} / P\).  What would happen in practice is that we would try to divide by zero or to take the square root of a negative number.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;34
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;35
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;36
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;37
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;38
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;39
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;40
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#ff79c6&#34;&gt;as&lt;/span&gt; np
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; math &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; sqrt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;FLOAT &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;float64
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;LinAlgError&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;pass&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;cholesky&lt;/span&gt;(A):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&amp;#34;An extremely terrible Cholesky implementation.&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    A &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;array(A, dtype&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;FLOAT)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    n &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; A&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;shape[&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;]  &lt;span style=&#34;color:#6272a4&#34;&gt;# A = [[P; C]; [C&amp;#39;; Q]]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;len&lt;/span&gt;(A&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;shape) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;or&lt;/span&gt; A&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;shape[&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; n:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;raise&lt;/span&gt; ValueError(&lt;span style=&#34;color:#f1fa8c&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;A must be a square matrix but got &lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;{&lt;/span&gt;A&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;shape&lt;span style=&#34;color:#f1fa8c&#34;&gt;=}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;not&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;all(A &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; A&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;T):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;raise&lt;/span&gt; ValueError(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;A must be a symmetric matrix!&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    L &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;zeros_like(A)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Q &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;copy(A)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;range&lt;/span&gt;(n):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        P &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;float&lt;/span&gt;(Q[&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        C &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Q[&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;:][&lt;span style=&#34;color:#ff79c6&#34;&gt;None&lt;/span&gt;, :]  &lt;span style=&#34;color:#6272a4&#34;&gt;# a row vector&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Q &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Q[&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;:, &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            L[i, i] &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; sqrt(P)  &lt;span style=&#34;color:#6272a4&#34;&gt;# This will detect negative eigenvalues&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#ff79c6&#34;&gt;except&lt;/span&gt; ValueError:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#ff79c6&#34;&gt;raise&lt;/span&gt; LinAlgError(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Matrix A is not positive definite&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        L[i &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; :, i] &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; L[i, i]) &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt; C
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Q &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; Q &lt;span style=&#34;color:#ff79c6&#34;&gt;-&lt;/span&gt; C&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;T &lt;span style=&#34;color:#ff79c6&#34;&gt;@&lt;/span&gt; (C &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; P)  &lt;span style=&#34;color:#6272a4&#34;&gt;# Division by P will fail on a *semi*-definite matrix&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; L
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#ff79c6&#34;&gt;in&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#bd93f9&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#bd93f9&#34;&gt;30&lt;/span&gt;, size&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1000&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    A &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;normal(size&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;(n, n))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    A &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; A &lt;span style=&#34;color:#ff79c6&#34;&gt;@&lt;/span&gt; A&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;T
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    L &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; cholesky(A)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;assert&lt;/span&gt; np&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;allclose(L &lt;span style=&#34;color:#ff79c6&#34;&gt;@&lt;/span&gt; L&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;T, A)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Passed :)&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#6272a4&#34;&gt;# org-mode recognizes this odd &amp;#39;return&amp;#39; as the output&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Passed :)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Testing Definiteness): The Cholesky decomposition is not only guaranteed to succeed if $\mathcal{Q} \succ 0$, it is also &lt;em&gt;guaranteed to fail&lt;/em&gt; if $\mathcal{Q} \succ 0$ does not hold.  Thus, computationally, the Cholesky decomposition serves as a reliable means of testing the definiteness of a matrix: a matrix $A$ is positive definite &lt;em&gt;if and only if&lt;/em&gt; a Cholesky decomposition algorithm successfully terminates in a factorization $A = LL^{\mathsf{T}}$.&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Computing Schur Complements): Even though we&amp;rsquo;ve derived the Cholesky decomposition from the Schur complement, we can also go the other way.  That is, the Cholesky decomposition algorithm can be used to compute Schur complements.  Moreover, this results directly in the Cholesky decomposition of the Schur complement itself, and therefore in a representation of $\mathcal{Q} / P$ which provides a numerical guarantee on the positive definiteness of the Schur complement.  To see this, consider the calculations below:&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathcal{Q}
+&amp;amp;= \begin{bmatrix}P &amp;amp; C\\ C^{\mathsf{T}} &amp;amp; Q\end{bmatrix}\\
+&amp;amp;= \begin{bmatrix}L_{11} &amp;amp; 0\\ L_{12} &amp;amp; L_{22} \end{bmatrix}\begin{bmatrix}L_{11}^{\mathsf{T}} &amp;amp; L_{12}^{\mathsf{T}} \\ 0 &amp;amp; L_{22}^{\mathsf{T}} \end{bmatrix}\\
+&amp;amp;= \begin{bmatrix}L_{11}L_{11}^{\mathsf{T}} &amp;amp; L_{11}L_{12}^{\mathsf{T}} \\ L_{12}L_{11}^{\mathsf{T}} &amp;amp; L_{12}L_{12}^{\mathsf{T}} + L_{22}L_{22}^{\mathsf{T}} \end{bmatrix}
+\end{aligned}
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;whereby we can calculate the Schur complement $$\mathcal{Q} / P = L_{12}L_{12}^{\mathsf{T}} + L_{22}L_{22}^{\mathsf{T}} - L_{12}L_{11}^{\mathsf{T}} (L_{11}L_{11}^{\mathsf{T}})^{-1} L_{11}L_{12} = L_{22}L_{22}^{\mathsf{T}}.$$  Thus, the Cholesky decomposition of $\mathcal{Q} / P$ is nothing but the bottom-right block of the Cholesky decomposition of the block matrix $\mathcal{Q}$.  The advantage of this method is in numerical stability: the subtraction $Q - C^{\mathsf{T}} P^{-1} C$ not only involves a pesky inversion of the matrix $P$, but it also involves the &lt;em&gt;difference&lt;/em&gt; of two positive definite matrices, which, due to numerical roundoff, can result in a matrix which is in actuality indefinite.  Using this method, if the Cholesky algorithm succeeds, then we are in the clear.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;probability-and-statistics&#34;
+    &gt;Probability and Statistics&lt;a href=&#34;#probability-and-statistics&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;Quadratic forms appear in many places in statistic, largely as a result of computing second order statistics (the mean and the variance).  Remarkably, though I derived them from examples in optimization, both the Schur complement and the Cholesky factorization play important roles in this theory as well.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;computations-with-the-mean-and-the-variance&#34;
+    &gt;Computations with the Mean and the Variance&lt;a href=&#34;#computations-with-the-mean-and-the-variance&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Two of the most important statistics of an $\mathbb{R}$-valued random variable, call it \(X\), are the mean and the variance \(\mu = \mathbb{E}X\) and \(\sigma^2 = \mathbb{E}(X - \mu)^2\).  Taken together, \((\mu, \sigma^2)\) are the &lt;em&gt;second-order statistics&lt;/em&gt; of \(X\).  The mean value measures the central tendency of \(X\), serving as one estimate of its &amp;ldquo;typical&amp;rdquo; value, and the variance \(\sigma^2\) is the average squared distance of \(X\) from its mean value.  When \(\sigma^2\) is small, then the probability that \(X\) is close to \(\mu\) is high, and when \(\sigma^2\) is large, that probability is small.&lt;/p&gt;
+&lt;p&gt;For vectors of random variables \(\mathbf{X} = (X_1, \ldots, X_n) \in \mathbb{R}^n\) the mean is simply defined element-wise \[\mathbb{E}\mathbf{X} = \begin{bmatrix}
+\mathbb{E}X_1\\ \vdots\\ \mathbb{E}X_n\\
+\end{bmatrix} = \begin{bmatrix}\mu_1\\ \vdots \\ \mu_n \end{bmatrix} = \bm{\mu}.\]  The variance of the vector random variable becomes somewhat more complicated, as the best definition is now a &lt;em&gt;matrix&lt;/em&gt;.  This &lt;em&gt;variance matrix&lt;/em&gt;, usually denoted \(\Sigma \in \mathbb{R}^{n \times n}\), is defined through an outer-product of the centered random variables \[\Sigma = \mathbb{E}(\mathbf{X} - \mathbf{\mu})(\mathbf{X} - \mathbf{\mu})^{\mathsf{T}},\] and includes all of the individual (&lt;em&gt;i.e.&lt;/em&gt;, marginal) variance \(\Sigma_{ii} = \mathbb{E}(X_i - \mu_i)^2\), but also all of the &lt;em&gt;co-variances&lt;/em&gt; \(\Sigma_{ij} = \mathbb{E}(X_i - \mu_i)(X_j - \mu_j)\).  These covariance terms provide a measure of how the random variables in the vector tend to move together &amp;ndash; &lt;em&gt;i.e.&lt;/em&gt;, they provide a quantitative measure of dependence.  The reason for this interpretation may become clear when we look at estimating one random variable given another.&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;sampling&#34;
+    &gt;Sampling&lt;a href=&#34;#sampling&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;It is easy to see that the covariance matrix is symmetric &amp;ndash; indeed, \(\Sigma_{ij} = \mathbb{E}(X_i - \mu_i)(X_j - \mu_j) = \mathbb{E}(X_j - \mu_j)(X_i - \mu_i) = \Sigma_{ji}\).  What is somewhat less obvious is that it is also &lt;em&gt;positive semi-definite&lt;/em&gt; \(\Sigma \succeq 0\).  To see this:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+a^{\mathsf{T}} \Sigma a^{\mathsf{T}}
+&amp;amp;= a^{\mathsf{T} }\bigl[\mathbb{E}(\mathbf{X} - \bm{\mu})(\mathbf{X} - \bm{\mu})^{\mathsf{T}} \bigr] a\\
+&amp;amp;\overset{(a)}{=} \mathbb{E} a^{\mathsf{T}} (\mathbf{X} - \bm{\mu})(\mathbf{X} - \bm{\mu})^{\mathsf{T}} a\\
+&amp;amp;\overset{(b)}{=} \mathbb{E} ||a^{\mathsf{T}} (\mathbf{X} - \bm{\mu})||_2^2 \ge 0,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \((a)\) uses the &lt;em&gt;linearity of expectation&lt;/em&gt; \(a\mathbb{E}X = \mathbb{E}[aX]\) and \((b)\) uses \(a^{\mathsf{T}} a = ||a||_2^2 := \sum_{i = 1}^n a_i^2\).  For simplicity, I will assume that \(\Sigma\) is &lt;em&gt;positive definite&lt;/em&gt; \(\Sigma \succ 0\), which is generally the case &amp;ndash; if \(\Sigma\) is not positive definite, then it can be shown that (at least) two components of the vector \(\mathbf{X}\) must be perfectly linearly related, &lt;em&gt;e.g.&lt;/em&gt;, \(X_1 = X_2 - X_3\), a case we simply exclude.&lt;/p&gt;
+&lt;p&gt;Since \(\Sigma \succ 0\), it must admit a Cholesky factorization \(\Sigma = LL^{\mathsf{T}}\).  This factorization can be used computationally to &lt;em&gt;sample&lt;/em&gt; random variables with a prescribed variance matrix.  As long as it is possible to sample independent random variables with variance \(1\), then we can construct a random vector with variance equal to the \(n \times n\) identity matrix \(I_n\) (how?) &amp;ndash; call this vector \(\mathbf{Z}\).  Supposing that \(\mathbf{Z}\) has zero mean \(\mathbb{E}\mathbf{Z} = 0\) (adding back a constant mean vector \(\bm{\mu}\) afterwards is easy) we can now transform \(\mathbf{Z}\) so that it has variance \(\Sigma\): let \(\mathbf{X} = L\mathbf{Z}\) and calculate:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathbb{E}\mathbf{XX}^{\mathsf{T}}
+&amp;amp;= \mathbb{E}(L\mathbf{Z})(L\mathbf{Z})^{\mathsf{T}}\\
+&amp;amp;= \mathbb{E}L\mathbf{Z}\mathbf{Z}^{\mathsf{T}} L^{\mathsf{T}}\\
+&amp;amp;= L\bigl[\mathbb{E}\mathbf{Z}\mathbf{Z}^{\mathsf{T}} \bigr]L^{\mathsf{T}}\\
+&amp;amp;= LI_n L^{\mathsf{T}}\\
+&amp;amp;= \Sigma.
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;Incidentally, a slight modification to the calculation above can show us that if \(\mathbf{X}\) has variance matrix \(\Sigma\), then for any matrix \(A\), the variance of \(A\mathbf{X}\) is given by \(A\Sigma A^{\mathsf{T}}\).&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;linear-minimum-mean-squared-error-estimation&#34;
+    &gt;Linear Minimum Mean Squared Error Estimation&lt;a href=&#34;#linear-minimum-mean-squared-error-estimation&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;To understand more about the meaning of the variance matrix, let&amp;rsquo;s see how it appears in a particularly important quadratic optimization problem: the linear minimum mean-squared error estimator (LMMSE estimator).  The setup for this problem is that we have a joint random variable \((X, Y)\) where \(X\) has dimension \(m\) and \(Y\) has dimension \(n\), and where \(X, Y\) have a &lt;em&gt;known&lt;/em&gt; joint variance matrix:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\text{Var}\begin{bmatrix}X\\ Y\end{bmatrix} = \begin{bmatrix}\Sigma_X &amp;amp; R\\ R^{\mathsf{T}} &amp;amp; \Sigma_Y \end{bmatrix} := \Sigma
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;\(\Sigma \in \mathbb{S}_{++}^{n + m}\), and mean values \(\mu_X \in \mathbb{R}^m \mu_Y \in \mathbb{R}^n\).  We want to find a &amp;ldquo;gain matrix&amp;rdquo; \(K \in \mathbb{R}^{m \times n}\) and a &amp;ldquo;bias vector&amp;rdquo; \(b \in \mathbb{R}^{n}\) to solve the following problem:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\underset{K, b}{\text{minimize}}\ \frac{1}{2}\mathbb{E}||X - KY - b||_2^2.
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;The interpretation of this problem is that we are making an actual observation of \(Y\), and want to use that to make some inference about what the value of \(X\) is, given the joint second order statistics (mean and variance) of \((X, Y)\).  An example application is that \(X\) is some &amp;ldquo;state&amp;rdquo; we are interested in (&lt;em&gt;e.g.&lt;/em&gt;, temperature, position, velocity, &lt;em&gt;etc&lt;/em&gt;.) and \(Y\) is the measurement of some sensor system.&lt;/p&gt;
+&lt;p&gt;To solve this problem, first start by minimizing over \(b\).  If we expand the objective we have&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\frac{1}{2}\mathbb{E} ||X - KY - b||_2^2
+&amp;amp;= \frac{1}{2}\mathbb{E}||X - KY||_2^2 + \frac{1}{2}||b||_2^2 - \mathbb{E}(X - KY)^{\mathsf{T}} b\\
+&amp;amp;= \frac{1}{2}\bigl((\mu_X - K\mu_Y) - b\bigr)^{\mathsf{T}} \bigl((\mu_X - K\mu_Y) - b\bigr) + \frac{1}{2}\mathbb{E}||X - KY||_2^2 - (\mu_X - K\mu_Y)^{\mathsf{T}}(\mu_X - K\mu_Y),
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;from which it is clear the optimal value is \(b = \mu_X - K\mu_Y\).  It is quite convenient that the optimal value of \(b\) makes \(X - KY - b\) have zero mean.  Because of this we can simply assume, without loss of generality, that \(\mathbb{E}X = 0\) and \(\mathbb{E}Y = 0\); indeed, we could make the substitutions \(X_0 = X - \mu_X\) &lt;em&gt;etc.&lt;/em&gt;, but this is unnecessarily cumbersome.  So, making this zero mean assumption, we again expand out the objective function&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\mathbb{E}||X - KY||_2^2
+&amp;amp;= \mathbb{E}(X - KY)^{\mathsf{T}}(X - KY)\\
+&amp;amp;= \mathbb{E}\bigl( X^{\mathsf{T}} X - X^{\mathsf{T}}KY - Y^{\mathsf{T}}K^{\mathsf{T}}X - Y^{\mathsf{T}}K^{\mathsf{T}}KY \bigr)\\
+&amp;amp;= \mathsf{tr}\bigl(\Sigma_X - KR^{\mathsf{T}} - R^{}K^{\mathsf{T}} + K\Sigma_Y K^{\mathsf{T}} \bigr)\\
+&amp;amp;= \mathsf{tr}(K - R\Sigma_Y^{-1})\Sigma_Y(K - R\Sigma_Y^{-1})^{\mathsf{T}} + \mathsf{tr}(\Sigma_X - R \Sigma_Y^{-1} R^{\mathsf{T}}),
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where in the last step we are again completing the square.  The second trace term does not depend upon \(K\), and the first term is minimized by the choice \(K = R\Sigma_Y^{-1}\) (why?  Obtain a generalization for quadratic forms and use \(\Sigma_Y \succ 0\)).  Remarkably, the &lt;em&gt;value&lt;/em&gt; of the objective at the optimum is given exactly by&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\underset{K}{\text{min}}\ \mathbb{E}||X - KY||_2^2 = \mathsf{tr}(\Sigma_X - R \Sigma_Y^{-1} R^{\mathsf{T}}) = \mathsf{tr}(\Sigma / \Sigma_Y),
+\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which is another Schur complement!  More generally, at \(K^\star = R\Sigma_Y^{-1}\) we have that \(\text{Var}(X - K^\star Y) = \Sigma / \Sigma_Y\) so that the variance matrix of the error vector \(E = X - KY\) is given exactly by a Schur complement in the original joint variance matrix.  This Schur complement is measuring the amount of variance which is removed from \(\Sigma_X\) by conditioning on \(Y\).  Another worthwhile observation is that \(\mathsf{tr}E^{\mathsf{T}} K^\star Y = \mathsf{tr}(X - R\Sigma_Y^{-1} Y)^{\mathsf{T}} R\Sigma_Y^{-1} Y = 0\), which is to say that &lt;em&gt;the estimate is orthogonal to the error&lt;/em&gt;.  This is not a coincidence and is a consequence of the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Hilbert_projection_theorem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Projection Theorem&lt;/a
+&gt;
+.&lt;/p&gt;
+&lt;p&gt;We can construct an illustrative example of these calculations, along with the sampling scheme of the previous section in two dimensions.  For this illustration I&amp;rsquo;m using the variance matrix \(\Sigma = \begin{bmatrix}\sigma_X^2 &amp;amp; \rho\sigma_X \sigma_Y \\ \rho \sigma_X \sigma_Y &amp;amp; \sigma_Y^2 \end{bmatrix}\) and thus the optimal gain is \(K = \rho \sigma_X \sigma_Y \times \frac{1}{\sigma_y^2} = \rho \frac{\sigma_X}{\sigma_Y}\) which leads to \(\hat{X}|Y = \rho \frac{\sigma_X}{\sigma_Y} Y\), and \(\sigma^2_{X|Y} = (1 - \rho)\sigma_X^2\) which are all worthwhile formulas to commit to memory.  The particular values used in the below example are \(\sigma_X^2 = 4, \sigma_Y^2 = 1, \rho = 0.8\).  The way that the estimator changes in response to changes in parameters can be visualized by inspecting the equations provided earlier &amp;ndash; in particular, the gain \(K\) and the conditional variance \(\sigma^2_{X|Y}\) both change linearly in response to changes in \(\rho\) or \(\sigma_X^2\).&lt;/p&gt;
+
+
+&lt;p&gt;It may at first look a bit odd that the regression line is not aligned with the principle axis of the contour plot.  This is not a mistake.  The regression line which &lt;em&gt;is&lt;/em&gt; aligned with that &amp;ldquo;natural looking&amp;rdquo; direction is obtained from &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Principal_component_regression&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Principle Component Regression&lt;/a
+&gt;
+, and is sub-optimal in this setting where we know exact statistics.  If the statistics \(\Sigma\) have to be estimated from available data, then it is possible that the regularization effect got from looking only at some top \(k\) principle components gives us overall lower squared error on a test set.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (MMSE Estimator): As opposed to the LMMSE estimator, the MMSE estimator is the optimal estimator which is not constrained to be linear.  The MMSE in general depends upon all of the higher order statistics, and cannot be computed without full knowledge of the joint distribution of $X, Y$.&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (The Gaussian Distribution): These formulas also arise in the conditioning formulas for&lt;/kbd&gt; &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Conditional_distributions&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;the Gaussian distribution&lt;/a
+&gt;
+.  &lt;kbd&gt;This is not exactly a coincidence &amp;ndash; Gaussian&amp;rsquo;s are fully characterized by their second order statistics and, as a family of distributions, are closed under linear combinations.  In the Gaussian case, the MMSE coincides with the LMMSE.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h3 class=&#34;group &#34; id=&#34;linear-regression&#34;
+    &gt;Linear Regression&lt;a href=&#34;#linear-regression&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at yet another example: linear regression.  This is a problem which is closely related to &lt;a
+    class=&#34;link&#34;
+    href=&#34;#linear-minimum-mean-squared-error-estimation&#34;&gt;Linear Minimum Mean Squared Error Estimation&lt;/a
+&gt;
+, but instead of using the observations \(Y\) of a sensor to estimate some state variable \(X\), we consider a &lt;em&gt;finite&lt;/em&gt; dataset \(\mathcal{D}_N = \{(x_i, y_i)\}_{i = 1}^N\) of \(N\) examples.  The goal of linear regression is to find some model function \(f\) such that the average squared error of the model \[y_i \approx f(x_i)\] is minimized.  Formally, we would write&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\underset{f \in \mathcal{F}}{\text{minimize}}\ \frac{1}{2N}\sum_{i = 1}^N \big(y_i - f(x_i)\big)^2
+\tag{$R_{\mathcal{F}}$}
+\end{equation}&lt;/p&gt;
+&lt;p&gt;where \(\mathcal{F}\) is some &amp;ldquo;admissible class&amp;rdquo; of functions.&lt;/p&gt;
+&lt;p&gt;The simplest useful class of functions \(\mathcal{F}\) are &lt;em&gt;linear functions&lt;/em&gt; \(f(x) = x^{\mathsf{T}} \beta\), parameterized by some vector \(\beta\).  Specializing the problem to this case is the problem of (ordinary) &lt;em&gt;linear regression&lt;/em&gt;.  By expanding the objective function we can easily pluck out the optimizer:&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\frac{1}{2N}\sum_{i = 1}^N \big(y_i - f(x_i)\big)^2
+&amp;amp;= \frac{1}{2N}\sum_{i = 1}^N \big(y_i - x_i^{\mathsf{T}} \beta \big)^2\\
+&amp;amp;= \frac{1}{2N}\sum_{i = 1}^N y_i^2 - \frac{1}{N}\sum_{i = 1}^N y_i (x_i^{\mathsf{T}} \beta) + \frac{1}{2N}\sum_{i = 1}^N  (x_i^{\mathsf{T}} \beta)^2\\
+&amp;amp;= \kappa - \big(\frac{1}{N}\sum_{i = 1}^N y_i x_i \big)^{\mathsf{T}} \beta + \frac{1}{2N}\sum_{i = 1}^N  \mathsf{tr}\ (x_i^{\mathsf{T}} \beta)(x_i^{\mathsf{T}} \beta) \\
+&amp;amp;= \kappa -  \big(\frac{1}{N}\sum_{i = 1}^N y_i x_i \big)^{\mathsf{T}} \beta + \frac{1}{2} \beta^{\mathsf{T}} \big(\frac{1}{N}\sum_{i = 1}^N x_i x_i^{\mathsf{T}} \big) \beta,
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;and hence \[\beta^\star_{lr} = \big( \frac{1}{N}\sum_{i = 1}^N x_i x_i^{\mathsf{T}} \big)^{-1} \big( \frac{1}{N}\sum_{i = 1}^N y_i x_i \big).\]&lt;/p&gt;
+&lt;p&gt;The whole problem can be made considerably simpler by means of matrix notation&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\mathbf{y} = \begin{bmatrix}y_1\\ \vdots\\ y_N \end{bmatrix}, \mathbf{X} = \begin{bmatrix}x_1^{\mathsf{T}} \\ \vdots \\ x_N^{\mathsf{T}} \end{bmatrix},\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;so that&lt;/p&gt;
+&lt;p&gt;\begin{equation}
+\begin{aligned}
+\frac{1}{2N} \sum_{i = 1}^N \bigl( y_i - x_i^{\mathsf{T}} \beta \bigr)^2 &amp;amp;= \frac{1}{2N}||\mathbf{y} - \mathbf{X}\beta||_2^2\\
+\implies \beta^\star_{lr} = \bigl(\mathbf{X}^{\mathsf{T}} \mathbf{X}\bigr)^{-1} \mathbf{X}^{\mathsf{T}} \mathbf{y},
+\end{aligned}\notag
+\end{equation}&lt;/p&gt;
+&lt;p&gt;which is a rather famous expression.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt; (Admissible Functions): Contrary to initial impressions, regression problem $R_\mathcal{F}$ can actually be solved, in closed form, at least up to an $\epsilon$ of approximation error, for an extremely large class of functions $\mathcal{F}$.  Indeed, for just one example when each $x$ is a single real number (to lighten notation) $x_i \in \R$ (as opposed to a vector) and $\mathcal{F}$ is the class of all &lt;em&gt;bounded and continuous&lt;/em&gt; functions, then any $f \in \F$ can be (uniformly) approximated to arbitrary accuracy using a polynomial $f_a(x) \approx \sum_{k = 0}^K a_k x^k$ parameterized by the coefficients $a$&lt;/kbd&gt; (this is the &lt;a
+    class=&#34;link&#34;
+    href=&#34;https://en.wikipedia.org/wiki/Stone%E2%80%93Weierstrass_theorem&#34;target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Stone-Weierstrass Theorem&lt;/a
+&gt;
+).  &lt;kbd&gt;Each sample $x_i$ can then be transformed into a vector $(1, x_i, x_i^2, \ldots, x_i^K)$, and we can perform &lt;em&gt;linear&lt;/em&gt; regression with the parameters $\beta = (1, a_1, \ldots, a_K)$.&lt;/kbd&gt;&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;&lt;strong&gt;Remark&lt;/strong&gt;: The way I&amp;rsquo;ve written the optimal solution $\beta_{lr}^\star$ is naive.  Computationally, the problem will usually be solved by means of a QR or Singular Value decomposition of the data matrix $X$ or by an iterative descent algorithm.  Analytically, it is also possible to write the optimal solution using the pseudo-inverse as in $\beta_{lr}^\star = X^\dagger y$, which is much more notationally compact, and doesn&amp;rsquo;t assert the existence of an inverse matrix.  Indeed, writing out&lt;/kbd&gt; \(\bigl(\mathbf{X}^{\mathsf{T}} \mathbf{X}\bigr)^{-1} \mathbf{X}^{\mathsf{T}} \mathbf{y}\) &lt;kbd&gt;is a plain waste of ink.&lt;/kbd&gt;&lt;/p&gt;
+
+
+&lt;h2 class=&#34;group &#34; id=&#34;conclusion&#34;
+    &gt;Conclusion&lt;a href=&#34;#conclusion&#34;
+        &gt;&lt;i class=&#34;eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100&#34;&gt;&lt;/i&gt;&lt;/a
+&gt;&lt;/h2&gt;
+
+&lt;p&gt;This post is a bit of a whirlwind tour of fundamental facts about quadratic forms and positive definite matrices.  All of these facts are truly elementary pieces of the computational linear algebra toolkit, and serve as building blocks for more sophisticated problems.  Indeed, a substantial motivation for writing all of this down is that now I can fearlessly use all these facts in future posts without feeling like I&amp;rsquo;m skipping over important details!&lt;/p&gt;
+&lt;p&gt;I hope you, dear reader (I trust there is at least one 🙏), have enjoyed this tour and can now comfortably apply this knowledge to your own problems :)&lt;/p&gt;</description></item><item>
             <title>Generalized Eigenvalue Problems and Trace Optimization</title>
             <link>https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/</link>
             <pubDate>Tue, 18 Jul 2023 00:00:00 -0700</pubDate>
