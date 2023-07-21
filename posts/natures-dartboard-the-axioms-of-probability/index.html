@@ -13,7 +13,7 @@
 <meta property="og:title" content="Nature&#39;s Dartboard: The Axioms of Probability" />
 <meta property="og:description" content="The basic axioms of probability and the idea of a random variable as a function from the sample space to \(\mathbb{R}\) are quite abstract and rather confusing at first pass. However, the axioms can be well motivated from our intuition, and defining random variables simply as functions turns out to be a brilliant and intuitive abstraction. My goal in this post is to try to explain the ideas behind the axiomatization of probability theory, and hopefully make the study of measure-theoretic probability seem a bit less intimidating.
 " />
-<meta property="og:url" content="https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/" /><meta property="article:published_time" content="2023-04-23T00:00:00-07:00" /><meta property="article:modified_time" content="2023-07-20T22:53:27-07:00" /><meta name="theme-color" content="#dd6065" />
+<meta property="og:url" content="https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/natures-dartboard-the-axioms-of-probability/" /><meta property="article:published_time" content="2023-04-23T00:00:00-07:00" /><meta property="article:modified_time" content="2023-07-20T23:04:12-07:00" /><meta name="theme-color" content="#dd6065" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Nature&#39;s Dartboard: The Axioms of Probability - Quant Out of Water" />
 <meta name="apple-mobile-web-app-status-bar-style" content="white" />
@@ -33,7 +33,7 @@
     "@type": "WebPage",
     "@id": "https:\/\/rjtk.github.io\/posts\/natures-dartboard-the-axioms-of-probability\/"
   },"genre": "posts","wordcount": 4493 ,
-  "url": "https:\/\/rjtk.github.io\/posts\/natures-dartboard-the-axioms-of-probability\/","datePublished": "2023-04-23T00:00:00-07:00","dateModified": "2023-07-20T22:53:27-07:00","author": {
+  "url": "https:\/\/rjtk.github.io\/posts\/natures-dartboard-the-axioms-of-probability\/","datePublished": "2023-04-23T00:00:00-07:00","dateModified": "2023-07-20T23:04:12-07:00","author": {
     "@type": "Person",
     "name": "qoow"
   },"description": ""
@@ -131,7 +131,7 @@
                     <i class="eva eva-edit-2-outline mr-1"></i>
                     <span>
                         <time
-                            title="Last modified on: 20 Jul 2023 22:53:27"datetime="2023-07-20T22:53:27-07:00">20 Jul 2023</time
+                            title="Last modified on: 20 Jul 2023 23:04:12"datetime="2023-07-20T23:04:12-07:00">20 Jul 2023</time
                         >
                     </span>
                 </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
@@ -317,13 +317,13 @@ a clever way, reassemble <strong>two</strong> copies of the original sphere.  He
 <p>All of the formalism laid out in understanding the probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) is rather complicated.  Fortunately, in most &ldquo;practical&rdquo; scenarios where we want to <em>use</em> probability for modelling, we just let this formalism sit back as an abstract foundation, more-or-less out of sight.  We instead work more directly with <em>random variables</em> which are defined as nothing but <em>functions from \(\Omega\) into \(\mathbb{R}\)</em> as in: \[X: \Omega \rightarrow \mathbb{R},\] sometimes written as \(X(\omega)\).</p>
 <p>The &ldquo;randomness&rdquo; thus passes from Nature&rsquo;s Dartboard \(\Omega\), an abstract set that we don&rsquo;t want to think about too much, to \(\mathbb{R}\), a natural set that we like to work with.  The way this works is as follows &ndash; suppose we want to compute the probability that \(X(\omega)\) is less than some real number \(x\), that is \(F(x) = \mathbb{P}(X \le x)\).  This is an important function called the <em>cumulative distribution function</em> of \(X\) and it turns out to be enough to fully determine the random behaviour of \(X\).  The notation \(\mathbb{P}(X \le x)\) is really nothing but a shorthand for \[F(x) = \mathbb{P}(\{\omega: X(\omega) \le x\}).\]</p>
 <p>That is, the common notation \(\mathbb{P}(X \le x)\), which is used to mean &ldquo;the probability that the random variable \(X\) is less than or equal to the real number \(x\)&rdquo; is really a shorthand for \(\mathbb{P}(\{\omega:\ X(\omega) \le x\})\) which is &ldquo;the volume of the set of all events \(\omega\) such that the function \(X\) evaluated \(X(\omega)\) is less than or equal to the real number \(x\)&rdquo;.  We can simplify this further:</p>
-<p>\begin{equation*}
+<p>\begin{equation}
 \begin{aligned}
 F(x)
-&amp;= \mathbb{P}(\{ω: X(ω) ≤ x\})<br />
-&amp;= \mathbb{P}(\{ω: X(ω) ∈ (-∞, x]\})<br />
-&amp;= \mathbb{P}(X<sup>-1</sup> ((-∞, x]))<br />
-&amp;= \mathbb{P} ˆ X<sup>-1</sup> ((-∞, x]).
+&amp;= \mathbb{P}(\{\omega: X(\omega) \le x\})\\
+&amp;= \mathbb{P}(\{\omega: X(\omega) \in (-\infty, x]\})\\
+&amp;= \mathbb{P}(X^{-1} ((-\infty, x]))\\
+&amp;= \mathbb{P} \circ X^{-1} ((-\infty, x]).
 \end{aligned}\notag
 \end{equation}</p>
 <p>These elementary manipulations show us that that the cumulative distribution function \(F\) is nothing but the composition of the probability measure \(\mathbb{P}\) with the inverse mapping of \(X\) (the domain of which are all the half-open intervals like \((-\infty, x]\))!  What does this mean?  It allows us to define events on \(\mathbb{R}\), like the probability of the event \(X \le x\) by measuring the size of the set of all \(\omega\) which satisfy \(X(\omega) \le x\).  So, what we do &ldquo;in practice&rdquo; is that we start by positing a distribution function \(F\) (like a Gaussian distribution) which we want to work with on \(\mathbb{R}\), and then we just trust that there is some appropriate probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) which is &ldquo;adequately expressive&rdquo; and some function \(X\) such that \(F = \mathbb{P} \circ X^{-1}\).  The function \(X\) is now a random variable having <em>c.d.f.</em> \(F\).  This gives us a huge variety of possibilities for modelling, and the randomness on \(\mathbb{R}\) is inherited from the simple and intuitive notion of randomness as volume on Nature&rsquo;s dartboard.</p>

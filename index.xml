@@ -1179,13 +1179,13 @@ a clever way, reassemble &lt;strong&gt;two&lt;/strong&gt; copies of the original
 &lt;p&gt;All of the formalism laid out in understanding the probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) is rather complicated.  Fortunately, in most &amp;ldquo;practical&amp;rdquo; scenarios where we want to &lt;em&gt;use&lt;/em&gt; probability for modelling, we just let this formalism sit back as an abstract foundation, more-or-less out of sight.  We instead work more directly with &lt;em&gt;random variables&lt;/em&gt; which are defined as nothing but &lt;em&gt;functions from \(\Omega\) into \(\mathbb{R}\)&lt;/em&gt; as in: \[X: \Omega \rightarrow \mathbb{R},\] sometimes written as \(X(\omega)\).&lt;/p&gt;
 &lt;p&gt;The &amp;ldquo;randomness&amp;rdquo; thus passes from Nature&amp;rsquo;s Dartboard \(\Omega\), an abstract set that we don&amp;rsquo;t want to think about too much, to \(\mathbb{R}\), a natural set that we like to work with.  The way this works is as follows &amp;ndash; suppose we want to compute the probability that \(X(\omega)\) is less than some real number \(x\), that is \(F(x) = \mathbb{P}(X \le x)\).  This is an important function called the &lt;em&gt;cumulative distribution function&lt;/em&gt; of \(X\) and it turns out to be enough to fully determine the random behaviour of \(X\).  The notation \(\mathbb{P}(X \le x)\) is really nothing but a shorthand for \[F(x) = \mathbb{P}(\{\omega: X(\omega) \le x\}).\]&lt;/p&gt;
 &lt;p&gt;That is, the common notation \(\mathbb{P}(X \le x)\), which is used to mean &amp;ldquo;the probability that the random variable \(X\) is less than or equal to the real number \(x\)&amp;rdquo; is really a shorthand for \(\mathbb{P}(\{\omega:\ X(\omega) \le x\})\) which is &amp;ldquo;the volume of the set of all events \(\omega\) such that the function \(X\) evaluated \(X(\omega)\) is less than or equal to the real number \(x\)&amp;rdquo;.  We can simplify this further:&lt;/p&gt;
-&lt;p&gt;\begin{equation*}
+&lt;p&gt;\begin{equation}
 \begin{aligned}
 F(x)
-&amp;amp;= \mathbb{P}(\{ω: X(ω) ≤ x\})&lt;br /&gt;
-&amp;amp;= \mathbb{P}(\{ω: X(ω) ∈ (-∞, x]\})&lt;br /&gt;
-&amp;amp;= \mathbb{P}(X&lt;sup&gt;-1&lt;/sup&gt; ((-∞, x]))&lt;br /&gt;
-&amp;amp;= \mathbb{P} ˆ X&lt;sup&gt;-1&lt;/sup&gt; ((-∞, x]).
+&amp;amp;= \mathbb{P}(\{\omega: X(\omega) \le x\})\\
+&amp;amp;= \mathbb{P}(\{\omega: X(\omega) \in (-\infty, x]\})\\
+&amp;amp;= \mathbb{P}(X^{-1} ((-\infty, x]))\\
+&amp;amp;= \mathbb{P} \circ X^{-1} ((-\infty, x]).
 \end{aligned}\notag
 \end{equation}&lt;/p&gt;
 &lt;p&gt;These elementary manipulations show us that that the cumulative distribution function \(F\) is nothing but the composition of the probability measure \(\mathbb{P}\) with the inverse mapping of \(X\) (the domain of which are all the half-open intervals like \((-\infty, x]\))!  What does this mean?  It allows us to define events on \(\mathbb{R}\), like the probability of the event \(X \le x\) by measuring the size of the set of all \(\omega\) which satisfy \(X(\omega) \le x\).  So, what we do &amp;ldquo;in practice&amp;rdquo; is that we start by positing a distribution function \(F\) (like a Gaussian distribution) which we want to work with on \(\mathbb{R}\), and then we just trust that there is some appropriate probability triple \((\Omega, \mathcal{F}, \mathbb{P})\) which is &amp;ldquo;adequately expressive&amp;rdquo; and some function \(X\) such that \(F = \mathbb{P} \circ X^{-1}\).  The function \(X\) is now a random variable having &lt;em&gt;c.d.f.&lt;/em&gt; \(F\).  This gives us a huge variety of possibilities for modelling, and the randomness on \(\mathbb{R}\) is inherited from the simple and intuitive notion of randomness as volume on Nature&amp;rsquo;s dartboard.&lt;/p&gt;
