@@ -13,7 +13,7 @@
 <meta property="og:title" content="Generalized Eigenvalue Problems and Trace Optimization" />
 <meta property="og:description" content="Most people are familiar with the concept of matrix eigenvalues. Less well known is that this concept can be fruitfully expanded to the generalized eigenvalues of pairs of matrices. Closely related are matrix trace optimization problems, which extremizes the trace of certain matrix products. Trace optimization constites a large class of practically solvable non-convex optimization problems commonly useful for dimensionality reduction and which includes the unsupervised weighted principle component analysis and the supervised method of Fisher&amp;rsquo;s Linear Discriminant. The purpose of this post is to explore some of these problems, their intuition, and their applications.
 " />
-<meta property="og:url" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><meta property="article:published_time" content="2023-07-18T00:00:00-07:00" /><meta property="article:modified_time" content="2023-07-20T22:53:26-07:00" /><meta name="theme-color" content="#dd6065" />
+<meta property="og:url" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/" /><meta property="article:published_time" content="2023-07-18T00:00:00-07:00" /><meta property="article:modified_time" content="2023-09-24T23:49:56-07:00" /><meta name="theme-color" content="#dd6065" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Generalized Eigenvalue Problems and Trace Optimization - Quant Out of Water" />
 <meta name="apple-mobile-web-app-status-bar-style" content="white" />
@@ -32,8 +32,8 @@
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https:\/\/rjtk.github.io\/posts\/generalized-eigenvalue-problems-and-trace-optimization\/"
-  },"genre": "posts","wordcount": 6162 ,
-  "url": "https:\/\/rjtk.github.io\/posts\/generalized-eigenvalue-problems-and-trace-optimization\/","datePublished": "2023-07-18T00:00:00-07:00","dateModified": "2023-07-20T22:53:26-07:00","author": {
+  },"genre": "posts","wordcount": 6167 ,
+  "url": "https:\/\/rjtk.github.io\/posts\/generalized-eigenvalue-problems-and-trace-optimization\/","datePublished": "2023-07-18T00:00:00-07:00","dateModified": "2023-09-24T23:49:56-07:00","author": {
     "@type": "Person",
     "name": "qoow"
   },"description": ""
@@ -131,7 +131,7 @@
                     <i class="eva eva-edit-2-outline mr-1"></i>
                     <span>
                         <time
-                            title="Last modified on: 20 Jul 2023 22:53:26"datetime="2023-07-20T22:53:26-07:00">20 Jul 2023</time
+                            title="Last modified on: 24 Sep 2023 23:49:56"datetime="2023-09-24T23:49:56-07:00">24 Sep 2023</time
                         >
                     </span>
                 </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
@@ -139,7 +139,7 @@
                 <span>29 mins read</span>
             </div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
                 <i class="eva eva-bar-chart-outline mr-1"></i>
-                <span>6162 words</span>
+                <span>6167 words</span>
             </div></div></div>
 <aside
             class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
@@ -532,7 +532,11 @@ J(VC)
 \implies \underset{V \in \mathcal{O}_k}{\text{max}}\ \mathsf{tr}\ V^{\mathsf{T}} \bigl(\Sigma - s^\star \Omega\bigr) V &amp;\le 0.\\
 \end{aligned}
 \end{equation}</p>
-<p>From what we know of eigenvalue problems, the maximizer \(V\) in \(\mathcal{O}_k\) of \(\mathsf{tr}\ V^{\mathsf{T}} \bigl(\Sigma - s \Omega \bigr) V\) is given by the last \(k\) eigenvectors of the matrix \(\Sigma - s \Omega\).  Lets call these \(V_s\).  We want to maximize the SNR, and thus find the largest \(s\) which satisfies the above inequalities &ndash; i.e., the optimal value \(s^\star\) should be a root of the function \[\mathcal{S}(s) = \mathsf{tr}\ V^{\mathsf{T}}_s \bigl( \Sigma - s \Omega \bigr) V_s,\] a function which can be evaluated through an eigendecomposition of \(\Sigma - s \Omega\).  (<kbd><strong>Remark</strong>: expressions like $\Sigma - s\Omega$ involving a matrix minus a scalar times another matrix are often referred to as <em>matrix pencils</em>.  For what reason, I have no idea.</kbd>)</p>
+<p>From what we know of eigenvalue problems, the maximizer \(V\) in \(\mathcal{O}_k\) of \(\mathsf{tr}\ V^{\mathsf{T}} \bigl(\Sigma - s \Omega \bigr) V\) is given by the last \(k\) eigenvectors of the matrix \(\Sigma - s \Omega\).  Lets call these \(V_s\).  We want to maximize the SNR, and thus find the largest \(s\) which satisfies the above inequalities &ndash; i.e., the optimal value \(s^\star\) should be a root of the function \[\mathcal{S}(s) = \mathsf{tr}\ V^{\mathsf{T}}_s \bigl( \Sigma - s \Omega \bigr) V_s,\] a function which can be evaluated through an eigendecomposition of \(\Sigma - s \Omega\).  (<kbd><strong>Remark</strong>: expressions like $\Sigma - s\Omega$ involving a matrix minus a scalar times another matrix are often referred to as <em>matrix pencils</em>.  I am told they are named after the concept</kbd> <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Pencil_%28geometry%29"target="_blank" rel="noopener">in geometry</a
+>
+.)</p>
 <p>To check that this can actually occur, notice that since \(\Omega \succ 0\), the function \(\mathcal{S}\) must be <em>monotone decreasing</em> on \(\R_+\).  To establish the existence of an \(s^\star\) such that \(\mathcal{S}(s^\star) = 0\), and to apply bisection search, we need to show that \(\mathcal{S}\) does actually cross \(0\).  To this end, \(\mathcal{S}(0) &gt; 0\) (since \(\Sigma \succ 0\)).  Since \(\mathcal{S}\) is strictly monotone, this is enough, but we&rsquo;d like to find a compact interval where we know \(s^\star\) lies.  I show in the detail below that \(\mathcal{S}(s) &lt; 0\) for any \(s &gt; \lambda_n(\Sigma, \Omega)\), the largest generalized eigenvalue.</p>
 <details>
   <summary>Generalized Eigenvalue Decomposition</summary>

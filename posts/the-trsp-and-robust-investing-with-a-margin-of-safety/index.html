@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en-us" class="lang-en-us">
+    <head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="This is a detailed example tying together quadratic optimization, eigenvalues, and the margin-of-safety principle applied to the Markowitz portfolio problem.
+" />
+<meta itemprop="description" content="This is a detailed example tying together quadratic optimization, eigenvalues, and the margin-of-safety principle applied to the Markowitz portfolio problem.
+" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<meta itemprop="name" content="The TRSP and Robust Investing with a Margin of Safety - Quant Out of Water" />
+<link href="https://rjtk.github.io/index.xml" title="The TRSP and Robust Investing with a Margin of Safety - Quant Out of Water" type="application/rss+xml" rel="alternate" />
+<title>The TRSP and Robust Investing with a Margin of Safety - Quant Out of Water</title><link rel="stylesheet" href="/main.1fcc545d2ef04212761e07c486eaac8b9c8e1c46af8fc344804b7383bb9116bc.css" integrity="sha256-H8xUXS7wQhJ2HgfEhuqsi5yOHEavj8NEgEtzg7uRFrw=" /><meta property="og:site_name" content="The TRSP and Robust Investing with a Margin of Safety - Quant Out of Water" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="The TRSP and Robust Investing with a Margin of Safety" />
+<meta property="og:description" content="This is a detailed example tying together quadratic optimization, eigenvalues, and the margin-of-safety principle applied to the Markowitz portfolio problem.
+" />
+<meta property="og:url" content="https://rjtk.github.io/posts/the-trsp-and-robust-investing-with-a-margin-of-safety/" /><meta property="article:publisher" content="https://rjtk.github.io/posts/the-trsp-and-robust-investing-with-a-margin-of-safety/" /><meta property="article:published_time" content="2023-07-20T00:00:00-07:00" /><meta property="article:modified_time" content="2023-08-14T22:18:14-07:00" /><meta name="theme-color" content="#dd6065" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="The TRSP and Robust Investing with a Margin of Safety - Quant Out of Water" />
+<meta name="apple-mobile-web-app-status-bar-style" content="white" />
+
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="The TRSP and Robust Investing with a Margin of Safety - Quant Out of Water" />
+<meta name="twitter:description" content="This is a detailed example tying together quadratic optimization, eigenvalues, and the margin-of-safety principle applied to the Markowitz portfolio problem.
+" />
+<meta name="twitter:url" content="https://rjtk.github.io/posts/the-trsp-and-robust-investing-with-a-margin-of-safety/" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
+<link href="/icon.png" rel="Bookmark" />
+<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "The TRSP and Robust Investing with a Margin of Safety",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/rjtk.github.io\/posts\/the-trsp-and-robust-investing-with-a-margin-of-safety\/"
+  },"genre": "posts","wordcount": 2395 ,
+  "url": "https:\/\/rjtk.github.io\/posts\/the-trsp-and-robust-investing-with-a-margin-of-safety\/","datePublished": "2023-07-20T00:00:00-07:00","dateModified": "2023-08-14T22:18:14-07:00","author": {
+    "@type": "Person",
+    "name": "qoow"
+  },"description": ""
+}
+</script>
+
+
+    </head>
+
+    <body class="dark:bg-darkBg dark:text-darkText">
+        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
+            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header
+    class="relative"
+><div class=" border-b py-6 text-center dark:border-darkBorder"><div class="text-3xl">Quant Out of Water</div></div><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
+            <div class="route-items flex w-full items-center justify-around"><a
+                        title="Home"
+                        data-active-link="/"
+                        href="/"
+                        class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                    >
+                        <i
+                            class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                        ></i>
+                        <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Home</span>
+                    </a><a
+                        title="About"
+                        data-active-link="/about/"
+                        href="/about/"
+                        class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                    >
+                        <i
+                            class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                        ></i>
+                        <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">About</span>
+                    </a>
+            </div>
+        </nav><nav class="sub-navbar z-10 flex items-center border-b px-5 py-2 dark:border-darkBorder md:px-10"><a
+                    title="Tags"
+                    data-active-link="/tags/"
+                    href="/tags/"
+                    class=" relative mr-4 flex cursor-pointer items-center text-gray-400 transition duration-150 ease-[ease] hover:text-theme dark:text-darkText"
+                >
+                    <i class="eva eva-pricetags mr-1 leading-none"></i>
+                    <span>Tags</span>
+                </a></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
+    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
+</div>
+</header>
+<main class=" relative flex flex-grow" id="swup"><style>:root {
+        --font:Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }</style>
+<div class="type-posts layout- w-full"><div class="relative h-full">
+    <div class="relative h-full">
+        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div>
+    <div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">
+        The TRSP and Robust Investing with a Margin of Safety
+    </div>
+</div>
+</div>
+<div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
+    <div>
+        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+            <i class="eva eva-clock-outline mr-1"></i>
+            <span>
+                <time
+                    title="Published in 20 Jul 2023 00:00:00"datetime="2023-07-20T00:00:00-07:00">20 Jul 2023</time
+                >
+            </span>
+        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                    <i class="eva eva-edit-2-outline mr-1"></i>
+                    <span>
+                        <time
+                            title="Last modified on: 14 Aug 2023 22:18:14"datetime="2023-08-14T22:18:14-07:00">14 Aug 2023</time
+                        >
+                    </span>
+                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-flag-outline mr-1"></i>
+                <span>12 mins read</span>
+            </div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-bar-chart-outline mr-1"></i>
+                <span>2395 words</span>
+            </div></div></div>
+<aside
+            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
+        >
+            <header>
+                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">Table of Contents</h1>
+            </header>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#duality-for-linear-equality-constrained-convex-quadratic-programming">Duality for Linear Equality Constrained Convex Quadratic Programming</a></li>
+    <li><a href="#the-markowitz-portfolio-problem">The Markowitz Portfolio Problem</a>
+      <ul>
+        <li><a href="#example">Example</a></li>
+      </ul>
+    </li>
+    <li><a href="#a-margin-of-safety">A Margin of Safety</a></li>
+    <li><a href="#the-quadratic-trsp">The Quadratic TRSP</a></li>
+    <li><a href="#computational-examples">Computational Examples</a></li>
+  </ul>
+</nav>
+        </aside><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="Faster Reads" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
+            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
+        ><p>This is a detailed example tying together quadratic optimization, eigenvalues, and the margin-of-safety principle applied to the Markowitz portfolio problem.</p>
+<p>This post was originally going to be an example section for my post about <a
+    class="link"
+    href="https://rjtk.github.io/posts/all-about-quadratic-forms/"target="_blank" rel="noopener">quadratic forms</a
+>
+.  However, it was getting way too long, so I just broke it out into it&rsquo;s own page.  Essentially, there are at least two more nice quadratic-form problems that I find interesting, and there is a modest relationship between them.  The first is a version of the famous <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Modern_portfolio_theory"target="_blank" rel="noopener">Markowitz portfolio problem</a
+>
+.  This problem can then be generalized into a <em>robust</em> Markowitz portfolio, from which one encounters the second problem: the Trust Region Subproblem (TRSP).  This TRSP will be optimized by combining bisection search with an <a
+    class="link"
+    href="https://rjtk.github.io/posts/generalized-eigenvalue-problems-and-trace-optimization/"target="_blank" rel="noopener">eigenvalue decomposition</a
+>
+.</p>
+
+
+<h2 class="group " id="duality-for-linear-equality-constrained-convex-quadratic-programming"
+    >Duality for Linear Equality Constrained Convex Quadratic Programming<a href="#duality-for-linear-equality-constrained-convex-quadratic-programming"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>A name can be given to the problem of minimizing a convex quadratic form subject to a linear equality constraint &ndash; it is a linearly constrained convex quadratic program:</p>
+<p>\begin{equation}
+\begin{aligned}
+\underset{x \in \R^n}{\text{minimize}}&amp;\quad \frac{1}{2}x^{\mathsf{T}} Q + x + q^{\mathsf{T}} x + \frac{1}{2}\kappa\\
+\text{subject to}&amp;\quad Ax = b.
+\end{aligned}\notag
+\end{equation}</p>
+<p>I wrote previously about how one can use the pseudo-inverse \(A^\dagger\) to eliminate the equality constraint and turn this problem into a more vanilla unconstrained quadratic form.  There is another insightful approach that also eliminates the constraint, which is the approach by Lagrangian Duality.  Define a function</p>
+<p>\begin{equation}
+\begin{aligned}
+\mathcal{L}(x, \nu)
+&amp;= \frac{1}{2}x^{\mathsf{T}} Q x + q^{\mathsf{T}} x + \nu^{\mathsf{T}} (Ax - b) + \frac{1}{2}\kappa\\
+&amp;= \frac{1}{2}x^{\mathsf{T}} Q x + (q + A^{\mathsf{T}} \nu)^{\mathsf{T}} x - b^{\mathsf{T}} \nu + \frac{1}{2}\kappa.
+\end{aligned}\notag
+\end{equation}</p>
+<p>whenever \(x\) is <em>feasible</em> (<em>i.e.</em>, \(Ax = b\)) the value of \(\mathcal{L}(x, \nu)\) is equal to the value of the original objective f(x)$, regardless of the value of \(\nu\).  On the other hand, if \(Ax = b\) is not feasible, then \(\nu\) can be chosen to make the value of \(\mathcal{L}\) as large as possible (since we&rsquo;re minimizing, think &ldquo;large = bad&rdquo;).  We can view this as a game wherein we are the $x$-player attempting to minimizing \(\mathcal{L}\) against an adversarial $ν$-player attempting to maximize \(\mathcal{L}\).  It is a useful property that the function \(\rho(x) = \underset{\nu \in \R^m}{\text{sup}}\ \mathcal{L}(x, \nu)\) is just another way to encode the quadratic program since $$ρ(x) = \frac{1}{2}x<sup>\mathsf{T}</sup> Q x + q<sup>\mathsf{T}</sup> x + \frac{1}{2}κ$ if \(Ax = b\) and \(\rho(x) = \infty\) otherwise.</p>
+<p>Now, what if we swap the order of maximization and minimization?  If our adversary \(\lambda\) has to act first, and we can choose \(x\) based on their choice, then we must necessarily obtain a smaller value for \(\mathcal{L}\):</p>
+<p>\begin{equation}
+\underset{x \in \R^n}{\text{inf}}\ \underset{\nu \in \R^m}{\text{sup}}\ \mathcal{L}(x, \nu) \le \underset{\nu \in \R^m}{\text{sup}} \underset{x \in \R^n}{\text{inf}}\ \mathcal{L}(x, \nu), \notag
+\end{equation}</p>
+<p>this is called the <em>minimax inequality</em>.</p>
+<p><span class="underline">TODO</span>: Show that it is an equality &ndash; do I need hyperplane separation?</p>
+<p><span class="underline">TODO</span>: Should I even actually do this by minimax?  Maybe not</p>
+<p>What this results in is another linear system of equation:</p>
+<p>\begin{equation}
+\begin{aligned}
+Qx + A^{\mathsf{T}}\nu &amp;= -q\\
+Ax &amp;= b,
+\end{aligned}\notag
+\end{equation}</p>
+<p>which we can write in matrix notation as:</p>
+<p>\begin{equation}
+\begin{bmatrix}Q &amp; A^{\mathsf{T}}\\ A &amp; 0\end{bmatrix}\begin{bmatrix}x \\ \nu \end{bmatrix} = \begin{bmatrix} -q \\ b \end{bmatrix}.\notag
+\end{equation}</p>
+<p>Thus, we can find a completely primal-dual solution to the original quadratic programming problem by solving this augmented system of equations, which is called a <a
+    class="link"
+    href="https://www.math.uh.edu/~rohop/fall_06/Chapter3.pdf"target="_blank" rel="noopener">KKT system</a
+>
+.  Unfortunately, this system does not need to be positive-definite, but at least it is symmetric!</p>
+
+
+<h2 class="group " id="the-markowitz-portfolio-problem"
+    >The Markowitz Portfolio Problem<a href="#the-markowitz-portfolio-problem"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>I generally try to avoid finance problems in this blog, but this example is incredibly famous, and a perfect illustration of quadratic optimization.  Let us imagine that we have a collection of \(N\) risky assets available to invest in, and that we know the mean \(\mu \in \R^N\) and variance \(\Sigma \in \mathbb{S}_{++}^N\) of the (random!) future returns \(r \in \R^N\) of these assets.  One particular version of the famous <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Modern_portfolio_theory"target="_blank" rel="noopener">Markowitz portfolio problem</a
+>
+ is the following, for some &ldquo;risk-aversion&rdquo; parameter \(\lambda &gt; 0\):</p>
+<p>\begin{equation}
+\begin{aligned}
+\underset{x \in \R^n}{\text{minimize}}\ \frac{1}{2}\lambda x^{\mathsf{T}} \Sigma x^{\mathsf{T}} - \mu^{\mathsf{T}} x\\
+\text{subject to}\ \mathbf{e}^{\mathsf{T}}x = w,
+\end{aligned} \tag{$\mathcal{M}$}
+\end{equation}</p>
+<p>where \(w\) is one&rsquo;s initial capital.  The constraint \(\mathbf{e}^{\mathsf{T}}x = w\) indicates that one is making a net investment of \(w\).  It is worthwhile to mention that \(w\) can be zero (even negative) &ndash; the long side of the portfolio (<em>i.e.</em>, everywhere with \(x_i &gt; 0\)) can be financed by the short side of the portfolio (<em>i.e.</em>, everywhere with \(x_i &lt; 0\)).</p>
+<p>This problem arises from the computation of the mean and variance of our actually realized returns from holding a portfolio \(x \in \R^{N}\).  That is, our expected returns are \(\mathbb{E} r^{\mathsf{T}} x = \mu^{\mathsf{T}} x\) and the variance of those returns \(\text{Var}\ r^{\mathsf{T}} x = x^{\mathsf{T}} \Sigma x\).  The objective function is reasonably well motivated by considering a quadratic approximation (or, leading to the same thing, assuming that \(r\) is Gaussian) of the exponential utility function \(\mathbb{E} \text{exp}(r^{\mathsf{T}} x)\), which is popular in <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Exponential_utility"target="_blank" rel="noopener">decision theory</a
+>
+.</p>
+<p>A primal-dual solution of this problem can be obtained by solving the corresponding KKT system</p>
+<p>\begin{equation}
+\begin{bmatrix}\Sigma &amp; \mathbf{e}\\ \mathbf{e}^{\mathsf{T}} &amp; 0\end{bmatrix}\begin{bmatrix}x \\ \nu \end{bmatrix} = \begin{bmatrix} \mu \\ w \end{bmatrix},\notag
+\end{equation}</p>
+<p>some straightforward <a
+    class="link"
+    href="https://jax.readthedocs.io/en/latest/index.html"target="_blank" rel="noopener">JAX</a
+>
+ code implementing this follows.  Using <kbd>jax.vmap</kbd> enables simultaneously computing an entire curve of solutions, and <kbd>jax.jit</kbd> dramatically speeds up this computation.  Thiis is a special case of <a
+    class="link"
+    href="https://www.amazon.com/Quadratic-Programming-Computer-Programs-Mathematics/dp/1498735754?&amp;linkCode=ll1&amp;tag=qoowrjtk-20&amp;linkId=d8932003796ab315be33abc43590b6af&amp;language=en_US&amp;ref_=as_li_ss_tl"target="_blank" rel="noopener">parametric quadratic programming</a
+>
+ <kbd><strong>Remark</strong>: The problem admits of special structure, and there is a very simple method of obtaining the whole curve $x^\star(\lambda)$ of solutions.  What is it?</kbd></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>@jax.jit
+</span></span><span style="display:flex;"><span>@partial(jax<span style="color:#ff79c6">.</span>vmap, in_axes<span style="color:#ff79c6">=</span>[<span style="color:#ff79c6">None</span>, <span style="color:#ff79c6">None</span>, <span style="color:#ff79c6">None</span>, <span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">solve_kkt</span>(Sigma, mu, w, lmbda):
+</span></span><span style="display:flex;"><span>    n <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">len</span>(mu)
+</span></span><span style="display:flex;"><span>    one <span style="color:#ff79c6">=</span> jnp<span style="color:#ff79c6">.</span>ones((n, <span style="color:#bd93f9">1</span>))
+</span></span><span style="display:flex;"><span>    K <span style="color:#ff79c6">=</span> jnp<span style="color:#ff79c6">.</span>block([[lmbda <span style="color:#ff79c6">*</span> Sigma, one], [one<span style="color:#ff79c6">.</span>T, <span style="color:#bd93f9">0</span>]])
+</span></span><span style="display:flex;"><span>    b <span style="color:#ff79c6">=</span> jnp<span style="color:#ff79c6">.</span>append(mu, w)
+</span></span><span style="display:flex;"><span>    z <span style="color:#ff79c6">=</span> jla<span style="color:#ff79c6">.</span>solve(K, b, assume_a<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;sym&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> z[:<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>], z[<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+
+<h3 class="group " id="example"
+    >Example<a href="#example"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>By way of example, I&rsquo;ve used daily stock return data from <a
+    class="link"
+    href="https://www.kaggle.com/datasets/tanavbajaj/yahoo-finance-all-stocks-dataset-daily-update"target="_blank" rel="noopener">Yahoo Finance</a
+>
+ to estimate (using the most elementary maximum-likelihood estimators) the mean \(\mu\) and variance \(\Sigma\) of the log-returns \(r_t = \mathsf{ln}(1 + \frac{p_t}{p_{t - 1}})\) of 498 stocks (I presume drawn from the S&amp;P500) over the last 1500 days.  This is obviously a very long lookback window, but this serves only to get a some numbers which are quantitatively within a reasonable ballpark.</p>
+<p>Some results of calculating and plotting portfolios for these stocks are shown below.</p>
+<figure><img src="markowitz_bullet.svg"
+         alt="Figure 1: Low and High Dimensional Markowitz Bullets"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Low and High Dimensional Markowitz Bullets</p>
+        </figcaption>
+</figure>
+
+
+
+<h2 class="group " id="a-margin-of-safety"
+    >A Margin of Safety<a href="#a-margin-of-safety"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>It is well known that this &ldquo;optimal&rdquo; portfolio is fragile.  That is, it is sensitive to errors in the estimates of the parameters.</p>
+<p>One part of why \(x^\star_{\mathcal{M}}\) can make for a poor choice is that the estimates \(\mu\) of forward returns are extremely uncertain.  Rather than relying on \(\mu\) directly, we should practice some <em>epistemic humility</em> and ensure that this is some <a
+    class="link"
+    href="https://amzn.to/3OlVET6"target="_blank" rel="noopener">margin of safety</a
+>
+ \(M\) in our estimate of \(\mu\).  That is, we allow that there is some <em>error</em> term \(\zeta\) satisfying a norm bound \(||\zeta|| \le M\) and that the <em>actual</em> mean forward returns are given by \(\mu + \zeta\).  Then, in order to construct a robust and conservative portfolio, consider the <em>minimax</em> portfolio problem</p>
+<p>\begin{equation}
+\underset{x \in \R^n}{\text{minimize}}\ \underset{\zeta: ||\zeta|| \le M}{\text{max}}\ \frac{1}{2}\lambda x^{\mathsf{T}} \Sigma x^{\mathsf{T}} - (\mu + \zeta)^{\mathsf{T}}x. \tag{$\mathcal{C}$}
+\end{equation}</p>
+<p>That a solution \(x^\star_{\mathcal{C}}\) (\(\mathcal{C}\) for &ldquo;conservative&rdquo;) actually exists follows from the celebrated <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Minimax_theorem"target="_blank" rel="noopener">minimax theorem</a
+>
+.  Indeed, the problem \((\mathcal{C})\) can be seen as a type of <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Game_theory"target="_blank" rel="noopener">game</a
+>
+ wherein the &ldquo;\(x\) player&rdquo; is trying to minimize, and the &ldquo;\(\zeta\) player&rdquo; is trying to maximize.  If we imagine ourselves as the $x$-player trying to optimize our investment return, the \(\zeta\) player is an adversary keeping us honest.</p>
+<p>One of the remarkable consequences of the minimax theorem is that the order of &ldquo;min&rdquo; and &ldquo;max&rdquo; can be swapped, which is <a
+    class="link"
+    href="https://en.wikipedia.org/wiki/Max%E2%80%93min_inequality"target="_blank" rel="noopener">not at all true in general</a
+>
+.  Indeed, it is a fact that the following optimization problem is exactly equivalent to \((\mathcal{C})\)</p>
+<p>\begin{equation}
+\underset{\zeta: ||\zeta|| \le M}{\text{max}}\ \underset{x \in \R^n}{\text{minimize}}\ \frac{1}{2}\lambda x^{\mathsf{T}} \Sigma x^{\mathsf{T}} - (\mu + \zeta)^{\mathsf{T}}x, \tag{$\mathcal{C}^\prime$}
+\end{equation}</p>
+<p>and using our knowledge of quadratic forms, we can easily solve the inner minimization problem to obtain another equivalent problem</p>
+<p>\begin{equation}
+\underset{\zeta: ||\zeta|| \le M}{\text{max}}\ -\frac{1}{2\lambda} (\mu + \zeta)^{\mathsf{T}} \Sigma^{-1}  (\mu + \zeta). \tag{$\mathcal{C}^{\prime\prime}$}
+\end{equation}</p>
+<p>Given an optimal \(\zeta^\star\) for this problem, a solution to the original problem can be obtained through the substitution \(x^\star_{\mathcal{C}}(\lambda) = x^\star_{\mathcal{M}} (\mu + \zeta^\star; \lambda)\), since \(x^\star_{\mathcal{M}}(\mu + \zeta^\star; \lambda)\) is the solution of the inner minimization.</p>
+<p>It is now a question of whether or not we can actually solve \(\mathcal{C}^{\prime\prime}\).  The reader with experience in convex optimization will know that the answer is a clear affirmative.  Indeed, the objective function is concave in the variable \(\zeta\) over which we are maximizing (since \(\Sigma \succ 0 \implies \Sigma^{-1} \succ 0\), we know the objective is a concave quadratic form), and the constraint set \(\zeta: ||\zeta|| \le M\) is convex.</p>
+<p>In fact, this problem is an instance of a <em>trust region subproblem</em> (TRSP), which arises in iterative optimization algorithms.  More specifically, a <a
+    class="link"
+    href="https://amzn.to/3Y2o2gv"target="_blank" rel="noopener">trust region algorithm</a
+>
+ approximates the (non-quadratic) objective function by a quadratic form which is valid within some bounded region.  The quadratic problem is solved in this region to obtain a new candidate point, wherein the procedure continues with a new quadratic approximation centered upon this point.  The algorithm continues until convergence.</p>
+<p>While \(\mathcal{C}^{\prime\prime}\) can be solved computationally for more-or-less any norm on \(\zeta\), the particular case of the quadratic norm \(||\zeta||_2^2 \le M^2\) is quite fitting, and admits of an elegant solution.  I turn to this next, even though the more sensible norm for conservative investing might be the infinity norm \(||\zeta||_\infty\), which corresponds more closely to the margin of safety.</p>
+
+
+<h2 class="group " id="the-quadratic-trsp"
+    >The Quadratic TRSP<a href="#the-quadratic-trsp"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Let us specialize problem \((\mathcal{C}^{\prime\prime})\) to the case of a quadratic norm &ndash; this is the usual instance referred to as &ldquo;the&rdquo; TRSP:</p>
+<p>\begin{equation}
+\underset{\zeta: ||\zeta||_2^2 \le M}{\text{min}}\ \frac{1}{2\lambda} (\mu + \zeta)^{\mathsf{T}} \Sigma^{-1}  (\mu + \zeta), \notag
+\end{equation}</p>
+<p>where I&rsquo;ve also reversed the sign in the objective in order to treat it as a minimization problem, the conventions of which I am more used to.  We can start to approach this problem by manipulating a Lagrangian function with dual variable \(y \ge 0\):</p>
+<p>\begin{equation}
+\begin{aligned}
+\mathcal{L}(\zeta, y)
+&amp;= \frac{1}{2\lambda} (\mu + \zeta)^{\mathsf{T}} \Sigma^{-1}  (\mu + \zeta) + y(||\zeta||_2^2 - M)\\
+&amp;= \frac{1}{2\lambda} \zeta^{\mathsf{T}} (\Sigma^{-1} + yI) \zeta + \frac{1}{\lambda} \mu^{\mathsf{T}} \Sigma^{-1} \zeta - yM + \mu^{\mathsf{T}} \Sigma^{-1} \mu.
+\end{aligned}\notag
+\end{equation}</p>
+<p>Minimizing this quadratic form over the variable \(\zeta\), which has optimal value \(\zeta^\star(y) = -(\Sigma^{-1} + yI)^{-1} \Sigma^{-1} \mu\), leads to a scalar dual function \(g: \R \rightarrow \R\)</p>
+<p>\begin{equation}
+\begin{aligned}
+g(y)
+&amp;= \underset{\zeta \in \R^N}{\text{inf}}\ \mathcal{L}(\zeta, y)\\
+&amp;= -\frac{1}{2\lambda} \mu^{\mathsf{T}} \Sigma^{-1} (\Sigma^{-1} + yI)^{-1} \Sigma^{-1} \mu - yM + \mu^{\mathsf{T}} \Sigma^{-1} \mu\\
+&amp;= -\frac{1}{2\lambda} \mu^{\mathsf{T}} \Sigma^{-1} \big[(\Sigma^{-1} + yI)^{-1} - \Sigma \big] \Sigma^{-1} \mu - yM.
+\end{aligned}\notag
+\end{equation}</p>
+<p>The optimal value of \(\zeta\) is obtained by optimizing this scalar function \(g(y)\) and substituting the optimal \(y^\star\) back into the function \(\zeta^\star(y^\star)\).</p>
+<p>We can make further headway on this problem by using the eigenvalue decomposition of \(\Sigma\).  Indeed, since \(\Sigma \succ 0\), it admits of an eigenvalue factorization with <em>strictly positive</em> eigenvalues \(\gamma_1, \ldots, \gamma_N\) and an orthogonal basis \(V\): \[\Sigma = V\Gamma V^{\mathsf{T}} = \sum_{i = 1}^N \gamma_i v_i v_i^{\mathsf{T}.}\]  Moreover, the inverse is expressed in a straightforward way \[\Sigma^{-1} = V\Gamma^{-1} V = \sum_{i = 1}^N \frac{1}{\gamma_i} v_i v_i^{\mathsf{T}}.\]  Thus, we can write</p>
+<p>\begin{equation}
+\begin{aligned}
+g(y)
+&amp;= -\frac{1}{2\lambda} \mu^{\mathsf{T}} \Sigma^{-1} \big[(V\Gamma^{-1} V^{\mathsf{T}} + yVV^{\mathsf{T}})^{-1} - \Sigma\big] \Sigma^{-1} \mu - yM\\
+&amp;= -\frac{1}{2\lambda} \mu^{\mathsf{T}} \Sigma^{-1} \big[\big(V(\Gamma^{-1} + yI)V^{\mathsf{T}} \big)^{-1} - \Sigma \big] \Sigma^{-1} \mu - yM\\
+&amp;= -\frac{1}{2\lambda} \mu^{\mathsf{T}} \Sigma^{-1} \big[V(\Gamma^{-1} + yI)^{-1} V^{\mathsf{T}} - V\Gamma V^{\mathsf{T}} \big] \Sigma^{-1} \mu - yM\\
+&amp;= -\frac{1}{2\lambda} \mu^{\mathsf{T}} V \Gamma^{-1} V^{\mathsf{T}} V\big[(\Gamma^{-1} + yI)^{-1} - \Gamma\big]V^{\mathsf{T}} V\Gamma^{-1} V^{\mathsf{T}} \mu - yM\\
+&amp;= -\frac{1}{2\lambda} \mu^{\mathsf{T}} V \Gamma^{-1} \big[(\Gamma^{-1} + yI)^{-1} - \Gamma\big]\Gamma^{-1} V^{\mathsf{T}} \mu - yM\\
+&amp;= -\frac{1}{2\lambda} \mu^{\mathsf{T}} \sum_{i = 1}^N \frac{1}{\gamma_i} \big[\frac{1}{1 + \gamma_i y} - 1 \big] v_i v_i^{\mathsf{T}} \mu - yM\\
+&amp;= -\frac{1}{2\lambda} \sum_{i = 1}^N \frac{1}{\gamma_i} \big[\frac{1}{1 + \gamma_i y} - 1\big] (v_i^{\mathsf{T}} \mu)^2 - yM.
+\end{aligned}\notag
+\end{equation}</p>
+<p>Since \(\gamma_i &gt; 0\) for each \(i\), and \(y \ge 0\) by the duality constraint, we are in no danger of dividing by zero in this summation (this puts us in the <a
+    class="link"
+    href="https://www.math.uwaterloo.ca/~hwolkowi/henry/reports/indefTRSSIOPT95.pdf"target="_blank" rel="noopener">easy version of the TRSP</a
+>
+).</p>
+<p>To obtain an optimal dual variable \(y^\star\) we need to maximize \(g\) over \(y \ge 0\).  It may not be particularly easy to recognize from this expression (although it is necessarily true as a general theorem) but the function \(g\) is a concave function of \(y\) on this interval since the function \(x \mapsto 1/x\) is convex for \(x \ge 0\), and composition of convex functions with linear functions remain convex.</p>
+<p>Since it is clear that \(g(y) \rightarrow -\infty\) as \(y \rightarrow \infty\), there must exist a solution.  Thus, we can find the optimal \(y\) by differentiating \(g\) and then carrying out bisection on the derivative.  Explicitly,</p>
+<p>\begin{equation}
+g^{\prime}(y) = \frac{1}{2\lambda} \sum_{i = 1}^N \frac{(v_i^{\mathsf{T}} \mu)^2}{(1 + \gamma_i y)^2} - M.\notag
+\end{equation}</p>
+<p>Now, since \(g(0) = 0\), the optimal dual multiplier will satisfy \(y^\star &gt; 0\) only if \(g^{\prime}(0) &gt; 0\).  This is so since we seek to find a zero \(g(y^\star) = 0\) and since \(g^{\prime}\) is monotone decreasing such a zero does not exist unless \(g^{\prime}(0) &gt; 0\).</p>
+<p>In the case where \(g^{\prime}(0) \le 0\) we must necessarily have \(y^\star = 0\) and thus \(\zeta^\star(0) = -\mu\) and \(x^\star_{\mathcal{C}} = 0\).  In our investment interpretation, this means that we invest nothing into the risky assets available to use, and this occurs exactly when our margin of safety \(M\) or risk aversion parameter \(\lambda\) is large.  Indeed, we can quantify this by calculating</p>
+<p>\begin{equation}
+\begin{aligned}
+g^\prime(0)
+&amp;= \frac{1}{2\lambda} \sum_{i = 1}^N (v_i^{\mathsf{T}} \mu)^2 - M\\
+&amp;= \frac{1}{2\lambda} \mu^{\mathsf{T}} VV^{\mathsf{T}} \mu - M\\
+&amp;= \frac{1}{2\lambda} ||\mu||_2^2 - M,
+\end{aligned}\notag
+\end{equation}</p>
+<p>so we can explicitly recognize that our optimal investment is zero exactly when \(\frac{1}{2}||\mu||_2^2 \le \lambda M\).  That is, the &ldquo;energy&rdquo; (squared norm) of our nominal returns need to exceed the margin of safety scaled by our risk aversion.</p>
+
+
+<h2 class="group " id="computational-examples"
+    >Computational Examples<a href="#computational-examples"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<p>Let&rsquo;s look at some examples of portfolios constructed according to three rules.  First, the ordinary Markowitz case \(x^\star_{\mathcal{M}}(\mu; \lambda)\), the squared-norm margin of safety \(x^\star_{\mathcal{C}}(\mu; \lambda, M)\) calculated as in the previous section, and the infinity-norm margin of safety \(\tilde{x}^\star_{\mathcal{C}}(\mu; \lambda, M)\) solved using <kbd>cvx</kbd>.</p></section>
+<div class="flex items-center justify-center px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14"><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="Share to twitter"
+                href="https://twitter.com/share?&text=This%20is%20a%20detailed%20example%20tying%20together%20quadratic%20optimization,%20eigenvalues,%20and%20the%20margin-of-safety%20principle%20applied%20to%20the%20Markowitz%20portfolio%20problem.&url=https://rjtk.github.io/posts/the-trsp-and-robust-investing-with-a-margin-of-safety/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><i class="eva eva-twitter hover:text-theme"></i
+            ></a><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="Share to weibo"
+                href="https://service.weibo.com/share/share.php?url=https://rjtk.github.io/posts/the-trsp-and-robust-investing-with-a-margin-of-safety/&title=The%20TRSP%20and%20Robust%20Investing%20with%20a%20Margin%20of%20Safety&sudaref=rjtk.github.io"
+                target="_blank"
+                rel="noopener noreferrer"
+            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="Copy Link" data-clipboard-text="https://rjtk.github.io/posts/the-trsp-and-robust-investing-with-a-margin-of-safety/"></i></div>
+<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
+    <div>
+        <a
+            href="/posts/all-about-quadratic-forms/"
+            title="All About Quadratic Forms"
+            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
+            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+                <i class="eva eva-chevron-left-outline"></i>
+            </span>
+            <span>Prev</span>
+        </a>
+    </div><div class="hidden items-center text-xs xl:flex">
+        Unless otherwise stated, this blog is licensed under 「
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener noreferrer" class="text-theme">CC BY-NC-SA 4.0</a>
+        」
+    </div>
+    <div class="flex items-center text-sm xl:hidden">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener noreferrer" class="text-theme">
+            <img src="/Cc-by-nc-sa.svg" alt="CC BY-NC-SA 4.0" title="CC BY-NC-SA 4.0" class="w-24" />
+        </a>
+    </div>
+
+    <a
+        href=""
+        title=""
+        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText">
+        <span>Next</span>
+        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+            <i class="eva eva-chevron-right-outline"></i>
+        </span>
+    </a>
+</div>
+
+
+        </div>
+    </div>
+</div>
+
+</div>
+                </main><footer>
+    <div
+        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
+    >
+        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
+            <span class="">© 2022 - 2023</span>
+            <span class="mx-1.5 opacity-50"> | </span>Powered by <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a></div>
+
+        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://rjtk.github.io/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
+                    <span>RSS</span>
+                </a><a data-no-swup href="https://rjtk.github.io/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
+                    <span>Sitemap</span>
+                </a></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
+    <span>Run time: </span><b id="run-time-d">0</b>
+    <span class="text-xs">days</span>
+    <b id="run-time-h">0</b>
+    <span class="text-xs">h</span>
+    <b id="run-time-m">0</b>
+    <span class="text-xs">m</span>
+    <b id="run-time-s">0</b>
+    <span class="text-xs">s</span>
+</div>
+</div>
+
+    <script type="text/javascript">
+window.__theme = {
+    cdn: '',
+    pjax: true ,
+    isServer: false ,
+    $version:"",
+    lang: 'en-us',
+    imageZoom: true ,
+    lazyload: true ,
+    bionicReading: {
+        enabled: true ,
+        skipLinks: false ,
+        autoBionic: false ,
+        excludeWords:[],
+        excludeClasses:[],
+        excludeNodeNames:[],
+    },
+    katex: true ,
+    search: true ,
+    backtop: true ,
+    pangu: false ,
+    autoDarkMode: false ,
+    googleAnalytics:false,
+    hugoEncrypt: {
+        wrongPasswordText: 'Password is incorrect',
+        userStorage:window['sessionStorage'],
+    },
+    console: {
+        enabled: true ,
+        leftColor: '#dd6065',
+        rightColor: '#feb462',
+        leftText: 'Hugo Theme Luna',
+        rightText: 'Powered by Hugo ❤ Luna',
+    },
+    assets: {
+        error_svg: "\/images\/error.svg",
+        search_svg: "\/images\/search.svg",
+    },
+    i18n: {
+        copy: {
+            success: "Copy success",
+            failed: "Copy failed",
+            copyCode: "Copy code",
+        },
+        search: {
+            untitled: "Untitled",
+            loadFailure: "Initialization of the search engine failed",
+            input: "Type something...",
+        },
+        darkMode: {
+            dark: "Switch to dark mode",
+            light: "Switch to light mode"
+        }
+    },creatTime: "2022\/12\/11"}
+</script>
+<script type="text/javascript" src="/ts/main.3e551c0bbea8d18cea412abc67113efa9fd16c3bba1eb4867a7e762260ee32dc.js" defer integrity="sha256-PlUcC76o0YzqQSq8ZxE&#43;&#43;p/RbDu6HrSGen52ImDuMtw="></script>
+
+
+
+
+
+<script>
+    
+    
+</script>
+
+<script data-swup-reload-script>
+    
+    
+</script>
+</footer>
+</div>
+        </div><a
+        href="#nav"
+        title="Back to top"
+        id="back-top"
+        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
+    >
+        <div class="relative">
+            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
+                <i class="eva eva-arrow-upward-outline"></i>
+            </div>
+            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
+                <circle
+                    transform="rotate(-90, 27 , 27)"
+                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
+                    cx="27"
+                    cy="27"
+                    r="25"
+                    fill="none"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke="var(--theme)"
+                />
+            </svg>
+        </div>
+    </a><noscript>
+    <style>
+        .dark-mode-switch,
+        #run-time,
+        #bionicReading,
+        .noscript-hidden,
+        [data-clipboard-text],
+        [data-lazyload] {
+            display: none;
+        }
+        #back-top {
+            opacity: 1;
+        }
+        .noscript-show {
+            display: initial;
+        }
+    </style>
+</noscript>
+</body>
+</html>

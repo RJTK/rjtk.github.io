@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Quant Out of Water</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 18 Jul 2023 00:00:00 -0700</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 24 Sep 2023 00:00:00 -0700</lastBuildDate><atom:link href="https://rjtk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Constraint Programming, Puzzles, ILP, and z3</title>
+      <link>https://rjtk.github.io/posts/constraint-programming-puzzles-ilp-and-z3/</link>
+      <pubDate>Sun, 24 Sep 2023 00:00:00 -0700</pubDate>
+      
+      <guid>https://rjtk.github.io/posts/constraint-programming-puzzles-ilp-and-z3/</guid>
+      <description>&lt;p&gt;Solving puzzles with computers.&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>All About Quadratic Forms</title>
       <link>https://rjtk.github.io/posts/all-about-quadratic-forms/</link>
